@@ -1,15 +1,16 @@
-this.foul_poultice_blueprint <- ::inherit("scripts/crafting/blueprint", {
+this.foul_poultice_blueprint <- ::inherit("scripts/crafting/blueprint",
+{
 	m = {},
 	function create()
 	{
 		this.blueprint.create();
 		this.m.ID = "blueprint.foul_poultice";
 		this.m.PreviewCraftable = ::new("scripts/items/special/foul_poultice_item");
-		this.m.Cost = 3000;
+		this.m.Cost = 500;
 		local ingredients = [
 			{
 				Script = "scripts/items/misc/unhold_heart_item",
-				Num = 2
+				Num = 1
 			},
 			{
 				Script = "scripts/items/misc/ghoul_brain_item",
@@ -27,6 +28,5 @@ this.foul_poultice_blueprint <- ::inherit("scripts/crafting/blueprint", {
 	{
 		_stash.add(::new("scripts/items/special/foul_poultice_item"));
 	}
-
 });
 

@@ -1,4 +1,5 @@
-this.foul_poultice_item <- this.inherit("scripts/items/item", {
+this.foul_poultice_item <- this.inherit("scripts/items/item",
+{
 	m = {},
 	function create()
 	{
@@ -74,8 +75,7 @@ this.foul_poultice_item <- this.inherit("scripts/items/item", {
 
 	function onUse( _actor, _item = null )
 	{
-
-        if (!_actor.getFlags().get("IsPlayerCharacter"))
+        if (!::RPGR_Raids.isActorEligible(_actor.getFlags()))
         {
             return false;
         }
@@ -99,6 +99,5 @@ this.foul_poultice_item <- this.inherit("scripts/items/item", {
 		_actor.getSprite("permanent_injury_4").resetBrush();
 		return true;
 	}
-
 });
 
