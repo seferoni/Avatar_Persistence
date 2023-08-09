@@ -41,15 +41,16 @@
 
     function removeItemsUponCombatLoss()
     {
-        local items = ::World.Assets.getStash();
-
-        for( local i = 0; i < ::Math.rand(1, 10); i++ )
+        local items = ::World.Assets.getStash().getItems();
+        local garbage = items.filter(function( item )
         {
-            local item = items[::Math.rand(0, items.len() - 1)];
+            return ::Math.rand(0, 100) <= ::RPGR_Avatar_Persistence.Mod.ModSettings.getSetting("ItemRemovalChance").getValue() && ::RPGR_Avatar_Persistence.isItemEligibleForRemoval(item);
+        });
+
+        foreach( item in garbage )
+        {
+            items.remove(item);
         }
-
-        // not done yet
-
     }
 
     function isActorEligible( _flags )
