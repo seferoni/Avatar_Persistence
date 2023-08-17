@@ -42,7 +42,7 @@
     function removeItemsUponCombatLoss()
     {
         local items = ::World.Assets.getStash().getItems();
-        local garbage = items.filter(function( item )
+        local garbage = items.filter(function( itemIndex, item )
         {
             return ::Math.rand(0, 100) <= ::RPGR_Avatar_Persistence.Mod.ModSettings.getSetting("ItemRemovalChance").getValue() && ::RPGR_Avatar_Persistence.isItemEligibleForRemoval(item);
         });
@@ -80,6 +80,11 @@
             return false;
         }
 
+        if (_item.m.ItemType == ::Const.Items.ItemType.Misc)
+        {
+            return false;
+        }
+
         if (_item.getID() == "weapon.player_banner")
         {
             return false;
@@ -103,13 +108,19 @@
     local pageGeneral = ::RPGR_Avatar_Persistence.Mod.ModSettings.addPage("General");
 
     local permanentInjuryChance = pageGeneral.addRangeSetting("PermanentInjuryChance", 33, 1, 100, 1, "Permanent Injury Chance");
-    permanentInjuryChance.setDescription("Percentage chance for the player character to suffer permanent injuries upon defeat.");
+    permanentInjuryChance.setDescription("Determines the percentage chance for the player character to suffer permanent injuries upon defeat.");
 
-    local permanentInjuryThreshold = pageGeneral.addRangeSetting("PermanentInjuryThreshold", 3, 1, 8, 1, "Permanent Injury Threshold");
+    local permanentInjuryThreshold = pageGeneral.addRangeSetting("PermanentInjuryThreshold", 3, 0 8, 1, "Permanent Injury Threshold");
     permanentInjuryThreshold.setDescription("Determines the threshold value of the number of permanent injuries the player character can have before persistence is lost.");
 
     local modifyTooltip = pageGeneral.addBooleanSetting("ModifyTooltip", true, "Modify Tooltip");
     modifyTooltip.setDescription("Determines whether the player character trait tooltip reflects changes brought about by this mod.");
+
+    local loseItemsUponDefeat = pageGeneral.addBooleanSetting("LoseItemsUponDefeat", true, "Lose Items Upon Defeat");
+    loseItemsUponDefeat.setDescription("Determines whether items kept in the player's stash are removed at random upon defeat, in the case of persistence.");
+
+    local itemRemovalChance = pageGeneral.addRangeSetting("ItemRemovalChance", 33, 1, 100, 1, "Item Removal Chance");
+    itemRemovalChance.setDescription("Determines the percentage chance for items to be removed from the player's stash. Does nothing if Lose Items Upon Defeat is disabled.");
 
     foreach( file in ::IO.enumerateFiles("mod_rpgr_avatar_persistence/hooks") )
     {
