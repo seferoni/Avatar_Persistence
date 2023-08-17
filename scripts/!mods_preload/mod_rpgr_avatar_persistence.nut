@@ -75,6 +75,12 @@
 
     function isItemEligibleForRemoval( _item )
     {
+        if (!::isKindOf(_item, "item"))
+        {
+            ::logError(_item.getName() + " is not a child class of item.nut.");
+            return false;
+        }
+
         if (_item.isItemType(::Const.Items.ItemType.Legendary))
         {
             return false;
