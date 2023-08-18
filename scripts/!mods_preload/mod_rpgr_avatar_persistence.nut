@@ -44,12 +44,14 @@
         local items = ::World.Assets.getStash().getItems();
         local garbage = items.filter(function( itemIndex, item )
         {
-            return ::Math.rand(0, 100) <= ::RPGR_Avatar_Persistence.Mod.ModSettings.getSetting("ItemRemovalChance").getValue() && ::RPGR_Avatar_Persistence.isItemEligibleForRemoval(item);
+            return item != null && ::Math.rand(0, 100) <= ::RPGR_Avatar_Persistence.Mod.ModSettings.getSetting("ItemRemovalChance").getValue()  && ::RPGR_Avatar_Persistence.isItemEligibleForRemoval(item);
         });
 
         foreach( item in garbage )
         {
-            items.remove(item);
+            local index  = items.find(item);
+            ::logInfo("Removing item " + item.getName() + " from stash.");
+            items.remove(index);
         }
     }
 
@@ -75,12 +77,6 @@
 
     function isItemEligibleForRemoval( _item )
     {
-        if (!::isKindOf(_item, "item"))
-        {
-            ::logError(_item.getName() + " is not a child class of item.nut.");
-            return false;
-        }
-
         if (_item.isItemType(::Const.Items.ItemType.Legendary))
         {
             return false;
