@@ -109,10 +109,10 @@
 
     local pageGeneral = ::RPGR_Avatar_Persistence.Mod.ModSettings.addPage("General");
 
-    local permanentInjuryChance = pageGeneral.addRangeSetting("PermanentInjuryChance", 33, 1, 100, 1, "Permanent Injury Chance");
+    local permanentInjuryChance = pageGeneral.addRangeSetting("PermanentInjuryChance", 100, 1, 100, 1, "Permanent Injury Chance");
     permanentInjuryChance.setDescription("Determines the percentage chance for the player character to suffer permanent injuries upon defeat.");
 
-    local permanentInjuryThreshold = pageGeneral.addRangeSetting("PermanentInjuryThreshold", 3, 0 8, 1, "Permanent Injury Threshold");
+    local permanentInjuryThreshold = pageGeneral.addRangeSetting("PermanentInjuryThreshold", 1, 0, 8, 1, "Permanent Injury Threshold");
     permanentInjuryThreshold.setDescription("Determines the threshold value of the number of permanent injuries the player character can have before persistence is lost.");
 
     local modifyTooltip = pageGeneral.addBooleanSetting("ModifyTooltip", true, "Modify Tooltip");
