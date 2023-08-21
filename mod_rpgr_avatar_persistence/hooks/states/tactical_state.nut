@@ -6,13 +6,12 @@
     object.gatherBrothers <- function( _isVictory )
     {
         local vanilla_gatherBrothers = gB_nullCheck == null ? this[parentName].gatherBrothers : gB_nullCheck;
+        ::World.Statistics.getFlags().set("LastCombatVictory", _isVictory);
 
         if (!::RPGR_Avatar_Persistence.isPlayerInSurvivorRoster())
         {
             return vanilla_gatherBrothers(_isVictory);
         }
-
-        ::World.Statistics.getFlags().set("LastCombatVictory", _isVictory);
 
         if (!::RPGR_Avatar_Persistence.Mod.ModSettings.getSetting("LoseItemsUponDefeat").getValue())
         {
