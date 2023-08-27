@@ -108,6 +108,7 @@
     ::RPGR_AR_ModuleFound <- ::mods_getRegisteredMod("mod_rpgr_avatar_resistances") != null;
 
     local pageGeneral = ::RPGR_Avatar_Persistence.Mod.ModSettings.addPage("General");
+    local pagePoulticeIngredients = ::RPGR_Avatar_Persistence.ModSettings.addPage("Poultice Ingredients");
 
     local permanentInjuryChance = pageGeneral.addRangeSetting("PermanentInjuryChance", 100, 1, 100, 1, "Permanent Injury Chance");
     permanentInjuryChance.setDescription("Determines the percentage chance for the player character to suffer permanent injuries upon defeat.");
@@ -122,7 +123,16 @@
     loseItemsUponDefeat.setDescription("Determines whether items kept in the player's stash are removed at random upon defeat, in the case of persistence.");
 
     local itemRemovalChance = pageGeneral.addRangeSetting("ItemRemovalChance", 33, 1, 100, 1, "Item Removal Chance");
-    itemRemovalChance.setDescription("Determines the percentage chance for items to be removed from the player's stash. Does nothing if Lose Items Upon Defeat is disabled.");
+    itemRemovalChance.setDescription("Determines the percentage chance for individual items to be removed from the player's stash. Does nothing if Lose Items Upon Defeat is disabled.");
+
+    local poulticeUnholdHeartCount = pagePoulticeIngredients.addRangeSetting("PoulticeUnholdHeartCount", 1, 1, 8, 1, "Unhold Heart Count");
+    poulticeUnholdHeartCount.setDescription("Determines how many unhold hearts are required to brew a foul poultice.");
+
+    local poulticeGhoulBrainCount = pagePoulticeIngredients.addRangeSetting("PoulticeGhoulBrainCount", 2, 0, 8, 1, "Ghoul Brain Count");
+    poulticeGhoulBrainCount.setDescription("Determines how many ghoul brains are required to brew a foul poultice.");
+
+    local poulticePoisonGlandCount = pagePoulticeIngredients.addRangeSetting("PoulticePoisonGlandCount", 2, 0, 8, 1, "Poison Gland Count");
+    poulticePoisonGlandCount.setDescription("Determines how many poison glands are required to brew a foul poultice.");
 
     foreach( file in ::IO.enumerateFiles("mod_rpgr_avatar_persistence/hooks") )
     {
