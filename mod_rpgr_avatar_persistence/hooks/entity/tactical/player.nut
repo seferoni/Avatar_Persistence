@@ -27,7 +27,7 @@
 
         if (injuryCandidates.len() == 0)
         {
-            ::logInfo("[Avatar Persistence] No injury candidates were found eligible for application to the player.");
+            ::RPGR_Avatar_Persistence.logWrapper("No injury candidates were found eligible for application to the player.", true);
             return ::RPGR_Avatar_Persistence.executePersistenceRoutine(this, "Was struck down");
         }
 

@@ -147,13 +147,13 @@
     itemRemovalCeiling.setDescription("Determines the maximum number of items that may be removed per instance of player defeat. Does nothing if Lose Items Upon Defeat is disabled.");
 
     local poulticeUnholdHeartCount = pagePoulticeIngredients.addRangeSetting("PoulticeUnholdHeartCount", 1, 1, 8, 1, "Unhold Heart Count");
-    poulticeUnholdHeartCount.setDescription("Determines how many unhold hearts are required to brew a foul poultice. Cannot be set to zero.");
+    poulticeUnholdHeartCount.setDescription("Determines how many unhold hearts are required to brew a foul poultice. Cannot be set to zero. Must be configured prior to game load.");
 
     local poulticeGhoulBrainCount = pagePoulticeIngredients.addRangeSetting("PoulticeGhoulBrainCount", 2, 0, 8, 1, "Ghoul Brain Count");
-    poulticeGhoulBrainCount.setDescription("Determines how many ghoul brains are required to brew a foul poultice.");
+    poulticeGhoulBrainCount.setDescription("Determines how many ghoul brains are required to brew a foul poultice. Must be configured prior to game load.");
 
     local poulticePoisonGlandCount = pagePoulticeIngredients.addRangeSetting("PoulticePoisonGlandCount", 2, 0, 8, 1, "Poison Gland Count");
-    poulticePoisonGlandCount.setDescription("Determines how many poison glands are required to brew a foul poultice.");
+    poulticePoisonGlandCount.setDescription("Determines how many poison glands are required to brew a foul poultice. Must be configured prior to game load.");
 
     local modifyTooltip = pageGeneral.addBooleanSetting("ModifyTooltip", true, "Modify Tooltip");
     modifyTooltip.setDescription("Determines whether the player character trait tooltip reflects changes brought about by this mod.");
