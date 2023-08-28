@@ -2,7 +2,7 @@
 {
     ID = "mod_rpgr_avatar_persistence",
     Name = "RPG Rebalance - Avatar Persistence",
-    Version = "1.1.1",
+    Version = "1.1.2",
 
     function executePersistenceRoutine( _player, _injuryFlavourText )
     {
@@ -39,6 +39,21 @@
         return tableEntry;
     }
 
+    function logWrapper( _string, _isError = false )
+    {
+        if(_isError)
+        {
+            ::logError("[Avatar Persistence] " + _string);
+        }
+
+        if (!::RPGR_Avatar_Persistence.Mod.ModSettings.getSetting("VerboseLogging").getValue())
+        {
+            return;
+        }
+
+        ::logInfo("[Avatar Persistence] " + _string);
+    }
+
     function removeItemsUponCombatLoss()
     {
         local items = ::World.Assets.getStash().getItems();
@@ -59,16 +74,9 @@
         {
             local item = garbage[i];
             local index  = items.find(item);
-            ::logInfo("Removing item " + item.getName() + " from stash.");
+            this.logWrapper("Removing item " + item.getName() + " from stash.");
             items.remove(index);
         }
-
-        /*foreach( item in garbage )
-        {
-            local index  = items.find(item);
-            ::logInfo("Removing item " + item.getName() + " from stash.");
-            items.remove(index);
-        }*/
     }
 
     function isActorEligible( _flags )
@@ -132,12 +140,6 @@
     local permanentInjuryThreshold = pageGeneral.addRangeSetting("PermanentInjuryThreshold", 1, 0, 8, 1, "Permanent Injury Threshold");
     permanentInjuryThreshold.setDescription("Determines the threshold value of the number of permanent injuries the player character can have before persistence is lost.");
 
-    local modifyTooltip = pageGeneral.addBooleanSetting("ModifyTooltip", true, "Modify Tooltip");
-    modifyTooltip.setDescription("Determines whether the player character trait tooltip reflects changes brought about by this mod.");
-
-    local loseItemsUponDefeat = pageGeneral.addBooleanSetting("LoseItemsUponDefeat", true, "Lose Items Upon Defeat");
-    loseItemsUponDefeat.setDescription("Determines whether items kept in the player's stash are removed at random upon defeat, in the case of persistence.");
-
     local itemRemovalChance = pageGeneral.addRangeSetting("ItemRemovalChance", 33, 1, 100, 1, "Item Removal Chance");
     itemRemovalChance.setDescription("Determines the percentage chance for individual items to be removed from the player's stash. Does nothing if Lose Items Upon Defeat is disabled.");
 
@@ -152,6 +154,15 @@
 
     local poulticePoisonGlandCount = pagePoulticeIngredients.addRangeSetting("PoulticePoisonGlandCount", 2, 0, 8, 1, "Poison Gland Count");
     poulticePoisonGlandCount.setDescription("Determines how many poison glands are required to brew a foul poultice.");
+
+    local modifyTooltip = pageGeneral.addBooleanSetting("ModifyTooltip", true, "Modify Tooltip");
+    modifyTooltip.setDescription("Determines whether the player character trait tooltip reflects changes brought about by this mod.");
+
+    local loseItemsUponDefeat = pageGeneral.addBooleanSetting("LoseItemsUponDefeat", true, "Lose Items Upon Defeat");
+    loseItemsUponDefeat.setDescription("Determines whether items kept in the player's stash are removed at random upon defeat, in the case of persistence.");
+
+    local verboseLogging = pageGeneral.addBooleanSetting("VerboseLogging", true, "Verbose Logging");
+    verboseLogging.setDescription("Enables verbose logging. Recommended for testing purposes only, as the volume of logged messages can make parsing the log more difficult for general use and debugging.");
 
     foreach( file in ::IO.enumerateFiles("mod_rpgr_avatar_persistence/hooks") )
     {
