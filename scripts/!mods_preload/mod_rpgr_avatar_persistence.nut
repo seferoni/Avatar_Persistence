@@ -79,6 +79,12 @@
         }
     }
 
+    function retrieveThresholdWarningText()
+    {
+        local permanentInjuryThreshold = ::RPGR_Avatar_Persistence.Mod.ModSettings.getSetting("PermanentInjuryThreshold").getValue();
+        return permanentInjuryThreshold == 0 ? "any permanent injuries are sustained" : "more than [color=" + ::Const.UI.Color.NegativeValue + "]" + permanentInjuryThreshold + "[/color] permanent injuries are sustained at a time";
+    }
+
     function isActorEligible( _flags )
     {
         return _flags.get("IsPlayerCharacter");
