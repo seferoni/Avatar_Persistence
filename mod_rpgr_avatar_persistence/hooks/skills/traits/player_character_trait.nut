@@ -7,7 +7,7 @@
     {
         local tooltipArray = gT_nullCheck == null ? this[parentName].getTooltip() : gT_nullCheck();
 
-        if (::RPGR_Avatar_Persistence.Mod.ModSettings.getSetting("ModifyTooltip").getValue() == false)
+        if (!::RPGR_Avatar_Persistence.Mod.ModSettings.getSetting("ModifyTooltip").getValue())
         {
             return tooltipArray;
         }
@@ -22,9 +22,10 @@
 
         tooltipArray.append(::RPGR_Avatar_Persistence.generateTooltipTableEntry(id, type, "obituary.png", "[color=" + ::Const.UI.Color.PositiveValue + "]" + "Will survive[/color] being struck down by most foes"));
 
-        if (!::RPGR_AR_ModuleFound || ::RPGR_AR_ModuleFound && ::RPGR_Avatar_Resistances.Mod.ModSettings.getSetting("ModifyTooltip").getValue() == false)
+        if (!::RPGR_AR_ModuleFound || ::RPGR_AR_ModuleFound && !::RPGR_Avatar_Resistances.Mod.ModSettings.getSetting("ModifyTooltip").getValue())
         {
-            local persistenceThresholdText = "Loses persistence when more than [color=" + ::Const.UI.Color.NegativeValue + "]" + ::RPGR_Avatar_Persistence.Mod.ModSettings.getSetting("PermanentInjuryThreshold").getValue() + "[/color] permanent injuries are suffered at a time";
+            local permanentInjuryThreshold = ::RPGR_Avatar_Persistence.Mod.ModSettings.getSetting("PermanentInjuryThreshold").getValue();
+            local persistenceThresholdText = permanentInjuryThreshold > 0 ? "Loses persistence when more than [color=" + ::Const.UI.Color.NegativeValue + "]" + permanentInjuryThreshold + "[/color] permanent injuries are sustained at a time" : "Loses persistence when a permanent injury is sustained";
             tooltipArray.append(::RPGR_Avatar_Persistence.generateTooltipTableEntry(id, type, "warning.png", persistenceThresholdText));
         }
 

@@ -70,7 +70,7 @@
         local naiveItemRemovalCeiling = ::RPGR_Avatar_Persistence.Mod.ModSettings.getSetting("ItemRemovalCeiling").getValue();
         local actualItemRemovalCeiling = naiveItemRemovalCeiling >= garbage.len() ? ::Math.rand(1, garbage.len()) : ::Math.rand(1, naiveItemRemovalCeiling);
 
-        for( i = 0; i <= actualItemRemovalCeiling - 1; i++ )
+        for( local i = 0; i <= actualItemRemovalCeiling - 1; i++ )
         {
             local item = garbage[i];
             local index  = items.find(item);
@@ -132,7 +132,7 @@
     ::RPGR_AR_ModuleFound <- ::mods_getRegisteredMod("mod_rpgr_avatar_resistances") != null;
 
     local pageGeneral = ::RPGR_Avatar_Persistence.Mod.ModSettings.addPage("General");
-    local pagePoulticeIngredients = ::RPGR_Avatar_Persistence.Mod.ModSettings.addPage("Poultice Recipe");
+    local pageItemLoss = ::RPGR_Avatar_Persistence.Mod.ModSettings.addPage("Item Loss");
 
     local permanentInjuryChance = pageGeneral.addRangeSetting("PermanentInjuryChance", 100, 1, 100, 1, "Permanent Injury Chance");
     permanentInjuryChance.setDescription("Determines the percentage chance for the player character to suffer permanent injuries upon defeat.");
@@ -140,26 +140,17 @@
     local permanentInjuryThreshold = pageGeneral.addRangeSetting("PermanentInjuryThreshold", 1, 0, 8, 1, "Permanent Injury Threshold");
     permanentInjuryThreshold.setDescription("Determines the threshold value of the number of permanent injuries the player character can have before persistence is lost.");
 
-    local itemRemovalChance = pageGeneral.addRangeSetting("ItemRemovalChance", 33, 1, 100, 1, "Item Removal Chance");
+    local itemRemovalChance = pageItemLoss.addRangeSetting("ItemRemovalChance", 33, 1, 100, 1, "Item Removal Chance");
     itemRemovalChance.setDescription("Determines the percentage chance for individual items to be removed from the player's stash. Does nothing if Lose Items Upon Defeat is disabled.");
 
-    local itemRemovalCeiling = pageGeneral.addRangeSetting("ItemRemovalCeiling", 6, 1, 10, 1, "Item Removal Ceiling");
+    local itemRemovalCeiling = pageItemLoss.addRangeSetting("ItemRemovalCeiling", 6, 1, 10, 1, "Item Removal Ceiling");
     itemRemovalCeiling.setDescription("Determines the maximum number of items that may be removed per instance of player defeat. Does nothing if Lose Items Upon Defeat is disabled.");
-
-    local poulticeUnholdHeartCount = pagePoulticeIngredients.addRangeSetting("PoulticeUnholdHeartCount", 1, 1, 8, 1, "Unhold Heart Count");
-    poulticeUnholdHeartCount.setDescription("Determines how many unhold hearts are required to brew a foul poultice. Cannot be set to zero. Must be configured prior to game load.");
-
-    local poulticeGhoulBrainCount = pagePoulticeIngredients.addRangeSetting("PoulticeGhoulBrainCount", 2, 0, 8, 1, "Ghoul Brain Count");
-    poulticeGhoulBrainCount.setDescription("Determines how many ghoul brains are required to brew a foul poultice. Must be configured prior to game load.");
-
-    local poulticePoisonGlandCount = pagePoulticeIngredients.addRangeSetting("PoulticePoisonGlandCount", 2, 0, 8, 1, "Poison Gland Count");
-    poulticePoisonGlandCount.setDescription("Determines how many poison glands are required to brew a foul poultice. Must be configured prior to game load.");
-
-    local modifyTooltip = pageGeneral.addBooleanSetting("ModifyTooltip", true, "Modify Tooltip");
-    modifyTooltip.setDescription("Determines whether the player character trait tooltip reflects changes brought about by this mod.");
 
     local loseItemsUponDefeat = pageGeneral.addBooleanSetting("LoseItemsUponDefeat", true, "Lose Items Upon Defeat");
     loseItemsUponDefeat.setDescription("Determines whether items kept in the player's stash are removed at random upon defeat, in the case of persistence.");
+
+    local modifyTooltip = pageGeneral.addBooleanSetting("ModifyTooltip", true, "Modify Tooltip");
+    modifyTooltip.setDescription("Determines whether the player character trait tooltip reflects changes brought about by this mod.");
 
     local verboseLogging = pageGeneral.addBooleanSetting("VerboseLogging", true, "Verbose Logging");
     verboseLogging.setDescription("Enables verbose logging. Recommended for testing purposes only, as the volume of logged messages can make parsing the log more difficult for general use and debugging.");

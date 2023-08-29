@@ -7,30 +7,20 @@ this.foul_poultice_blueprint <- ::inherit("scripts/crafting/blueprint",
 		this.m.ID = "blueprint.foul_poultice";
 		this.m.PreviewCraftable = ::new("scripts/items/special/foul_poultice_item");
 		this.m.Cost = 500;
-		local modSettings = ::RPGR_Avatar_Persistence.Mod.ModSettings;
 		local ingredients = [
 			{
 				Script = "scripts/items/misc/unhold_heart_item",
-				Num = modSettings.getSetting("PoulticeUnholdHeartCount").getValue()
+				Num = 1
+			},
+			{
+				Script = "scripts/items/misc/ghoul_brain_item",
+				Num = 1
+			},
+			{
+				Script = "scripts/items/misc/poison_gland_item",
+				Num = 1
 			}
 		];
-
-		if (modSettings.getSetting("PoulticeGhoulBrainCount").getValue() > 0)
-		{
-			ingredients.push({
-				Script = "scripts/items/misc/ghoul_brain_item",
-				Num = modSettings.getSetting("PoulticeGhoulBrainCount").getValue()
-			});
-		}
-
-		if (modSettings.getSetting("PoulticePoisonGlandCount").getValue() > 0)
-		{
-			ingredients.push({
-				Script = "scripts/items/misc/poison_gland_item",
-				Num = modSettings.getSetting("PoulticePoisonGlandCount").getValue()
-			});
-		}
-
 		this.init(ingredients);
 	}
 
