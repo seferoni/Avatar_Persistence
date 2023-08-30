@@ -41,7 +41,7 @@
 
     function logWrapper( _string, _isError = false )
     {
-        if(_isError)
+        if (_isError)
         {
             ::logError("[Avatar Persistence] " + _string);
         }
