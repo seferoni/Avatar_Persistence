@@ -2,7 +2,7 @@
 {
     ID = "mod_rpgr_avatar_persistence",
     Name = "RPG Rebalance - Avatar Persistence",
-    Version = "1.1.2",
+    Version = "1.1.3",
 
     function executePersistenceRoutine( _player, _injuryFlavourText )
     {
