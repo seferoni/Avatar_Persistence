@@ -68,7 +68,7 @@
         }
 
         local naiveItemRemovalCeiling = ::RPGR_Avatar_Persistence.Mod.ModSettings.getSetting("ItemRemovalCeiling").getValue();
-        local actualItemRemovalCeiling = naiveItemRemovalCeiling >= garbage.len() ? ::Math.rand(1, garbage.len()) : ::Math.rand(1, naiveItemRemovalCeiling);
+        local actualItemRemovalCeiling = naiveItemRemovalCeiling >= garbage.len() ? ::Math.rand(1, garbage.len()) : ::Math.rand(1, naiveItemRemovalCeiling); // TODO: sanity check this
 
         for( local i = 0; i <= actualItemRemovalCeiling - 1; i++ )
         {
@@ -152,13 +152,13 @@
     local itemRemovalCeiling = pageItemLoss.addRangeSetting("ItemRemovalCeiling", 6, 1, 10, 1, "Item Removal Ceiling");
     itemRemovalCeiling.setDescription("Determines the maximum number of items that may be removed per instance of player defeat. Does nothing if Lose Items Upon Defeat is disabled.");
 
-    local loseItemsUponDefeat = pageGeneral.addBooleanSetting("LoseItemsUponDefeat", true, "Lose Items Upon Defeat");
+    local loseItemsUponDefeat = pageGeneral.addBooleanSetting("LoseItemsUponDefeat", false, "Lose Items Upon Defeat");
     loseItemsUponDefeat.setDescription("Determines whether items kept in the player's stash are removed at random upon defeat, in the case of persistence.");
 
     local modifyTooltip = pageGeneral.addBooleanSetting("ModifyTooltip", true, "Modify Tooltip");
     modifyTooltip.setDescription("Determines whether the player character trait tooltip reflects changes brought about by this mod.");
 
-    local verboseLogging = pageGeneral.addBooleanSetting("VerboseLogging", true, "Verbose Logging");
+    local verboseLogging = pageGeneral.addBooleanSetting("VerboseLogging", false, "Verbose Logging");
     verboseLogging.setDescription("Enables verbose logging. Recommended for testing purposes only, as the volume of logged messages can make parsing the log more difficult for general use and debugging.");
 
     foreach( file in ::IO.enumerateFiles("mod_rpgr_avatar_persistence/hooks") )
