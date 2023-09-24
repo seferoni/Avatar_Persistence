@@ -14,15 +14,8 @@
 
     function generateInjuryCandidates( _player )
     {
-        local permanentInjuries = ::Const.Injury.Permanent;
         local injuriesToCull = ["injury.missing_nose", "injury.missing_eye", "injury.missing_ear", "injury.brain_damage", "injury.missing_finger"];
-
-        local filteredInjuries = permanentInjuries.filter(function( injuryIndex, injury )
-        {
-            local injuryID = injury.ID;
-            return injuriesToCull.find(injuryID) == null && !_player.getSkills().hasSkill(injuryID);
-        });
-
+        local filteredInjuries = ::Const.Injury.Permanent.filter(@(injuryIndex, injury) injuriesToCull.find(injury.ID) == null && !_player.getSkills().hasSkill(injury.ID));
         return filteredInjuries;
     }
 
