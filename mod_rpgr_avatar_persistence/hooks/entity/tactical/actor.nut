@@ -19,4 +19,18 @@
 
         return vanilla_kill(_killer, _skill, ::Const.FatalityType.None, _silent);
     }
+
+    ::RPGR_Avatar_Persistence.Standard.wrap(this, "kill", function( _killer = null, _skill = null, _fatalityType = ::Const.FatalityType.None, _silent = true )
+    {
+        if (!::RPGR_Avatar_Persistence.Persistence.isActorEligible(this.getFlags()))
+        {
+            return;
+        }
+
+        if (!::RPGR_Avatar_Persistence.isWithinInjuryThreshold(this))
+        {
+            return;
+        }
+
+    })
 });
