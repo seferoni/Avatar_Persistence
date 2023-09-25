@@ -1,5 +1,5 @@
 local AP = ::RPGR_Avatar_Persistence;
-::RPGR_Avatar_Persistence.Standard <-
+AP.Standard <-
 {
     function cacheHookedMethod( _object, _functionName )
     {
@@ -24,6 +24,30 @@ local AP = ::RPGR_Avatar_Persistence;
         }
 
         return concatenatedArray;
+    }
+
+    function executeHookProcedure( _object, _function, _originalMethod, _argumentsArray, _procedures, _returnOverride = null )
+    {
+        local arguments = this.concatenateArrays([_object], _argumentsArray);
+
+        switch(_procedures.HookProcedure)
+        {
+            case "wrapMethod": // Calls both methods in order, returns the original value. Generic wrapper.
+                local orderedArray = this.generateOrderedArray(_function, originalMethod, _procedures.Order);
+                return this.orderedCall(orderedArray, arguments, _procedures.ReturnSequence, _returnOverride);
+
+            case "overrideMethod": // Calls and returns new method; if return value is null, calls and returns original method. Should only be used for boolean functions.
+                local returnValue = _function.acall(arguments);
+                return returnValue == null ? _originalMethod(arguments) : returnValue;
+
+            case "overrideReturn": // Calls original method and passes result onto new method, returns new result. Ideal for tooltips.
+                local newArguments = this.concatenateArrays([_object], _originalMethod.acall(arguments));
+                return _function.acall(newArguments);
+
+            case "overrideArguments": // Calls new method and passes result onto original method; if null, calls original with original arguments. Somewhat niche.
+                local newArguments = this.concatenateArrays([_object], _function.acall(arguments));
+                return newArguments == null ? (_returnOverride == null ? _originalMethod.acall(arguments) : _returnOverride) : _originalMethod.acall(newArguments);
+        }
     }
 
     function generateTooltipTableEntry( _id, _type, _icon, _text )
@@ -90,26 +114,6 @@ local AP = ::RPGR_Avatar_Persistence;
         ::logInfo(format("[Avatar Persistence] %s", _string));
     }
 
-    function overrideArguments( _object, _functionName, _function, _returnOverride = null )
-    {
-        local cachedMethod = this.cacheHookedMethod(_object, _functionName),
-        parentName = _object.SuperName;
-
-        _object[_functionName] = function( ... )
-        {
-            local originalMethod = cachedMethod == null ? this[parentName][_functionName] : cachedMethod,
-            arguments = AP.Standard.concatenateArrays([this], vargv),
-            newArguments = AP.Standard.concatenateArrays([this], _function.acall(arguments));
-
-            if (newArguments == null)
-            {
-                return _returnOverride == null ? originalMethod.acall(_newArgumentsArray) : _returnOverride;
-            }
-
-            return originalMethod.acall(arguments);
-        }
-    }
-
     function orderedCall( _functions, _argumentsArray, _procedure, _returnOverride = null )
     {
         local returnValues = [];
@@ -119,20 +123,23 @@ local AP = ::RPGR_Avatar_Persistence;
             returnValues.push(functionDef.acall(_argumentsArray)); // TODO: see what context object we need to be in
         }
 
-        return _procedure == "returnFirst" ? returnValues[0] : _procedure == "returnSecond" ? returnValue[1] : _returnOverride;
+        switch(_procedure)
+        {
+            case "returnFirst": return returnValues[0];
+            case "returnSecond": return returnValues[1];
+            default: return _returnOverride;
+        }
     }
 
-    function wrap( _object, _functionName, _function, _procedures = [null, "returnFirst"], _returnOverride = null )
-    {   // this works best for when wrapping a function to perform a set of procedures and then returning the original method's return value
+    function wrap( _object, _functionName, _function, _procedures = {Order = null, ReturnSequence = "returnFirst", HookProcedure = "wrap"}, _returnOverride = null )
+    {
         local cachedMethod = this.cacheHookedMethod(_object, _functionName),
         parentName = _object.SuperName;
 
         _object[_functionName] = function( ... )
         {
-            local originalMethod = cachedMethod == null ? this[parentName][_functionName] : cachedMethod,
-            orderedArray = AP.Standard.generateOrderedArray(_function, originalMethod, _procedures[0]),
-            arguments = AP.Standard.concatenateArrays([this], vargv);
-            return AP.Standard.orderedCall(orderedArray, arguments, _procedures[1], _returnOverride);
+            local originalMethod = cachedMethod == null ? this[parentName][_functionName] : cachedMethod;
+            return ::RPGR_Avatar_Persistence.Standard.executeHookProcedure(_object, _function, originalMethod, vargv, _procedures, _returnOverride);
         }
     }
 };

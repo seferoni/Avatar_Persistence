@@ -1,6 +1,7 @@
+local AP = ::RPGR_Avatar_Persistence;
 ::mods_hookExactClass("states/tactical_state", function( object )
 {
-    local parentName = object.SuperName;
+    /*local parentName = object.SuperName;
 
     local gB_nullCheck = "gatherBrothers" in object ? object.gatherBrothers : null;
     object.gatherBrothers <- function( _isVictory )
@@ -23,5 +24,25 @@
         }
 
         return vanilla_gatherBrothers(true);
-    }
+    }*/
+
+    AP.Standard.wrap(object, "gatherBrothers", function( _isVictory )
+    {
+        if (!::RPGR_Avatar_Persistence.isPlayerInSurvivorRoster())
+        {
+            return null;
+        }
+
+        if (!AP.Standard.getSetting("LoseItemsUponDefeat"))
+        {
+            return [true];
+        }
+
+        if (!_isVictory)
+        {
+            AP.Persistence.removeItemsUponCombatLoss();
+        }
+
+        return [true];
+    }, {Order = null, ReturnSequence = null, HookProcedure = "overrideArguments"});
 });

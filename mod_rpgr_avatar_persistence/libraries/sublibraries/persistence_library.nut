@@ -12,8 +12,7 @@ local AP = ::RPGR_Avatar_Persistence;
     function generateInjuryCandidates( _player )
     {
         local injuriesToCull = ["injury.missing_nose", "injury.missing_eye", "injury.missing_ear", "injury.brain_damage", "injury.missing_finger"];
-        local filteredInjuries = ::Const.Injury.Permanent.filter(@(injuryIndex, injury) injuriesToCull.find(injury.ID) == null && !_player.getSkills().hasSkill(injury.ID));
-        return filteredInjuries;
+        return ::Const.Injury.Permanent.filter(@(injuryIndex, injury) injuriesToCull.find(injury.ID) == null && !_player.getSkills().hasSkill(injury.ID));
     }
 
     function getThresholdWarningText()
@@ -24,8 +23,8 @@ local AP = ::RPGR_Avatar_Persistence;
 
     function removeItemsUponCombatLoss()
     {
-        local items = ::World.Assets.getStash().getItems();
-        local garbage = items.filter(function( _itemIndex, _item )
+        local items = ::World.Assets.getStash().getItems(),
+        garbage = items.filter(function( _itemIndex, _item )
         {
             return _item != null && ::Math.rand(1, 100) <= AP.Standard.getSetting("ItemRemovalChance")  && AP.Persistence.isItemEligibleForRemoval(_item);
         });

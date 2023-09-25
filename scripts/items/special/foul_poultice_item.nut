@@ -1,4 +1,4 @@
-this.foul_poultice_item <- this.inherit("scripts/items/item",
+this.foul_poultice_item <- ::inherit("scripts/items/item",
 {
 	m = {},
 	function create()
@@ -16,7 +16,7 @@ this.foul_poultice_item <- this.inherit("scripts/items/item",
 		this.m.Value = 0;
 	}
 
-	function getTooltip()
+	function getTooltip() // TODO: rewrite this
 	{
 		local result = [
 			{
@@ -75,7 +75,7 @@ this.foul_poultice_item <- this.inherit("scripts/items/item",
 
 	function onUse( _actor, _item = null )
 	{
-        if (!::RPGR_Raids.isActorEligible(_actor.getFlags()))
+        if (!::RPGR_Avatar_Persistence.Persistence.isActorEligible(_actor.getFlags()))
         {
             return false;
         }
@@ -89,14 +89,20 @@ this.foul_poultice_item <- this.inherit("scripts/items/item",
 		_actor.getSkills().removeByType(::Const.SkillType.Injury);
 		_actor.getSkills().add(::new("scripts/skills/injury/sickness_injury"));
 		_actor.setHitpoints(_actor.getHitpointsMax());
-		_actor.getSprite("permanent_injury_1").Visible = false;
-		_actor.getSprite("permanent_injury_2").Visible = false;
-		_actor.getSprite("permanent_injury_3").Visible = false;
-		_actor.getSprite("permanent_injury_4").Visible = false;
-		_actor.getSprite("permanent_injury_1").resetBrush();
-		_actor.getSprite("permanent_injury_2").resetBrush();
-		_actor.getSprite("permanent_injury_3").resetBrush();
-		_actor.getSprite("permanent_injury_4").resetBrush();
+		local sprites = [];
+
+		for( local i = 1 ; i <= 4 ; i++ )
+		{
+			sprites.push("permanent_injury_" + i);
+		}
+
+		foreach( sprite in sprites )
+		{
+			local injurySprite = _actor.getSprite(sprite);
+			injurySprite.Visible = false;
+			injurySprite.resetBrush();
+		}
+
 		return true;
 	}
 });
