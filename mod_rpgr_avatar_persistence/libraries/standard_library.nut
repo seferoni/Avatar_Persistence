@@ -1,9 +1,10 @@
+local AP = ::RPGR_Avatar_Persistence;
 ::RPGR_Avatar_Persistence.Standard <-
 {
     function cacheHookedMethod( _object, _functionName )
     {
-        local naiveMethod = null;
-        local parentName = _object.SuperName;
+        local naiveMethod = null,
+        parentName = _object.SuperName;
 
         if (_functionName in _object)
         {
@@ -11,6 +12,18 @@
         }
 
         return naiveMethod;
+    }
+
+    function concatenateArrays( ... )
+    {
+        local concatenatedArray = [];
+
+        foreach( array in vargv )
+        {
+            concatenatedArray.extend(array);
+        }
+
+        return concatenatedArray;
     }
 
     function generateTooltipTableEntry( _id, _type, _icon, _text )
@@ -30,7 +43,7 @@
     {
         local orderedArray = [_firstEntry, _secondEntry];
 
-        if (_procedure[0] == "reverse")
+        if (_procedure == "reverse")
         {
             orderedArray.reverse();
         }
@@ -40,18 +53,18 @@
 
     function getSetting( _settingID )
     {
-        if (::RPGR_Avatar_Persistence.MSUFound)
+        if (AP.MSUFound)
         {
-            return ::RPGR_Raids.Mod.ModSettings.getSetting(_settingID).getValue();
+            return AP.Mod.ModSettings.getSetting(_settingID).getValue();
         }
 
-        if (!(_settingID in ::RPGR_Raids.Defaults))
+        if (!(_settingID in AP.Defaults))
         {
             this.logWrapper(format("Invalid settingID %s passed to getSetting, returning null.", _settingID), true);
             return null;
         }
 
-        return ::RPGR_Raids.Defaults[_settingID];
+        return AP.Defaults[_settingID];
     }
 
     function includeFiles( _path )
@@ -77,6 +90,26 @@
         ::logInfo(format("[Avatar Persistence] %s", _string));
     }
 
+    function overrideArguments( _object, _functionName, _function, _returnOverride = null )
+    {
+        local cachedMethod = this.cacheHookedMethod(_object, _functionName),
+        parentName = _object.SuperName;
+
+        _object[_functionName] = function( ... )
+        {
+            local originalMethod = cachedMethod == null ? this[parentName][_functionName] : cachedMethod,
+            arguments = AP.Standard.concatenateArrays([this], vargv),
+            newArguments = AP.Standard.concatenateArrays([this], _function.acall(arguments));
+
+            if (newArguments == null)
+            {
+                return _returnOverride == null ? originalMethod.acall(_newArgumentsArray) : _returnOverride;
+            }
+
+            return originalMethod.acall(arguments);
+        }
+    }
+
     function orderedCall( _functions, _argumentsArray, _procedure, _returnOverride = null )
     {
         local returnValues = [];
@@ -86,21 +119,20 @@
             returnValues.push(functionDef.acall(_argumentsArray)); // TODO: see what context object we need to be in
         }
 
-        return _procedure[1] == "returnFirst" ? returnValues[0] : _procedure[1] == "returnSecond" ? returnValue[1] : _returnOverride;
+        return _procedure == "returnFirst" ? returnValues[0] : _procedure == "returnSecond" ? returnValue[1] : _returnOverride;
     }
 
-    function wrap( _object, _functionName, _function, _procedure = [null, "returnFirst"], _returnOverride = null )
-    {
-        local cachedMethod = this.cacheHookedMethod(_object, _functionName);
-        local parentName = _object.SuperName;
+    function wrap( _object, _functionName, _function, _procedures = [null, "returnFirst"], _returnOverride = null )
+    {   // this works best for when wrapping a function to perform a set of procedures and then returning the original method's return value
+        local cachedMethod = this.cacheHookedMethod(_object, _functionName),
+        parentName = _object.SuperName;
 
         _object[_functionName] = function( ... )
         {
-            local originalMethod = cachedMethod == null ? this[parentName][_functionName] : cachedMethod;
-            local orderedArray = this.generateOrderedArray(_function, originalMethod, _procedure);
-            local arguments = clone vargv;
-            arguments.insert(0, this);
-            return ::RPGR_Raids.Standard.orderedCall(orderedArray, arguments, _procedure, _returnOverride);
+            local originalMethod = cachedMethod == null ? this[parentName][_functionName] : cachedMethod,
+            orderedArray = AP.Standard.generateOrderedArray(_function, originalMethod, _procedures[0]),
+            arguments = AP.Standard.concatenateArrays([this], vargv);
+            return AP.Standard.orderedCall(orderedArray, arguments, _procedures[1], _returnOverride);
         }
     }
 };

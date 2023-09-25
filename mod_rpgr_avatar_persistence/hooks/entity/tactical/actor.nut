@@ -2,7 +2,7 @@
 {
     local parentName = object.SuperName;
 
-    local k_nullCheck = "kill" in object ? object.kill : null;
+    /*local k_nullCheck = "kill" in object ? object.kill : null;
     object.kill <- function( _killer = null, _skill = null, _fatalityType = ::Const.FatalityType.None, _silent = true )
     {
         local vanilla_kill = k_nullCheck == null ? this[parentName].kill : k_nullCheck;
@@ -18,19 +18,20 @@
         }
 
         return vanilla_kill(_killer, _skill, ::Const.FatalityType.None, _silent);
-    }
+    }*/
 
-    ::RPGR_Avatar_Persistence.Standard.wrap(this, "kill", function( _killer = null, _skill = null, _fatalityType = ::Const.FatalityType.None, _silent = true )
+    ::RPGR_Avatar_Persistence.Standard.overrideArguments(this, "kill", function( _killer = null, _skill = null, _fatalityType = ::Const.FatalityType.None, _silent = true )
     {
         if (!::RPGR_Avatar_Persistence.Persistence.isActorEligible(this.getFlags()))
         {
-            return;
+            return null;
         }
 
-        if (!::RPGR_Avatar_Persistence.isWithinInjuryThreshold(this))
+        if (!::RPGR_Avatar_Persistence.Persistence.isWithinInjuryThreshold(this))
         {
-            return;
+            return null;
         }
 
-    })
+        return [_killer, _skill, ::Const.FatalityType.None, _silent];
+    });
 });

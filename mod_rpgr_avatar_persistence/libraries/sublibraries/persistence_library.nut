@@ -1,3 +1,4 @@
+local AP = ::RPGR_Avatar_Persistence;
 ::RPGR_Avatar_Persistence.Persistence <-
 {
     function executePersistenceRoutine( _player, _injuryFlavourText )
@@ -17,16 +18,16 @@
 
     function getThresholdWarningText()
     {
-        local permanentInjuryThreshold = ::RPGR_Avatar_Persistence.Mod.ModSettings.getSetting("PermanentInjuryThreshold").getValue();
+        local permanentInjuryThreshold = AP.Standard.getSetting("PermanentInjuryThreshold");
         return permanentInjuryThreshold == 0 ? "any permanent injuries are sustained" : "more than [color=" + ::Const.UI.Color.NegativeValue + "]" + permanentInjuryThreshold + "[/color] permanent injuries are sustained at a time";
     }
 
     function removeItemsUponCombatLoss()
     {
         local items = ::World.Assets.getStash().getItems();
-        local garbage = items.filter(function( itemIndex, item )
+        local garbage = items.filter(function( _itemIndex, _item )
         {
-            return item != null && ::Math.rand(0, 100) <= ::RPGR_Avatar_Persistence.Mod.ModSettings.getSetting("ItemRemovalChance").getValue()  && ::RPGR_Avatar_Persistence.isItemEligibleForRemoval(item);
+            return _item != null && ::Math.rand(1, 100) <= AP.Standard.getSetting("ItemRemovalChance")  && AP.Persistence.isItemEligibleForRemoval(_item);
         });
 
         if (garbage.len() == 0)
@@ -34,15 +35,14 @@
             return;
         }
 
-        local naiveItemRemovalCeiling = ::RPGR_Avatar_Persistence.Standard.getSetting("ItemRemovalCeiling");
+        local naiveItemRemovalCeiling = AP.Standard.getSetting("ItemRemovalCeiling");
         local actualItemRemovalCeiling = naiveItemRemovalCeiling >= garbage.len() ? ::Math.rand(1, garbage.len()) : ::Math.rand(1, naiveItemRemovalCeiling); // TODO: sanity check this
 
         for( local i = 0; i <= actualItemRemovalCeiling - 1; i++ )
         {
-            local item = garbage[i];
-            local index  = items.find(item);
-            this.logWrapper("Removing item " + item.getName() + " from stash.");
-            items.remove(index);
+            local index  = items.find(garbage[i]);
+            this.logWrapper(format("Removing item %s from stash.", item.getName()));
+            items.remove(index); // TODO: write a method for this in standard with validation
         }
     }
 
@@ -88,6 +88,6 @@
 
     function isWithinInjuryThreshold( _player )
     {
-        return _player.getSkills().getAllSkillsOfType(::Const.SkillType.PermanentInjury).len() <= this.Mod.ModSettings.getSetting("PermanentInjuryThreshold").getValue();
+        return _player.getSkills().getAllSkillsOfType(::Const.SkillType.PermanentInjury).len() <= AP.Standard.getSetting("PermanentInjuryThreshold");
     }
 }
