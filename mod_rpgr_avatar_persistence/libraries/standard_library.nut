@@ -68,8 +68,10 @@ AP.Standard <-
 
     function overrideArguments( _object, _function, _originalMethod, _argumentsArray )
     {   # Calls new method and passes result onto original method; if null, calls original method with original arguments.
-        local newArguments = this.prependContextObject(_object, [_function.acall(_argumentsArray)]);
-        return newArguments == null ? _originalMethod.acall(_argumentsArray) : _originalMethod.acall(newArguments);
+        # It is the responsibility of the overriding function to return appropriate arguments.
+        local returnValue = _function.acall(_argumentsArray);
+        local newArguments = returnValue == null ? _argumentsArray : this.prependContextObject(_object, returnValue);
+        return _originalMethod.acall(newArguments);
     }
 
     function overrideMethod( _object, _function, _originalMethod, _argumentsArray )
@@ -79,16 +81,23 @@ AP.Standard <-
     }
 
     function overrideReturn( _object, _function, _originalMethod, _argumentsArray )
-    {   # Calls original method and passes result as an array onto new method, returns new result. Ideal for tooltips.
-        local newArguments = this.prependContextObject(_object, [_originalMethod.acall(_argumentsArray)]);
+    {   # Calls original method and passes result onto new method, returns new result. Ideal for tooltips.
+        # It is the responsibility of the overriding function to ensure it takes on the appropriate arguments.
+        local newArguments = this.prependContextObject(_object, _originalMethod.acall(_argumentsArray));
         return _function.acall(newArguments);
     }
 
-    function prependContextObject( _object, _array ) // TODO: prepend should be able to preserve arrays
+    function prependContextObject( _object, _list )
     {
         local array = [_object];
 
-        foreach( entry in _array )
+        if (typeof _list != "array")
+        {
+            array.push(_list);
+            return array;
+        }
+
+        foreach( entry in _arguments )
         {
             array.push(entry);
         }
@@ -96,13 +105,12 @@ AP.Standard <-
         return array;
     }
 
-
     function wrap( _object, _functionName, _function, _procedure )
     {
         local cachedMethod = this.cacheHookedMethod(_object, _functionName),
         parentName = _object.SuperName;
 
-        _object.rawset(_functionName, function( ... )
+        _object.rawset(_functionName, function( ... ) // TODO: check if rawset is the right procedure here
         {
             local originalMethod = cachedMethod == null ? this[parentName][_functionName] : cachedMethod,
             argumentsArray = ::RPGR_Avatar_Persistence.Standard.prependContextObject(this, vargv);

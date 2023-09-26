@@ -13,6 +13,6 @@ local AP = ::RPGR_Avatar_Persistence;
             return null;
         }
 
-        return [_killer, _skill, ::Const.FatalityType.None, _silent]; // FIXME: this is a problem
+        return [_killer, _skill, ::Const.FatalityType.None, _silent];
     }, "overrideArguments");
 });
