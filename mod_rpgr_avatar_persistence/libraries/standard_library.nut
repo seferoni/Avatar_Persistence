@@ -14,42 +14,6 @@ AP.Standard <-
         return naiveMethod;
     }
 
-    function concatenateArrays( ... )
-    {
-        local concatenatedArray = [];
-
-        foreach( array in vargv )
-        {
-            concatenatedArray.extend(array);
-        }
-
-        return concatenatedArray;
-    }
-
-    function executeHookProcedure( _object, _function, _originalMethod, _argumentsArray, _procedures, _returnOverride = null )
-    {
-        local arguments = this.concatenateArrays([_object], _argumentsArray);
-
-        switch(_procedures.HookProcedure)
-        {
-            case "wrapMethod": // Calls both methods in order, returns the original value. Generic wrapper.
-                local orderedArray = this.generateOrderedArray(_function, originalMethod, _procedures.Order);
-                return this.orderedCall(orderedArray, arguments, _procedures.ReturnSequence, _returnOverride);
-
-            case "overrideMethod": // Calls and returns new method; if return value is null, calls and returns original method. Should only be used for boolean functions.
-                local returnValue = _function.acall(arguments);
-                return returnValue == null ? _originalMethod(arguments) : returnValue;
-
-            case "overrideReturn": // Calls original method and passes result onto new method, returns new result. Ideal for tooltips.
-                local newArguments = this.concatenateArrays([_object], _originalMethod.acall(arguments));
-                return _function.acall(newArguments);
-
-            case "overrideArguments": // Calls new method and passes result onto original method; if null, calls original with original arguments. Somewhat niche.
-                local newArguments = this.concatenateArrays([_object], _function.acall(arguments));
-                return newArguments == null ? (_returnOverride == null ? _originalMethod.acall(arguments) : _returnOverride) : _originalMethod.acall(newArguments);
-        }
-    }
-
     function generateTooltipTableEntry( _id, _type, _icon, _text )
     {
         local tableEntry =
@@ -61,18 +25,6 @@ AP.Standard <-
         }
 
         return tableEntry;
-    }
-
-    function generateOrderedArray( _firstEntry, _secondEntry, _procedure )
-    {
-        local orderedArray = [_firstEntry, _secondEntry];
-
-        if (_procedure == "reverse")
-        {
-            orderedArray.reverse();
-        }
-
-        return orderedArray;
     }
 
     function getSetting( _settingID )
@@ -114,33 +66,48 @@ AP.Standard <-
         ::logInfo(format("[Avatar Persistence] %s", _string));
     }
 
-    function orderedCall( _functions, _argumentsArray, _procedure, _returnOverride = null )
-    {
-        local returnValues = [];
-
-        foreach( functionDef in _functions )
-        {
-            returnValues.push(functionDef.acall(_argumentsArray)); // TODO: see what context object we need to be in
-        }
-
-        switch(_procedure)
-        {
-            case "returnFirst": return returnValues[0];
-            case "returnSecond": return returnValues[1];
-            default: return _returnOverride;
-        }
+    function overrideArguments( _object, _function, _originalMethod, _argumentsArray )
+    {   # Calls new method and passes result onto original method; if null, calls original method with original arguments.
+        local newArguments = this.prependContextObject(_object, [_function.acall(_argumentsArray)]);
+        return newArguments == null ? _originalMethod.acall(_argumentsArray) : _originalMethod.acall(newArguments);
     }
 
-    function wrap( _object, _functionName, _function, _procedures = {Order = null, ReturnSequence = "returnFirst", HookProcedure = "wrap"}, _returnOverride = null )
+    function overrideMethod( _object, _function, _originalMethod, _argumentsArray )
+    {   # Calls and returns new method; if return value is null, calls and returns original method.
+        local returnValue = _function.acall(_argumentsArray);
+        return returnValue == null ? _originalMethod(_argumentsArray) : returnValue;
+    }
+
+    function overrideReturn( _object, _function, _originalMethod, _argumentsArray )
+    {   # Calls original method and passes result as an array onto new method, returns new result. Ideal for tooltips.
+        local newArguments = this.prependContextObject(_object, [_originalMethod.acall(_argumentsArray)]);
+        return _function.acall(newArguments);
+    }
+
+    function prependContextObject( _object, _array ) // TODO: prepend should be able to preserve arrays
+    {
+        local array = [_object];
+
+        foreach( entry in _array )
+        {
+            array.push(entry);
+        }
+
+        return array;
+    }
+
+
+    function wrap( _object, _functionName, _function, _procedure )
     {
         local cachedMethod = this.cacheHookedMethod(_object, _functionName),
         parentName = _object.SuperName;
 
-        _object[_functionName] = function( ... )
+        _object.rawset(_functionName, function( ... )
         {
-            local originalMethod = cachedMethod == null ? this[parentName][_functionName] : cachedMethod;
-            return ::RPGR_Avatar_Persistence.Standard.executeHookProcedure(_object, _function, originalMethod, vargv, _procedures, _returnOverride);
-        }
+            local originalMethod = cachedMethod == null ? this[parentName][_functionName] : cachedMethod,
+            argumentsArray = ::RPGR_Avatar_Persistence.Standard.prependContextObject(this, vargv);
+            return ::RPGR_Avatar_Persistence.Standard[_procedure](this, _function, originalMethod, argumentsArray);
+        });
     }
 };
 
