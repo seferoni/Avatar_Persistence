@@ -81,19 +81,19 @@ AP.Standard <-
     }
 
     function overrideReturn( _object, _function, _originalMethod, _argumentsArray )
-    {   # Calls original method and passes result onto new method, returns new result. Ideal for tooltips.
-        # It is the responsibility of the overriding function to ensure it takes on the appropriate arguments.
+    {   # Calls original method and passes result onto new method, returns new result. Ideal for tooltips. 
+        # It is the responsibility of the overriding function to ensure it takes on the appropriate arguments and returns appropriate values.
         local newArguments = this.prependContextObject(_object, _originalMethod.acall(_argumentsArray));
         return _function.acall(newArguments);
     }
 
-    function prependContextObject( _object, _list )
+    function prependContextObject( _object, _arguments )
     {
         local array = [_object];
 
-        if (typeof _list != "array")
+        if (typeof _arguments != "array")
         {
-            array.push(_list);
+            array.push(_arguments);
             return array;
         }
 
