@@ -40,7 +40,7 @@ AP.Persistence <-
         for( local i = 0; i <= actualItemRemovalCeiling - 1; i++ )
         {
             local index  = items.find(garbage[i]);
-            this.logWrapper(format("Removing item %s from stash.", item.getName()));
+            this.log(format("Removing item %s from stash.", item.getName()));
             items.remove(index); // TODO: write a method for this in standard with validation
         }
     }

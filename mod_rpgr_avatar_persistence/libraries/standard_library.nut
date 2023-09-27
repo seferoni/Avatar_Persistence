@@ -13,17 +13,21 @@ AP.Standard <-
         return naiveMethod;
     }
 
-    function generateTooltipTableEntry( _id, _type, _icon, _text )
+    function colourWrap( _text, _colour )
     {
-        local tableEntry =
+        local string = _text;
+
+        if (typeof _text != "string")
         {
-            id = _id,
-            type = _type,
-            icon = "ui/icons/" + _icon,
-            text = _text
+            string = _text.tostring();
         }
 
-        return tableEntry;
+        return format("[color=%s] %s [/color]", ::Const.UI.Color[_colour], string)
+    }
+
+    function getOriginalResult( _argumentsArray )
+    {
+        return _argumentsArray[0];
     }
 
     function getSetting( _settingID )
@@ -35,7 +39,7 @@ AP.Standard <-
 
         if (!(_settingID in AP.Defaults))
         {
-            this.logWrapper(format("Invalid settingID %s passed to getSetting, returning null.", _settingID), true);
+            this.log(format("Invalid settingID %s passed to getSetting, returning null.", _settingID), true);
             return null;
         }
 
@@ -50,7 +54,7 @@ AP.Standard <-
         }
     }
 
-    function logWrapper( _string, _isError = false )
+    function log( _string, _isError = false )
     {
         if (_isError)
         {
@@ -63,6 +67,19 @@ AP.Standard <-
         }
 
         ::logInfo(format("[Avatar Persistence] %s", _string));
+    }
+
+    function makeTooltip( _id, _type, _icon, _text )
+    {
+        local tableEntry =
+        {
+            id = _id,
+            type = _type,
+            icon = format("ui/icons/%s", _icon),
+            text = _text
+        }
+
+        return tableEntry;
     }
 
     function overrideArguments( _object, _function, _originalMethod, _argumentsArray )
@@ -113,8 +130,18 @@ AP.Standard <-
 
         _object.rawset(_functionName, function( ... ) // TODO: check if rawset is the right procedure here
         {
-            local originalMethod = cachedMethod == null ? this[parentName][_functionName] : cachedMethod,
-            argumentsArray = ::RPGR_Avatar_Persistence.Standard.prependContextObject(this, vargv);
+            local originalMethod = cachedMethod == null ? this[parentName][_functionName] : cachedMethod;
+            this.log(_functionName);
+            ::MSU.Log.printData(vargv);
+            ::MSU.Log.printData(originalMethod.getinfos().parameters);
+
+            if (vargv.len() != originalMethod.getinfos().parameters.len())
+            {
+                //this.log(format("An invalid number of parameters were passed to %s, aborting wrap procedure.", _functionName), true);
+                //return;
+            }
+
+            local argumentsArray = ::RPGR_Avatar_Persistence.Standard.prependContextObject(this, vargv);
             return ::RPGR_Avatar_Persistence.Standard[_procedure](this, _function, originalMethod, argumentsArray);
         });
     }

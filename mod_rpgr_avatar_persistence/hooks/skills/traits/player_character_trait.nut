@@ -3,7 +3,7 @@ local AP = ::RPGR_Avatar_Persistence;
 {
     AP.Standard.wrap(object, "getTooltip", function( ... )
     {
-        local tooltipArray = vargv[0];
+        local tooltipArray = AP.Standard.getOriginalResult(vargv);
 
         if (!AP.Standard.getSetting("ModifyTooltip"))
         {
@@ -16,11 +16,11 @@ local AP = ::RPGR_Avatar_Persistence;
         }
 
         local id = 10, type = "text";
-        tooltipArray.push(AP.Standard.generateTooltipTableEntry(id, type, "obituary.png", "[color=" + ::Const.UI.Color.PositiveValue + "]" + "Will survive[/color] being struck down by most foes"));
+        tooltipArray.push(AP.Standard.makeTooltip(id, type, "obituary.png", format("%s being struck down by most foes", AP.Standard.colourWrap("Will survive", "PositiveValue"))));
 
         if (!AP.Internal.ARFound || (AP.Internal.ARFound && !::RPGR_Avatar_Resistances.Standard.getSetting("ModifyTooltip")))
         {
-            tooltipArray.push(AP.Standard.generateTooltipTableEntry(id, type, "warning.png", format("Loses persistence when %s", AP.Persistence.retrieveThresholdWarningText())));
+            tooltipArray.push(AP.Standard.makeTooltip(id, type, "warning.png", format("Loses persistence when %s", AP.Persistence.retrieveThresholdWarningText())));
         }
 
         return tooltipArray;

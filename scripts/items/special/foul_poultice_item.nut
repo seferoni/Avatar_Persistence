@@ -20,7 +20,7 @@ this.foul_poultice_item <- ::inherit("scripts/items/item",
 	{
 		local result = [
 			{
-				id = 1,
+				id = 1, // TODO: functionalise table generation
 				type = "title",
 				text = this.getName()
 			},

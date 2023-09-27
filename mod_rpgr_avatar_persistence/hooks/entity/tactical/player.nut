@@ -22,7 +22,7 @@ local AP = ::RPGR_Avatar_Persistence;
 
         if (injuryCandidates.len() == 0)
         {
-            AP.Standard.logWrapper("No injury candidates were found viable for application to the player.", true);
+            AP.Standard.log("No injury candidates were found viable for application to the player.", true);
             return AP.Persistence.executePersistenceRoutine(this, "Was struck down");
         }
 
