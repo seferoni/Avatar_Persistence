@@ -2,7 +2,11 @@
 {
     ID = "mod_rpgr_avatar_persistence",
     Name = "RPG Rebalance - Avatar Persistence",
-    Version = "1.2.0"
+    Version = "1.2.0",
+    Internal =
+    {
+        TERMINATE = "__end"
+    },
     Defaults =
     {
         PermanentInjuryChance = 100,
@@ -15,21 +19,21 @@
     }
 }
 
-::mods_registerMod(::RPGR_Avatar_Persistence.ID, ::RPGR_Avatar_Persistence.Version, ::RPGR_Avatar_Persistence.Name);
-::mods_queue(::RPGR_Avatar_Persistence.ID, "mod_msu(>=1.2.6)", function()
+local AP = ::RPGR_Avatar_Persistence;
+::mods_registerMod(AP.ID, AP.Version, AP.Name);
+::mods_queue(AP.ID, ">mod_msu(>=1.2.6)", function()
 {
-    ::RPGR_Avatar_Persistence.MSUFound <- ::mods_getRegisteredMod("mod_msu") != null;
-    ::RPGR_AR_ModuleFound <- ::mods_getRegisteredMod("mod_rpgr_avatar_resistances") != null;
+    AP.Internal.MSUFound <- ::mods_getRegisteredMod("mod_msu") != null;
+    AP.Internal.ARFound <- ::mods_getRegisteredMod("mod_rpgr_avatar_resistances") != null;
 
-    if (!::RPGR_Avatar_Persistence.MSUFound)
+    if (!AP.Internal.MSUFound)
     {
         return;
     }
 
-    ::RPGR_Avatar_Persistence.Mod <- ::MSU.Class.Mod(::RPGR_Avatar_Persistence.ID, ::RPGR_Avatar_Persistence.Version, ::RPGR_Avatar_Persistence.Name);
+    AP.Mod <- ::MSU.Class.Mod(AP.ID, AP.Version, AP.Name);
 
-    local pageGeneral = ::RPGR_Avatar_Persistence.Mod.ModSettings.addPage("General");
-    local pageItemLoss = ::RPGR_Avatar_Persistence.Mod.ModSettings.addPage("Item Loss");
+    local pageGeneral = AP.Mod.ModSettings.addPage("General"), pageItemLoss = AP.Mod.ModSettings.addPage("Item Loss");
 
     local permanentInjuryChance = pageGeneral.addRangeSetting("PermanentInjuryChance", 100, 1, 100, 1, "Permanent Injury Chance");
     permanentInjuryChance.setDescription("Determines the percentage chance for the player character to suffer permanent injuries upon defeat.");

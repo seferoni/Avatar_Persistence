@@ -1,5 +1,5 @@
 local AP = ::RPGR_Avatar_Persistence;
-::RPGR_Avatar_Persistence.Persistence <-
+AP.Persistence <-
 {
     function executePersistenceRoutine( _player, _injuryFlavourText )
     {
@@ -45,9 +45,9 @@ local AP = ::RPGR_Avatar_Persistence;
         }
     }
 
-    function isActorEligible( _flags )
+    function isActorViable( _actor )
     {
-        return _flags.get("IsPlayerCharacter");
+        return _actor.getFlags().get("IsPlayerCharacter");
     }
 
     function isPlayerInSurvivorRoster()
@@ -56,7 +56,7 @@ local AP = ::RPGR_Avatar_Persistence;
 
         foreach( brother in survivorRoster )
         {
-            if (this.isActorEligible(brother.getFlags()))
+            if (this.isActorViable(brother))
             {
                 return true;
             }
@@ -65,7 +65,7 @@ local AP = ::RPGR_Avatar_Persistence;
         return false;
     }
 
-    function isItemEligibleForRemoval( _item )
+    function isItemViableForRemoval( _item )
     {
         if (_item.isItemType(::Const.Items.ItemType.Legendary))
         {

@@ -3,14 +3,14 @@ local AP = ::RPGR_Avatar_Persistence;
 {
     AP.Standard.wrap(object, "kill", function( _killer = null, _skill = null, _fatalityType = ::Const.FatalityType.None, _silent = true )
     {
-        if (!AP.Persistence.isActorEligible(this.getFlags()))
+        if (!AP.Persistence.isActorViable(this))
         {
-            return null;
+            return;
         }
 
         if (!AP.Persistence.isWithinInjuryThreshold(this))
         {
-            return null;
+            return;
         }
 
         return [_killer, _skill, ::Const.FatalityType.None, _silent];

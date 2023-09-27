@@ -3,14 +3,14 @@ local AP = ::RPGR_Avatar_Persistence;
 {
     AP.Standard.wrap(object, "isReallyKilled", function( _fatalityType )
     {
-        if (!AP.isActorEligible(this.getFlags()))
+        if (!AP.isActorViable(this))
         {
-            return null;
+            return;
         }
 
         if (!AP.isWithinInjuryThreshold(this))
         {
-            return null;
+            return;
         }
 
         if (::Math.rand(1, 100) > AP.Standard.getSetting("PermanentInjuryChance"))
@@ -22,7 +22,7 @@ local AP = ::RPGR_Avatar_Persistence;
 
         if (injuryCandidates.len() == 0)
         {
-            AP.Standard.logWrapper("No injury candidates were found eligible for application to the player.", true);
+            AP.Standard.logWrapper("No injury candidates were found viable for application to the player.", true);
             return AP.Persistence.executePersistenceRoutine(this, "Was struck down");
         }
 

@@ -3,8 +3,7 @@ AP.Standard <-
 {
     function cacheHookedMethod( _object, _functionName )
     {
-        local naiveMethod = null,
-        parentName = _object.SuperName;
+        local naiveMethod = null;
 
         if (_functionName in _object)
         {
@@ -29,7 +28,7 @@ AP.Standard <-
 
     function getSetting( _settingID )
     {
-        if (AP.MSUFound)
+        if (AP.Internal.MSUFound)
         {
             return AP.Mod.ModSettings.getSetting(_settingID).getValue();
         }
@@ -77,14 +76,16 @@ AP.Standard <-
     function overrideMethod( _object, _function, _originalMethod, _argumentsArray )
     {   # Calls and returns new method; if return value is null, calls and returns original method.
         local returnValue = _function.acall(_argumentsArray);
-        return returnValue == null ? _originalMethod(_argumentsArray) : returnValue;
+        return returnValue == null ? _originalMethod.acall(_argumentsArray) : (returnValue == ::RPGR_Avatar_Persistence.Internal.TERMINATE ? null : returnValue);
     }
 
     function overrideReturn( _object, _function, _originalMethod, _argumentsArray )
-    {   # Calls original method and passes result onto new method, returns new result. Ideal for tooltips. 
+    {   # Calls original method and passes result onto new method, returns new result. Ideal for tooltips.
         # It is the responsibility of the overriding function to ensure it takes on the appropriate arguments and returns appropriate values.
-        local newArguments = this.prependContextObject(_object, _originalMethod.acall(_argumentsArray));
-        return _function.acall(newArguments);
+        local originalValue = _originalMethod.acall(_argumentsArray);
+        _argumentsArray.insert(1, originalValue);
+        local returnValue = _function.acall(_argumentsArray);
+        return returnValue == null ? _originalValue : (returnValue == ::RPGR_Avatar_Persistence.Internal.TERMINATE ? null : returnValue);
     }
 
     function prependContextObject( _object, _arguments )

@@ -3,9 +3,9 @@ local AP = ::RPGR_Avatar_Persistence;
 {
     AP.Standard.wrap(object, "gatherBrothers", function( _isVictory )
     {
-        if (!::RPGR_Avatar_Persistence.isPlayerInSurvivorRoster())
+        if (!AP.Persistence.isPlayerInSurvivorRoster())
         {
-            return null;
+            return;
         }
 
         if (!AP.Standard.getSetting("LoseItemsUponDefeat"))
