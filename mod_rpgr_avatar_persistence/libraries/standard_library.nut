@@ -123,26 +123,41 @@ AP.Standard <-
         return array;
     }
 
+    function validateParameters( _originalFunction, _newParameters )
+    {
+        local oldParameters = _originalFunction.getInfos().parameters;
+
+        if (oldParameters[oldParameters.len() - 1] == "...")
+        {
+            return true;
+        }
+
+        if (_newParameters.len() + 1 == oldParameters.len())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     function wrap( _object, _functionName, _function, _procedure )
     {
         local cachedMethod = this.cacheHookedMethod(_object, _functionName),
+        AP = ::RPGR_Avatar_Persistence,
         parentName = _object.SuperName;
 
         _object.rawset(_functionName, function( ... ) // TODO: check if rawset is the right procedure here
         {
             local originalMethod = cachedMethod == null ? this[parentName][_functionName] : cachedMethod;
-            this.log(_functionName);
-            ::MSU.Log.printData(vargv);
-            ::MSU.Log.printData(originalMethod.getinfos().parameters);
 
-            if (vargv.len() != originalMethod.getinfos().parameters.len())
+            if (!AP.Standard.validateParameters(originalMethod, vargv))
             {
-                //this.log(format("An invalid number of parameters were passed to %s, aborting wrap procedure.", _functionName), true);
-                //return;
+                AP.Standard.log(format("An invalid number of parameters were passed to %s, aborting wrap procedure.", _functionName), true);
+                return;
             }
 
-            local argumentsArray = ::RPGR_Avatar_Persistence.Standard.prependContextObject(this, vargv);
-            return ::RPGR_Avatar_Persistence.Standard[_procedure](this, _function, originalMethod, argumentsArray);
+            local argumentsArray = AP.Standard.prependContextObject(this, vargv);
+            return AP.Standard[_procedure](this, _function, originalMethod, argumentsArray);
         });
     }
 };
