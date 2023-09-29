@@ -30,6 +30,11 @@ AP.Standard <-
         return _argumentsArray[0];
     }
 
+    function getPercentageSetting( _settingID )
+    {
+        return (this.getSetting(_settingID) / 100.0)
+    }
+
     function getSetting( _settingID )
     {
         if (AP.Internal.MSUFound)
@@ -59,6 +64,7 @@ AP.Standard <-
         if (_isError)
         {
             ::logError(format("[Avatar Persistence] %s", _string));
+            return;
         }
 
         if (!this.getSetting("VerboseLogging"))
@@ -102,7 +108,7 @@ AP.Standard <-
         local originalValue = _originalMethod.acall(_argumentsArray);
         _argumentsArray.insert(1, originalValue);
         local returnValue = _function.acall(_argumentsArray);
-        return returnValue == null ? _originalValue : (returnValue == ::RPGR_Avatar_Persistence.Internal.TERMINATE ? null : returnValue);
+        return returnValue == null ? originalValue : (returnValue == ::RPGR_Avatar_Persistence.Internal.TERMINATE ? null : returnValue);
     }
 
     function prependContextObject( _object, _arguments )
@@ -125,14 +131,17 @@ AP.Standard <-
 
     function validateParameters( _originalFunction, _newParameters )
     {
-        local oldParameters = _originalFunction.getInfos().parameters;
+        local originalInfo = _originalFunction.getinfos();
+        local originalParameters = originalInfo.parameters;
 
-        if (oldParameters[oldParameters.len() - 1] == "...")
+        if (originalParameters[originalParameters.len() - 1] == "...") // TODO: revise this
         {
             return true;
         }
 
-        if (_newParameters.len() + 1 == oldParameters.len())
+        local newLength = _newParameters.len() + 1;
+
+        if (newLength <= originalParameters.len() && newLength >= oldParameters.len() - originalInfo.defparams.len())
         {
             return true;
         }
