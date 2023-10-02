@@ -99,7 +99,7 @@ AP.Standard <-
     function overrideMethod( _object, _function, _originalMethod, _argumentsArray )
     {   # Calls and returns new method; if return value is null, calls and returns original method.
         local returnValue = _function.acall(_argumentsArray);
-        return returnValue == null ? _originalMethod.acall(_argumentsArray) : (returnValue == ::RPGR_Avatar_Persistence.Internal.TERMINATE ? null : returnValue);
+        return returnValue == null ? _originalMethod.acall(_argumentsArray) : (returnValue == AP.Internal.TERMINATE ? null : returnValue);
     }
 
     function overrideReturn( _object, _function, _originalMethod, _argumentsArray )
@@ -108,7 +108,7 @@ AP.Standard <-
         local originalValue = _originalMethod.acall(_argumentsArray);
         _argumentsArray.insert(1, originalValue);
         local returnValue = _function.acall(_argumentsArray);
-        return returnValue == null ? originalValue : (returnValue == ::RPGR_Avatar_Persistence.Internal.TERMINATE ? null : returnValue);
+        return returnValue == null ? originalValue : (returnValue == AP.Internal.TERMINATE ? null : returnValue);
     }
 
     function prependContextObject( _object, _arguments )
@@ -131,17 +131,16 @@ AP.Standard <-
 
     function validateParameters( _originalFunction, _newParameters )
     {
-        local originalInfo = _originalFunction.getinfos();
-        local originalParameters = originalInfo.parameters;
+        local originalInfo = _originalFunction.getinfos(), originalParameters = originalInfo.parameters;
 
-        if (originalParameters[originalParameters.len() - 1] == "...") // TODO: revise this
+        if (originalParameters[originalParameters.len() - 1] == "...")
         {
             return true;
         }
 
         local newLength = _newParameters.len() + 1;
 
-        if (newLength <= originalParameters.len() && newLength >= oldParameters.len() - originalInfo.defparams.len())
+        if (newLength <= originalParameters.len() && newLength >= originalParameters.len() - originalInfo.defparams.len())
         {
             return true;
         }
@@ -155,7 +154,7 @@ AP.Standard <-
         AP = ::RPGR_Avatar_Persistence,
         parentName = _object.SuperName;
 
-        _object.rawset(_functionName, function( ... ) // TODO: check if rawset is the right procedure here
+        _object.rawset(_functionName, function( ... )
         {
             local originalMethod = cachedMethod == null ? this[parentName][_functionName] : cachedMethod;
 

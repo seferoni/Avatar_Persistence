@@ -1,14 +1,14 @@
 local AP = ::RPGR_Avatar_Persistence;
-::mods_hookExactClass("entity/tactical/player", function( object )
+::mods_hookExactClass("entity/tactical/player", function( _object )
 {
-    AP.Standard.wrap(object, "isReallyKilled", function( _fatalityType )
+    AP.Standard.wrap(_object, "isReallyKilled", function( _fatalityType )
     {
-        if (!AP.isActorViable(this))
+        if (!AP.Persistence.isActorViable(this))
         {
             return;
         }
 
-        if (!AP.isWithinInjuryThreshold(this))
+        if (!AP.Persistence.isWithinInjuryThreshold(this))
         {
             return;
         }

@@ -1,9 +1,9 @@
 local AP = ::RPGR_Avatar_Persistence;
 AP.Persistence <-
 {
-    function executePersistenceRoutine( _player, _injuryFlavourText )
+    function executePersistenceRoutine( _player, _flavourText )
     {
-        _player.worsenMood(::Const.MoodChange.PermanentInjury, _injuryFlavourText);
+        _player.worsenMood(::Const.MoodChange.PermanentInjury, _flavourText);
         ::Tactical.getSurvivorRoster().add(_player);
         _player.m.IsDying = false;
         return false;
@@ -12,13 +12,13 @@ AP.Persistence <-
     function generateInjuryCandidates( _player )
     {
         local injuriesToCull = ["injury.missing_nose", "injury.missing_eye", "injury.missing_ear", "injury.brain_damage", "injury.missing_finger"];
-        return ::Const.Injury.Permanent.filter(@(injuryIndex, injury) injuriesToCull.find(injury.ID) == null && !_player.getSkills().hasSkill(injury.ID));
+        return ::Const.Injury.Permanent.filter(@(_injuryIndex, _injury) injuriesToCull.find(_injury.ID) == null && !_player.getSkills().hasSkill(_injury.ID));
     }
 
     function getThresholdWarningText()
     {
-        local permanentInjuryThreshold = AP.Standard.getSetting("PermanentInjuryThreshold");
-        return permanentInjuryThreshold == 0 ? "any permanent injuries are sustained" : "more than [color=" + ::Const.UI.Color.NegativeValue + "]" + permanentInjuryThreshold + "[/color] permanent injuries are sustained at a time";
+        local threshold = AP.Standard.getSetting("PermanentInjuryThreshold");
+        return threshold == 0 ? "any permanent injuries are sustained" : format("more than %s permanent injuries are sustained at a time", AP.Standard.colourWrap(threshold, "NegativeValue"));
     }
 
     function removeItemsUponCombatLoss()
@@ -26,7 +26,7 @@ AP.Persistence <-
         local items = ::World.Assets.getStash().getItems(),
         garbage = items.filter(function( _itemIndex, _item )
         {
-            return _item != null && ::Math.rand(1, 100) <= AP.Standard.getSetting("ItemRemovalChance")  && AP.Persistence.isItemEligibleForRemoval(_item);
+            return _item != null && ::Math.rand(1, 100) <= AP.Standard.getSetting("ItemRemovalChance")  && AP.Persistence.isItemViableForRemoval(_item);
         });
 
         if (garbage.len() == 0)
@@ -34,14 +34,14 @@ AP.Persistence <-
             return;
         }
 
-        local naiveItemRemovalCeiling = AP.Standard.getSetting("ItemRemovalCeiling");
-        local actualItemRemovalCeiling = naiveItemRemovalCeiling >= garbage.len() ? ::Math.rand(1, garbage.len()) : ::Math.rand(1, naiveItemRemovalCeiling); // TODO: sanity check this
+        local naiveCeiling = AP.Standard.getSetting("ItemRemovalCeiling"),
+        actualCeiling = naiveCeiling >= garbage.len() ? ::Math.rand(1, garbage.len() - 1) : ::Math.rand(1, naiveCeiling);
 
-        for( local i = 0; i <= actualItemRemovalCeiling - 1; i++ )
+        for( local i = 0; i <= actualCeiling; i++ )
         {
             local index  = items.find(garbage[i]);
-            this.log(format("Removing item %s from stash.", item.getName()));
-            items.remove(index); // TODO: write a method for this in standard with validation
+            AP.Standard.log(format("Removing item %s from stash.", item.getName()));
+            items.remove(index);
         }
     }
 

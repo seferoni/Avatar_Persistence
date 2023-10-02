@@ -13,7 +13,7 @@ this.foul_poultice_item <- ::inherit("scripts/items/item",
 		this.m.IsDroppedAsLoot = true;
 		this.m.IsAllowedInBag = false;
 		this.m.IsUsable = true;
-		this.m.Value = 0;
+		this.m.Value = 10;
 	}
 
 	function getTooltip() // TODO: rewrite this
@@ -75,7 +75,7 @@ this.foul_poultice_item <- ::inherit("scripts/items/item",
 
 	function onUse( _actor, _item = null )
 	{
-        if (!::RPGR_Avatar_Persistence.Persistence.isActorEligible(_actor.getFlags()))
+        if (!::RPGR_Avatar_Persistence.Persistence.isActorViable(_actor))
         {
             return false;
         }
@@ -88,12 +88,11 @@ this.foul_poultice_item <- ::inherit("scripts/items/item",
 		::Sound.play("sounds/combat/drink_03.wav", ::Const.Sound.Volume.Inventory);
 		_actor.getSkills().removeByType(::Const.SkillType.Injury);
 		_actor.getSkills().add(::new("scripts/skills/injury/sickness_injury"));
-		_actor.setHitpoints(_actor.getHitpointsMax());
 		local sprites = [];
 
 		for( local i = 1 ; i <= 4 ; i++ )
 		{
-			sprites.push("permanent_injury_" + i);
+			sprites.push(format("permanent_injury_%i", i));
 		}
 
 		foreach( sprite in sprites )

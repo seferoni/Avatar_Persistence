@@ -1,28 +1,26 @@
 local AP = ::RPGR_Avatar_Persistence;
-::mods_hookExactClass("skills/traits/player_character_trait", function( object )
+::mods_hookExactClass("skills/traits/player_character_trait", function( _object )
 {
-    AP.Standard.wrap(object, "getTooltip", function( ... )
+    AP.Standard.wrap(_object, "getTooltip", function( _tooltipArray )
     {
-        local tooltipArray = AP.Standard.getOriginalResult(vargv);
-
         if (!AP.Standard.getSetting("ModifyTooltip"))
         {
-            return tooltipArray;
+            return;
         }
 
         if (!AP.Persistence.isWithinInjuryThreshold(this.getContainer().getActor()))
         {
-            return tooltipArray;
+            return;
         }
 
         local id = 10, type = "text";
-        tooltipArray.push(AP.Standard.makeTooltip(id, type, "obituary.png", format("%s being struck down by most foes", AP.Standard.colourWrap("Will survive", "PositiveValue"))));
+        _tooltipArray.push(AP.Standard.makeTooltip(id, type, "obituary.png", format("%s being struck down by most foes", AP.Standard.colourWrap("Will survive", "PositiveValue"))));
 
         if (!AP.Internal.ARFound || (AP.Internal.ARFound && !::RPGR_Avatar_Resistances.Standard.getSetting("ModifyTooltip")))
         {
-            tooltipArray.push(AP.Standard.makeTooltip(id, type, "warning.png", format("Loses persistence when %s", AP.Persistence.retrieveThresholdWarningText())));
+            _tooltipArray.push(AP.Standard.makeTooltip(id, type, "warning.png", format("Loses persistence when %s", AP.Persistence.getThresholdWarningText())));
         }
 
-        return tooltipArray;
+        return _tooltipArray;
     }, "overrideReturn");
 });

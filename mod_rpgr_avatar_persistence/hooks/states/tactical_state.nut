@@ -1,7 +1,7 @@
 local AP = ::RPGR_Avatar_Persistence;
-::mods_hookExactClass("states/tactical_state", function( object )
+::mods_hookExactClass("states/tactical_state", function( _object )
 {
-    AP.Standard.wrap(object, "gatherBrothers", function( _isVictory )
+    AP.Standard.wrap(_object, "gatherBrothers", function( _isVictory )
     {
         if (!AP.Persistence.isPlayerInSurvivorRoster())
         {
