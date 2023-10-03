@@ -75,19 +75,6 @@ AP.Standard <-
         ::logInfo(format("[Avatar Persistence] %s", _string));
     }
 
-    function makeTooltip( _id, _type, _icon, _text )
-    {
-        local tableEntry =
-        {
-            id = _id,
-            type = _type,
-            icon = format("ui/icons/%s", _icon),
-            text = _text
-        }
-
-        return tableEntry;
-    }
-
     function overrideArguments( _object, _function, _originalMethod, _argumentsArray )
     {   # Calls new method and passes result onto original method; if null, calls original method with original arguments.
         # It is the responsibility of the overriding function to return appropriate arguments.

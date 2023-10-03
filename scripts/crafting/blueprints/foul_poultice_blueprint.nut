@@ -8,18 +8,9 @@ this.foul_poultice_blueprint <- ::inherit("scripts/crafting/blueprint",
 		this.m.PreviewCraftable = ::new("scripts/items/special/foul_poultice_item");
 		this.m.Cost = 500;
 		local ingredients = [
-			{
-				Script = "scripts/items/misc/unhold_heart_item",
-				Num = 1
-			},
-			{
-				Script = "scripts/items/misc/ghoul_brain_item",
-				Num = 1
-			},
-			{
-				Script = "scripts/items/misc/poison_gland_item",
-				Num = 1
-			}
+			{Script = "scripts/items/misc/unhold_heart_item", Num = 1},
+			{Script = "scripts/items/misc/ghoul_brain_item", Num = 1},
+			{Script = "scripts/items/misc/poison_gland_item", Num = 1}
 		];
 		this.init(ingredients);
 	}

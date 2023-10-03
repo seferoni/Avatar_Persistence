@@ -16,56 +16,30 @@ this.foul_poultice_item <- ::inherit("scripts/items/item",
 		this.m.Value = 10;
 	}
 
-	function getTooltip() // TODO: rewrite this
+	function getTooltip()
 	{
-		local result = [
-			{
-				id = 1, // TODO: functionalise table generation
-				type = "title",
-				text = this.getName()
-			},
-			{
-				id = 2,
-				type = "description",
-				text = this.getDescription()
-			}
+		local tooltipArray =
+		[
+			{id = 1, type = "title", text = this.getName()},
+			{id = 2, type = "description", text = this.getDescription()},
+			{id = 66, type = "text", text = this.getValueString()},
 		];
-		result.push({
-			id = 66,
-			type = "text",
-			text = this.getValueString()
-		});
 
 		if (this.getIconLarge() != null)
 		{
-			result.push({
-				id = 3,
-				type = "image",
-				image = this.getIconLarge(),
-				isLarge = true
-			});
+			tooltipArray.push({id = 3, type = "image", image = this.getIconLarge(), isLarge = true});
 		}
 		else
 		{
-			result.push({
-				id = 3,
-				type = "image",
-				image = this.getIcon()
-			});
+			tooltipArray.push({id = 3, type = "image", image = this.getIcon()});
 		}
 
-		result.push({
-			id = 6,
-			type = "text",
-			icon = "ui/icons/special.png",
-			text = "Will remove all temporary or permanent injuries, but only for those that can stomach its noxious vapours"
-		});
-		result.push({
-			id = 65,
-			type = "text",
-			text = "Right-click or drag onto the currently selected character in order to drink. This item will be consumed in the process."
-		});
-		return result;
+		tooltipArray.extend([
+			{id = 6, type = "text", icon = "ui/icons/special.png", text = "Will remove all temporary or permanent injuries, but only for those that can stomach its noxious vapours"},
+			{id = 65, type = "text", text = "Right-click or drag onto the currently selected character in order to drink. This item will be consumed in the process."}
+		]);
+
+		return tooltipArray;
 	}
 
 	function playInventorySound( _eventType )
