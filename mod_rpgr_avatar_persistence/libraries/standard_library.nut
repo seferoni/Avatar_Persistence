@@ -93,7 +93,7 @@ AP.Standard <-
     {   # Calls original method and passes result onto new method, returns new result. Ideal for tooltips.
         # It is the responsibility of the overriding function to ensure it takes on the appropriate arguments and returns appropriate values.
         local originalValue = _originalMethod.acall(_argumentsArray);
-        _argumentsArray.insert(1, originalValue);
+        if (originalValue != null) _argumentsArray.insert(1, originalValue);
         local returnValue = _function.acall(_argumentsArray);
         return returnValue == null ? originalValue : (returnValue == AP.Internal.TERMINATE ? null : returnValue);
     }
