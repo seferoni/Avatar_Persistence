@@ -25,9 +25,15 @@ AP.Standard <-
         return format("[color=%s] %s [/color]", ::Const.UI.Color[_colour], string)
     }
 
-    function getOriginalResult( _argumentsArray )
+    function getDescriptor( _valueToMatch, _referenceTable )
     {
-        return _argumentsArray[0];
+        foreach( descriptor, value in _referenceTable )
+        {
+            if (value == _valueToMatch)
+            {
+                return descriptor;
+            }
+        }
     }
 
     function getPercentageSetting( _settingID )
