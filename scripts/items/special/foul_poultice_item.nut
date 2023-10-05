@@ -62,6 +62,7 @@ this.foul_poultice_item <- ::inherit("scripts/items/item",
 		::Sound.play("sounds/combat/drink_03.wav", ::Const.Sound.Volume.Inventory);
 		_actor.getSkills().removeByType(::Const.SkillType.Injury);
 		_actor.getSkills().add(::new("scripts/skills/injury/sickness_injury"));
+		_actor.setHitpoints(_actor.getHitpointsMax());
 		local sprites = [];
 
 		for( local i = 1 ; i <= 4 ; i++ )

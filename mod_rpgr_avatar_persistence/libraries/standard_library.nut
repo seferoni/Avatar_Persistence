@@ -96,7 +96,7 @@ AP.Standard <-
     }
 
     function overrideReturn( _object, _function, _originalMethod, _argumentsArray )
-    {   # Calls original method and passes result onto new method, returns new result. Ideal for tooltips.
+    {   # Calls original method and passes result onto new method, returns new result.
         # It is the responsibility of the overriding function to ensure it takes on the appropriate arguments and returns appropriate values.
         local originalValue = _originalMethod.acall(_argumentsArray);
         if (originalValue != null) _argumentsArray.insert(1, originalValue);
@@ -120,6 +120,12 @@ AP.Standard <-
         }
 
         return array;
+    }
+
+    function setCase( _string, _case )
+    {
+        local character = _string[0].tochar()[_case]()
+        return format("%s%s", character, _string.slice(1, str.len() - 1));
     }
 
     function validateParameters( _originalFunction, _newParameters )

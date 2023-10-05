@@ -13,11 +13,11 @@ local AP = ::RPGR_Avatar_Persistence;
             return;
         }
 
-        _tooltipArray.push({id = 10, type = "text", icon = "obituary.png", text = format("%s being struck down by most foes", AP.Standard.colourWrap("Will survive", "PositiveValue"))});
+        _tooltipArray.push({id = 10, type = "text", icon = "ui/icons/obituary.png", text = format("%s being struck down by most foes", AP.Standard.colourWrap("Will survive", "PositiveValue"))});
 
         if (!AP.Internal.ARFound || (AP.Internal.ARFound && !::RPGR_Avatar_Resistances.Standard.getSetting("ModifyTooltip")))
         {
-            _tooltipArray.push({id = 10, type = "text", icon = "warning.png", text = format("Loses persistence when %s", AP.Persistence.getThresholdWarningText())});
+            _tooltipArray.push({id = 10, type = "text", icon = "ui/icons/warning.png", text = format("Loses persistence when %s", AP.Persistence.getThresholdWarningText())});
         }
 
         return _tooltipArray;

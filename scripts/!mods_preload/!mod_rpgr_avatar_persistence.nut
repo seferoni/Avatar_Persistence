@@ -2,7 +2,7 @@
 {
     ID = "mod_rpgr_avatar_persistence",
     Name = "RPG Rebalance - Avatar Persistence",
-    Version = "1.2.0",
+    Version = 1.2.0,
     Internal =
     {
         TERMINATE = "__end"
@@ -21,7 +21,7 @@
 
 local AP = ::RPGR_Avatar_Persistence;
 ::mods_registerMod(AP.ID, AP.Version, AP.Name);
-::mods_queue(AP.ID, ">mod_msu(>=1.2.7)", function()
+::mods_queue(AP.ID, ">mod_msu", function()
 {
     AP.Internal.MSUFound <- ::mods_getRegisteredMod("mod_msu") != null;
     AP.Internal.ARFound <- ::mods_getRegisteredMod("mod_rpgr_avatar_resistances") != null;
