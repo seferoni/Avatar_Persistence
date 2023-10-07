@@ -36,6 +36,18 @@ AP.Standard <-
         }
     }
 
+    function getFlag( _string, _object = ::World.Statistics )
+    {
+        local flagValue = _object.getFlags().get(format("mod_rpgr_avatar_persistence.%s", _string));
+
+        if (flagValue == false)
+        {
+            return _object.getFlags().get(format("%s", _string)).
+        }
+
+        return flagValue;
+    }
+
     function getPercentageSetting( _settingID )
     {
         return (this.getSetting(_settingID) / 100.0)
@@ -126,6 +138,11 @@ AP.Standard <-
     {
         local character = _string[0].tochar()[_case]()
         return format("%s%s", character, _string.slice(1, str.len() - 1));
+    }
+
+    function setFlag( _string, _value, _object )
+    {
+        _object.getFlags().set(format("mod_rpgr_avatar_persistence.%s", _string), _value);
     }
 
     function validateParameters( _originalFunction, _newParameters )
