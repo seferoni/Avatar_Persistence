@@ -47,7 +47,7 @@ AP.Persistence <-
 
     function isActorViable( _actor )
     {
-        return _actor.getFlags().get("IsPlayerCharacter");
+        return AP.Standard.getFlag("IsPlayerCharacter", _actor);
     }
 
     function isPlayerInSurvivorRoster()

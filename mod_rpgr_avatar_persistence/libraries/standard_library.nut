@@ -36,13 +36,25 @@ AP.Standard <-
         }
     }
 
-    function getFlag( _string, _object = ::World.Statistics )
+    function getFlag( _string, _object )
     {
         local flagValue = _object.getFlags().get(format("mod_rpgr_avatar_persistence.%s", _string));
 
-        if (flagValue == false)
+        if (!flagValue)
         {
-            return _object.getFlags().get(format("%s", _string)).
+            return _object.getFlags().get(format("%s", _string));
+        }
+
+        return flagValue;
+    }
+
+    function getFlagAsInt( _string, _object )
+    {
+        return _object.getFlags().getAsInt(format("mod_rpgr_avatar_persistence.%s", _string));
+
+        if (!flagValue)
+        {
+            return _object.getFlags().getAsInt(format("%s", _string));
         }
 
         return flagValue;
@@ -75,6 +87,11 @@ AP.Standard <-
         {
             ::include(file);
         }
+    }
+
+    function incrementFlag( _string, _value, _object )
+    {
+        _object.getFlags().increment(format("mod_rpgr_avatar_persistence.%s", _string), _value);
     }
 
     function log( _string, _isError = false )
