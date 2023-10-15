@@ -153,8 +153,8 @@ AP.Standard <-
 
     function setCase( _string, _case )
     {
-        local character = _string[0].tochar()[_case]()
-        return format("%s%s", character, _string.slice(1, str.len() - 1));
+        local character = _string[0].tochar()[_case]();
+        return format("%s%s", character, _string.slice(1));
     }
 
     function setFlag( _string, _value, _object )
