@@ -21,7 +21,7 @@ AP.Persistence <-
         return threshold == 0 ? "any permanent injuries are sustained" : format("more than %s permanent injuries are sustained at a time", AP.Standard.colourWrap(threshold, "NegativeValue"));
     }
 
-    function removeItemsUponCombatLoss()
+    function removeItemsUponCombatLoss() // TODO: this should also remove money
     {
         local items = ::World.Assets.getStash().getItems(),
         garbage = items.filter(function( _itemIndex, _item )
