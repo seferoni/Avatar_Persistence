@@ -31,7 +31,7 @@ local AP = ::RPGR_Avatar_Persistence;
         return;
     }
 
-    AP.Mod <- ::MSU.Class.Mod(AP.ID, AP.Version, AP.Name);
+    AP.Mod <- ::MSU.Class.Mod(AP.ID, AP.Version.tostring(), AP.Name);
 
     local pageGeneral = AP.Mod.ModSettings.addPage("General"), pageItemLoss = AP.Mod.ModSettings.addPage("Item Loss");
 
