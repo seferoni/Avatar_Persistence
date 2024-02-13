@@ -1,92 +1,114 @@
 local AP = ::RPGR_Avatar_Persistence;
 AP.Persistence <-
 {
-    function executePersistenceRoutine( _player, _flavourText )
-    {
-        _player.worsenMood(::Const.MoodChange.PermanentInjury, _flavourText);
-        ::Tactical.getSurvivorRoster().add(_player);
-        _player.m.IsDying = false;
-        return false;
-    }
+	Excluded = 
+	[
+		"injury.missing_nose",
+		"injury.missing_eye",
+		"injury.missing_ear",
+		"injury.missing_finger"
+	],
+	Parameters = 
+	{
+		ElixirChance = 100
+	}
 
-    function generateInjuryCandidates( _player )
-    {
-        local injuriesToCull = ["injury.missing_nose", "injury.missing_eye", "injury.missing_ear", "injury.brain_damage", "injury.missing_finger"];
-        return ::Const.Injury.Permanent.filter(@(_injuryIndex, _injury) injuriesToCull.find(_injury.ID) == null && !_player.getSkills().hasSkill(_injury.ID));
-    }
+	function executeDefeatRoutine()
+	{
+		::World.Assets.m.Money *= 1 - AP.Standard.getPercentageSetting("MoneyLossPercentage");
+		::World.Assets.m.ArmorParts *= 1 - AP.Standard.getPercentageSetting("ToolsLossPercentage");
+		::World.Assets.m.Medicine *= 1 - AP.Standard.getPercentageSetting("MedicineLossPercentage");
+		::World.Assets.m.Ammo *= 1 - AP.Standard.getPercentageSetting("AmmoLossPercentage");
+		this.removeItemsUponCombatLoss();
+	}
 
-    function getThresholdWarningText()
-    {
-        local threshold = AP.Standard.getSetting("PermanentInjuryThreshold");
-        return threshold == 0 ? "any permanent injuries are sustained" : format("more than %s permanent injuries are sustained at a time", AP.Standard.colourWrap(threshold, "NegativeValue"));
-    }
+	function executePersistenceRoutine( _player, _flavourText )
+	{
+		_player.worsenMood(::Const.MoodChange.PermanentInjury, _flavourText);
+		::Tactical.getSurvivorRoster().add(_player);
+		_player.m.IsDying = false;
+		return false;
+	}
 
-    function removeItemsUponCombatLoss() // TODO: this should also remove money
-    {
-        local items = ::World.Assets.getStash().getItems(),
-        garbage = items.filter(function( _itemIndex, _item )
-        {
-            return _item != null && ::Math.rand(1, 100) <= AP.Standard.getSetting("ItemRemovalChance")  && AP.Persistence.isItemViableForRemoval(_item);
-        });
+	function generateInjuryCandidates( _player )
+	{
+		local injuriesToCull = this.Excluded;
+		return ::Const.Injury.Permanent.filter(@(_injuryIndex, _injury) injuriesToCull.find(_injury.ID) == null && !_player.getSkills().hasSkill(_injury.ID));
+	}
 
-        if (garbage.len() == 0)
-        {
-            return;
-        }
+	function getThresholdWarningText()
+	{
+		local threshold = AP.Standard.getSetting("PermanentInjuryThreshold");
+		return threshold == 0 ? "any permanent injuries are sustained" : format("more than %s permanent injuries are sustained at a time", AP.Standard.colourWrap(threshold, "NegativeValue"));
+	}
 
-        local naiveCeiling = AP.Standard.getSetting("ItemRemovalCeiling"),
-        actualCeiling = naiveCeiling >= garbage.len() ? ::Math.rand(1, garbage.len() - 1) : ::Math.rand(1, naiveCeiling);
+	function removeItemsUponCombatLoss()
+	{
+		local items = ::World.Assets.getStash().getItems(),
+		candidates = items.filter(function( _itemIndex, _item )
+		{
+			return _item != null && AP.Persistence.isItemViableForRemoval(_item);
+		});
 
-        for( local i = 0; i <= actualCeiling; i++ )
-        {
-            local index  = items.find(garbage[i]);
-            AP.Standard.log(format("Removing item %s from stash.", item.getName()));
-            items.remove(index);
-        }
-    }
+		if (candidates.len() == 0)
+		{
+			return;
+		}
 
-    function isActorViable( _actor )
-    {
-        return AP.Standard.getFlag("IsPlayerCharacter", _actor);
-    }
+		local count = 0,
+		naiveCeiling = AP.Standard.getSetting("ItemRemovalCeiling"),
+		actualCeiling = ::Math.rand(1, ::Math.min(candidates.len(), naiveCeiling));
 
-    function isPlayerInSurvivorRoster()
-    {
-        local survivorRoster = ::Tactical.getSurvivorRoster().getAll();
+		while( count < actualCeiling )
+		{
+			local index  = items.find(candidates[::Math.rand(0, candidates.len() - 1)]);
+			items.remove(index);
+			count++;
+		}
+	}
 
-        foreach( brother in survivorRoster )
-        {
-            if (this.isActorViable(brother))
-            {
-                return true;
-            }
-        }
+	function isActorViable( _actor )
+	{
+		return AP.Standard.getFlag("IsPlayerCharacter", _actor);
+	}
 
-        return false;
-    }
+	function isPlayerInSurvivorRoster()
+	{
+		local survivorRoster = ::Tactical.getSurvivorRoster().getAll();
 
-    function isItemViableForRemoval( _item )
-    {
-        if (_item.isItemType(::Const.Items.ItemType.Legendary))
-        {
-            return false;
-        }
+		foreach( brother in survivorRoster )
+		{
+			if (this.isActorViable(brother))
+			{
+				return true;
+			}
+		}
 
-        if (_item.m.ItemType == ::Const.Items.ItemType.Misc)
-        {
-            return false;
-        }
+		return false;
+	}
 
-        if (_item.getID() == "weapon.player_banner")
-        {
-            return false;
-        }
+	function isItemViableForRemoval( _item )
+	{
+		if (_item.isItemType(::Const.Items.ItemType.Legendary))
+		{
+			return false;
+		}
 
-        return true;
-    }
+		if (_item.m.ItemType == ::Const.Items.ItemType.Misc)
+		{
+			return false;
+		}
 
-    function isWithinInjuryThreshold( _player )
-    {
-        return _player.getSkills().getAllSkillsOfType(::Const.SkillType.PermanentInjury).len() <= AP.Standard.getSetting("PermanentInjuryThreshold");
-    }
+		if (_item.getID() == "weapon.player_banner")
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	function isWithinInjuryThreshold( _player )
+	{
+		return _player.getSkills().getAllSkillsOfType(::Const.SkillType.PermanentInjury).len() <= AP.Standard.getSetting("PermanentInjuryThreshold");
+	}
 }
