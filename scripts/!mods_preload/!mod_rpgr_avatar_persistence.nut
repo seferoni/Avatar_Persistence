@@ -8,13 +8,18 @@
 		TERMINATE = "__end"
 	},
 	Defaults =
-	{	// TODO: add loss on defeat stuff
-		PermanentInjuryChance = 100,
-		PermanentInjuryThreshold = 1,
+	{
+		AmmoLossPercentage = 40,
+		ElixirAddedToMarketplace = true,
+		PermanentInjuryChance = 66,
+		PermanentInjuryThreshold = 3,
 		ItemRemovalChance = 33,
 		ItemRemovalCeiling = 6,
 		LoseItemsUponDefeat = true,
+		MedicineLossPercentage = 50,
 		ModifyTooltip = true,
+		MoneyLossPercentage = 85,
+		ToolsLossPercentage = 50,
 		VerboseLogging = true
 	}
 }
@@ -41,8 +46,14 @@ if (!AP.Internal.MSUFound)
 	AP.Mod <- ::MSU.Class.Mod(AP.ID, AP.Version.tostring(), AP.Name);
 	local Defaults = AP.Defaults;
 
-	local pageGeneral = AP.Mod.ModSettings.addPage("General"), 
+	local pageGeneral = AP.Mod.ModSettings.addPage("General"),
 	pageItemLoss = AP.Mod.ModSettings.addPage("Item Loss");
+
+	local ammoLossPercentage = pageItemLoss.addRangeSetting("AmmoLossPercentage", Defaults.AmmoLossPercentage, 0, 100, 1, "Ammo Loss Percentage");
+	ammoLossPercentage.setDescription("Determines the percentage of ammo lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.");
+
+	local elixirAddedToMarketplace = pageGeneral.addBooleanSetting("ElixirAddedToMarketplace", Defaults.EnableElixir, "Elixir Added To Marketplace");
+	enableElixir.setDescription("Determines whether or not the elixir can be found in marketplaces. Disabling this will not remove currently existing elixirs, but will prevent the creation of new ones.");
 
 	local permanentInjuryChance = pageGeneral.addRangeSetting("PermanentInjuryChance", Defaults.PermanentInjuryChance, 0, 100, 1, "Permanent Injury Chance");
 	permanentInjuryChance.setDescription("Determines the percentage chance for the player character to suffer permanent injuries upon defeat.");
@@ -61,9 +72,6 @@ if (!AP.Internal.MSUFound)
 
 	local moneyLossPercentage = pageItemLoss.addRangeSetting("MoneyLossPercentage", Defaults.MoneyLossPercentage, 0, 100, 1, "Money Loss Percentage");
 	moneyLossPercentage.setDescription("Determines the percentage of money lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.");
-
-	local ammoLossPercentage = pageItemLoss.addRangeSetting("AmmoLossPercentage", Defaults.AmmoLossPercentage, 0, 100, 1, "Ammo Loss Percentage");
-	ammoLossPercentage.setDescription("Determines the percentage of ammo lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.");
 
 	local medicineLossPercentage = pageItemLoss.addRangeSetting("MedicineLossPercentage", Defaults.MedicineLossPercentage, 0, 100, 1, "Medicine Loss Percentage");
 	medicineLossPercentage.setDescription("Determines the percentage of medicine lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.");

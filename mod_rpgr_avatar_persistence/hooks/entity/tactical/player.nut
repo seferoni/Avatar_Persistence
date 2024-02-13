@@ -15,7 +15,7 @@ local AP = ::RPGR_Avatar_Persistence;
 
 		if (::Math.rand(1, 100) > AP.Standard.getSetting("PermanentInjuryChance"))
 		{
-			return AP.Persistence.executePersistenceRoutine(this, "Was struck down");
+			return AP.Persistence.executePersistenceRoutine(this, AP.Persistence.FlavourText.Uninjured);
 		}
 
 		local injuryCandidates = AP.Persistence.generateInjuryCandidates(this);
@@ -23,10 +23,10 @@ local AP = ::RPGR_Avatar_Persistence;
 		if (injuryCandidates.len() == 0)
 		{
 			AP.Standard.log("No injury candidates were found viable for application to the player.", true);
-			return AP.Persistence.executePersistenceRoutine(this, "Was struck down");
+			return AP.Persistence.executePersistenceRoutine(this, AP.Persistence.FlavourText.Uninjured);
 		}
 
-		this.getSkills().add(::new("scripts/skills/" + injuryCandidates[::Math.rand(0, injuryCandidates.len() - 1)].Script));
-		return AP.Persistence.executePersistenceRoutine(this, "Was grievously struck down");
+		this.getSkills().add(::new(format("scripts/skills/%s", injuryCandidates[::Math.rand(0, injuryCandidates.len() - 1)].Script)));
+		return AP.Persistence.executePersistenceRoutine(this, AP.Persistence.FlavourText.Injured);
 	}, "overrideMethod");
 });

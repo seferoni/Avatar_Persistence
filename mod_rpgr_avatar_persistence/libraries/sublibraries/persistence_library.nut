@@ -1,24 +1,43 @@
 local AP = ::RPGR_Avatar_Persistence;
 AP.Persistence <-
 {
-	Excluded = 
+	Excluded =
 	[
 		"injury.missing_nose",
 		"injury.missing_eye",
 		"injury.missing_ear",
 		"injury.missing_finger"
 	],
-	Parameters = 
+	FlavourText =
+	{
+		Uninjured = "Was struck down",
+		Injured = "Was grievously struck down"
+	},
+	Parameters =
 	{
 		ElixirChance = 100
+	},
+	Tooltip =
+	{
+		Icons =
+		{
+			Persistence = "ui/icons/obituary.png",
+			Warning = "ui/icons/warning.png"
+		}
 	}
 
 	function executeDefeatRoutine()
 	{
-		::World.Assets.m.Money *= 1 - AP.Standard.getPercentageSetting("MoneyLossPercentage");
-		::World.Assets.m.ArmorParts *= 1 - AP.Standard.getPercentageSetting("ToolsLossPercentage");
-		::World.Assets.m.Medicine *= 1 - AP.Standard.getPercentageSetting("MedicineLossPercentage");
-		::World.Assets.m.Ammo *= 1 - AP.Standard.getPercentageSetting("AmmoLossPercentage");
+		local Standard = AP.Standard,
+		get = @(_settingID) 1 - Standard.getPercentageSetting(_settingID);
+
+		# Reduce resources as per user-configured percentage setting.
+		::World.Assets.m.Money *= get("MoneyLossPercentage")
+		::World.Assets.m.ArmorParts *= get("ToolsLossPercentage");
+		::World.Assets.m.Medicine *= get("MedicineLossPercentage");
+		::World.Assets.m.Ammo *= get("AmmoLossPercentage");
+
+		# Remove items in stash.
 		this.removeItemsUponCombatLoss();
 	}
 
@@ -39,7 +58,7 @@ AP.Persistence <-
 	function getThresholdWarningText()
 	{
 		local threshold = AP.Standard.getSetting("PermanentInjuryThreshold");
-		return threshold == 0 ? "any permanent injuries are sustained" : format("more than %s permanent injuries are sustained at a time", AP.Standard.colourWrap(threshold, "NegativeValue"));
+		return threshold == 0 ? "any permanent injuries are sustained" : format("more than %s permanent injuries are sustained at a time", AP.Standard.colourWrap(threshold, AP.Standard.Colour.Red));
 	}
 
 	function removeItemsUponCombatLoss()
