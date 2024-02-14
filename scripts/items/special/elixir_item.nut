@@ -87,7 +87,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 	function onUse( _actor, _item = null )
 	{
 		if (!this.isActorViable(_actor))
-		{
+		{	// TODO: handle case where avatar status is conferred & add warning entry for invalid uses
 			return false;
 		}
 

@@ -2,7 +2,7 @@
 {
 	ID = "mod_rpgr_avatar_persistence",
 	Name = "RPG Rebalance - Avatar Persistence",
-	Version = 2.0.0,
+	Version = "2.0.0",
 	Internal =
 	{
 		TERMINATE = "__end"
@@ -11,6 +11,7 @@
 	{
 		AmmoLossPercentage = 40,
 		ElixirAddedToMarketplace = true,
+		ElixirConfersAvatarStatus = true,
 		PermanentInjuryChance = 66,
 		PermanentInjuryThreshold = 3,
 		ItemRemovalChance = 33,
@@ -52,9 +53,6 @@ if (!AP.Internal.MSUFound)
 	local ammoLossPercentage = pageItemLoss.addRangeSetting("AmmoLossPercentage", Defaults.AmmoLossPercentage, 0, 100, 1, "Ammo Loss Percentage");
 	ammoLossPercentage.setDescription("Determines the percentage of ammo lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.");
 
-	local elixirAddedToMarketplace = pageGeneral.addBooleanSetting("ElixirAddedToMarketplace", Defaults.EnableElixir, "Elixir Added To Marketplace");
-	enableElixir.setDescription("Determines whether or not the elixir can be found in marketplaces. Disabling this will not remove currently existing elixirs, but will prevent the creation of new ones.");
-
 	local permanentInjuryChance = pageGeneral.addRangeSetting("PermanentInjuryChance", Defaults.PermanentInjuryChance, 0, 100, 1, "Permanent Injury Chance");
 	permanentInjuryChance.setDescription("Determines the percentage chance for the player character to suffer permanent injuries upon defeat.");
 
@@ -64,6 +62,12 @@ if (!AP.Internal.MSUFound)
 	local itemRemovalCeiling = pageItemLoss.addRangeSetting("ItemRemovalCeiling", Defaults.ItemRemovalCeiling, 1, 10, 1, "Item Removal Ceiling");
 	itemRemovalCeiling.setDescription("Determines the maximum number of items that may be removed per instance of player defeat. Does nothing if Lose Items Upon Defeat is disabled.");
 
+	local elixirAddedToMarketplace = pageGeneral.addBooleanSetting("ElixirAddedToMarketplace", Defaults.ElixirAddedToMarketplace, "Elixir Added To Marketplace");
+	elixirAddedToMarketplace.setDescription("Determines whether or not the elixir can be found in marketplaces. Disabling this will not remove currently existing elixirs, but will prevent the creation of new ones.");
+
+	local elixirConfersAvatarStatus = pageGeneral.addBooleanSetting("ElixirConfersAvatarStatus", Defaults.ElixirConfersAvatarStatus, "Elixir Confers Avatar Status");
+	elixirConfersAvatarStatus.setDescription("Determines whether or not the elixir has the ability to make selected non-player characters avatars on consumption.");
+	
 	local loseItemsUponDefeat = pageGeneral.addBooleanSetting("LoseItemsUponDefeat", Defaults.LoseItemsUponDefeat, "Lose Items Upon Defeat");
 	loseItemsUponDefeat.setDescription("Determines whether items kept in the player's stash are removed at random upon defeat, in the case of persistence.");
 

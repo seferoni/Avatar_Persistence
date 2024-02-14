@@ -17,6 +17,13 @@ AP.Persistence <-
 	{
 		ElixirChance = 100
 	},
+	Resources = 
+	[
+		"Ammo",
+		"Medicine",
+		"Money",
+		"Tools"
+	],
 	Tooltip =
 	{
 		Icons =
@@ -28,16 +35,7 @@ AP.Persistence <-
 
 	function executeDefeatRoutine()
 	{
-		local Standard = AP.Standard,
-		get = @(_settingID) 1 - Standard.getPercentageSetting(_settingID);
-
-		# Reduce resources as per user-configured percentage setting.
-		::World.Assets.m.Money *= get("MoneyLossPercentage")
-		::World.Assets.m.ArmorParts *= get("ToolsLossPercentage");
-		::World.Assets.m.Medicine *= get("MedicineLossPercentage");
-		::World.Assets.m.Ammo *= get("AmmoLossPercentage");
-
-		# Remove items in stash.
+		this.reduceResources();
 		this.removeItemsUponCombatLoss();
 	}
 
@@ -55,10 +53,16 @@ AP.Persistence <-
 		return ::Const.Injury.Permanent.filter(@(_injuryIndex, _injury) injuriesToCull.find(_injury.ID) == null && !_player.getSkills().hasSkill(_injury.ID));
 	}
 
-	function getThresholdWarningText()
+	function reduceResources()
 	{
-		local threshold = AP.Standard.getSetting("PermanentInjuryThreshold");
-		return threshold == 0 ? "any permanent injuries are sustained" : format("more than %s permanent injuries are sustained at a time", AP.Standard.colourWrap(threshold, AP.Standard.Colour.Red));
+		local Standard = AP.Standard,
+		get = @(_settingID) 1 - Standard.getPercentageSetting(_settingID);	
+
+		foreach( resource in this.Resources )
+		{
+			local currentValue = ::World.Assets.m[resource];
+			::World.Assets.m[resource] = ::Math.floor(currentValue * get(format("%sLossPercentage", resource)));
+		}
 	}
 
 	function removeItemsUponCombatLoss()
@@ -89,6 +93,21 @@ AP.Persistence <-
 	function isActorViable( _actor )
 	{
 		return AP.Standard.getFlag("IsPlayerCharacter", _actor);
+	}
+
+	function isPlayerInRoster()
+	{
+		local roster = ::World.getPlayerRoster().getAll();
+
+		foreach( brother in roster )
+		{
+			if (this.isActorViable(brother))
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	function isPlayerInSurvivorRoster()
