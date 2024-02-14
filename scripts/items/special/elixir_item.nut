@@ -15,6 +15,8 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		this.m.IsAllowedInBag = false;
 		this.m.IsUsable = true;
 		this.m.Value = 1500;
+		this.initialiseText();
+		this.initialiseWarnings();
 	}
 	Tooltip =
 	{
@@ -29,22 +31,33 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		Use = "sounds/combat/drink_03.wav"
 	}
 
-	function getTooltip()
+	function createWarningEntry()
 	{
-		local tooltipArray = [],
-		push = @(_entry) tooltipArray.push(_entry);
+		local warning = this.getActiveWarning();
 
-		# Create generic entries.
-		push({id = 1, type = "title", text = this.getName()});
-		push({id = 2, type = "description", text = this.getDescription()});
-		push({id = 66, type = "text", text = this.getValueString()});
-		push({id = 3, type = "image", image = this.getIcon()});
+		if (warning == null)
+		{
+			return null;
+		}
+	}
 
-		# Create instruction entries.
-		push({id = 6, type = "text", icon = this.Tooltip.Icons.Instruction, text = "Will remove all temporary or permanent injuries, but only for player characters"});
-		push({id = 65, type = "text", text = "Right-click or drag onto the currently selected character in order to drink. This item will be consumed in the process."});
+	function conferAvatarStatus( _actor )
+	{
+		if (AP.Persistence.isPlayerInRoster())
+		{
+			this.setWarning("AvatarAlreadyPresent", true);
+			return;
+		}
+	}
 
-		return tooltipArray;
+	function getActiveWarning()
+	{
+		foreach( warning, warningState in this.m.Warnings )
+		{
+			if (warningState) return warning;
+		}
+
+		return null;
 	}
 
 	function getAllSprites()
@@ -57,6 +70,48 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		}
 
 		return sprites;
+	}
+
+	function getInstructionText()
+	{
+		return this.m.InstructionText;
+	}
+
+	function getTooltip()
+	{
+		local tooltipArray = [],
+		push = @(_entry) tooltipArray.push(_entry);
+
+		# Create generic entries.
+		push({id = 1, type = "title", text = this.getName()});
+		push({id = 2, type = "description", text = this.getDescription()});
+		push({id = 66, type = "text", text = this.getValueString()});
+		push({id = 3, type = "image", image = this.getIcon()});
+
+		# Create instruction entries.
+		push({id = 6, type = "text", icon = this.Tooltip.Icons.Instruction, text = this.getInstructionText()});
+		push({id = 65, type = "text", text = this.getUsageText()});
+
+		return tooltipArray;
+	}
+
+	function getUsageText()
+	{
+		return this.m.UsageText;
+	}
+
+	function initialiseText()
+	{
+		this.m.InstructionText <- "Will remove all temporary or permanent injuries, but only for player characters.";
+		this.m.UsageText <- "Right-click or drag onto the currently selected character in order to drink. This item will be consumed in the process.";
+	}
+
+	function initialiseWarning()
+	{
+		this.m.Warnings <- {};
+		this.m.Warnings.AvatarAlreadyPresent <- false;
+		this.m.Warnings.CharacterNotEligible <- false;
+		this.m.Warnings.NoInjuriesPresent <- false;
 	}
 
 	function isActorViable( _actor )
@@ -78,17 +133,23 @@ this.elixir_item <- ::inherit("scripts/items/item",
 	{
 		::Sound.play(this.Sounds.Inventory, ::Const.Sound.Volume.Inventory);
 	}
-	
+
 	function playUseSound()
 	{
 		::Sound.play(this.Sounds.Use, ::Const.Sound.Volume.Inventory);
 	}
 
-	function onUse( _actor, _item = null )
+	function setWarning( _warning, _boolean )
 	{
-		if (!this.isActorViable(_actor))
-		{	// TODO: handle case where avatar status is conferred & add warning entry for invalid uses
-			return false;
+		this.m.Warnings[_warning] = _boolean;
+		::Tooltip.reload();
+	}
+
+	function onUse( _actor, _item = null )
+	{ // TODO: revise
+		if (!this.isActorViable(_actor) && !)
+		{
+			this.conferAvatarStatus(_actor);
 		}
 
 		this.playUseSound();

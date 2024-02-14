@@ -17,7 +17,7 @@ AP.Persistence <-
 	{
 		ElixirChance = 100
 	},
-	Resources = 
+	Resources =
 	[
 		"Ammo",
 		"Medicine",
@@ -28,9 +28,27 @@ AP.Persistence <-
 	{
 		Icons =
 		{
-			Persistence = "ui/icons/obituary.png",
 			Warning = "ui/icons/warning.png"
 		}
+	}
+
+	function createTooltipEntries()
+	{
+		local tooltipArray = [],
+		push = @(_entry) tooltipArray.push(_entry);
+
+		local threshold = AP.Standard.getSetting("PermanentInjuryThreshold"),
+		warningText = "Loses persistence when any permanent injuries are sustained";
+
+		# Amend entry text if user-configured permanent injury threshold is non-zero - that is, if some allowance can be made before persistence is lost.
+		if (threshold != 0)
+		{
+			warningText = format("Loses persistence when more than %s permanent injuries are sustained at a time", AP.Standard.colourWrap(threshold, AP.Standard.Colour.Red));
+		}
+
+		# Create warning entry.
+		push({id = 10, type = "text", icon = this.Tooltip.Icons.Warning, text = warningText});
+		return tooltipArray;
 	}
 
 	function executeDefeatRoutine()
@@ -56,7 +74,7 @@ AP.Persistence <-
 	function reduceResources()
 	{
 		local Standard = AP.Standard,
-		get = @(_settingID) 1 - Standard.getPercentageSetting(_settingID);	
+		get = @(_settingID) 1 - Standard.getPercentageSetting(_settingID);
 
 		foreach( resource in this.Resources )
 		{
