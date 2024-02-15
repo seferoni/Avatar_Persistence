@@ -66,7 +66,7 @@ if (!AP.Internal.MSUFound)
 	elixirAddedToMarketplace.setDescription("Determines whether or not the elixir can be found in marketplaces. Disabling this will not remove currently existing elixirs, but will prevent the creation of new ones.");
 
 	local elixirConfersAvatarStatus = pageGeneral.addBooleanSetting("ElixirConfersAvatarStatus", Defaults.ElixirConfersAvatarStatus, "Elixir Confers Avatar Status");
-	elixirConfersAvatarStatus.setDescription("Determines whether or not the elixir has the ability to make selected non-player characters avatars on consumption.");
+	elixirConfersAvatarStatus.setDescription("Determines whether or not the elixir has the ability to confer player character status to selected non-player characters on consumption.");
 	
 	local loseItemsUponDefeat = pageGeneral.addBooleanSetting("LoseItemsUponDefeat", Defaults.LoseItemsUponDefeat, "Lose Items Upon Defeat");
 	loseItemsUponDefeat.setDescription("Determines whether items kept in the player's stash are removed at random upon defeat, in the case of persistence.");
