@@ -23,16 +23,16 @@ this.elixir_item <- ::inherit("scripts/items/item",
 			Instruction = "ui/icons/special.png",
 			Warning = "ui/icons/warning.png"
 		},
-		Template = 
+		Template =
 		{
 			id = 6,
-			type = "text", 
-			icon = "", 
+			type = "text",
+			icon = "",
 			text = ""
 		}
-		Text = 
+		Text =
 		{
-			Warnings = 
+			Warnings =
 			{
 				AvatarAlreadyPresent = "A player character is already present in your roster.",
 				CharacterNotEligible = "This character is not the player character.",
@@ -47,7 +47,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		Inventory = "sounds/bottle_01.wav",
 		Use = "sounds/combat/drink_03.wav"
 	},
-	Warnings = 
+	Warnings =
 	{
 		AvatarAlreadyPresent = false,
 		CharacterNotEligible = false,
@@ -121,7 +121,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		push({id = 65, type = "text", text = this.Tooltip.Text.Use});
 
 		local warningEntry = this.createWarningEntry();
-		# 
+
 		if (warningEntry != null)
 		{
 			push(warningEntry);
@@ -130,16 +130,10 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		return tooltipArray;
 	}
 
-	function isActorViable( _actor )
+	function isActorInjured( _actor )
 	{
-		if (AP.Persistence.isActorViable())
-		{
-			return true;
-		}
-
 		if (!_actor.getSkills().hasSkillOfType(::Const.SkillType.Injury))
 		{
-			this.setWarning("NoInjuriesPresent");
 			return false;
 		}
 
@@ -171,13 +165,20 @@ this.elixir_item <- ::inherit("scripts/items/item",
 	}
 
 	function onUse( _actor, _item = null )
-	{	// TODO: no good. track process flow
-		if (this.isActorViable(_actor))
+	{
+		if (!this.isActorInjured(_actor))
+		{
+			this.setWarning("NoInjuriesPresent");
+			return false;
+		}
+
+		if (AP.Persistence.isActorViable(_actor))
 		{
 			this.consume(_actor);
 			return true;
 		}
-		else if (!AP.Standard.getSetting("ElixirConfersAvatarStatus"))
+
+		if (!AP.Standard.getSetting("ElixirConfersAvatarStatus"))
 		{
 			this.setWarning("CharacterNotEligible");
 			return false;
