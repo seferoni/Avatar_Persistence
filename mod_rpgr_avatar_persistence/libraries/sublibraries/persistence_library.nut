@@ -73,8 +73,7 @@ AP.Persistence <-
 
 	function reduceResources()
 	{
-		local Standard = AP.Standard,
-		get = @(_settingID) 1 - Standard.getPercentageSetting(_settingID);
+		local get = @(_settingID) 1 - AP.Standard.getPercentageSetting(_settingID);
 
 		foreach( resource in this.Resources )
 		{

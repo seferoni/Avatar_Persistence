@@ -7,7 +7,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		this.item.create();
 		this.m.ID = "misc.elixir";
 		this.m.Name = "Elixir";
-		this.m.Description = "A caustic and volatile concoction, notorious throughout the realms for its propensity to both heal and harm in equal measure.";
+		this.m.Description = "A caustic and volatile concoction, coveted throughout the realms for its curative powers.";
 		this.m.Icon = "special/elixir_01.png";
 		this.m.SlotType = ::Const.ItemSlot.None;
 		this.m.ItemType = ::Const.Items.ItemType.Usable;
@@ -15,7 +15,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		this.m.IsAllowedInBag = false;
 		this.m.IsUsable = true;
 		this.m.Value = 1500;
-	}
+	},
 	Tooltip =
 	{
 		Icons =
@@ -37,12 +37,12 @@ this.elixir_item <- ::inherit("scripts/items/item",
 				AvatarAlreadyPresent = "A player character is already present in your roster.",
 				CharacterNotEligible = "This character does not have player character status.",
 				NoInjuriesSustained = "This character has sustained no injuries."
-			}
+			},
 			Conferment = format("The elixir can confer the %s upon the currently selected character.", AP.Standard.colourWrap("player character trait", AP.Standard.Colour.Green)),
 			Instruction = format("Will remove all %s, but only for player characters.", AP.Standard.colourWrap("temporary or permanent injuries", AP.Standard.Colour.Green)),
 			Use = "Right-click or drag onto the currently selected character in order to drink. This item will be consumed in the process."
 		}
-	}
+	},
 	Sounds =
 	{
 		Move = "sounds/bottle_01.wav",
@@ -258,7 +258,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		{
 			return this.handleUseForPlayer(_actor);
 		}
-		
+
 		return this.handleUseForCharacter(_actor);
 	}
 

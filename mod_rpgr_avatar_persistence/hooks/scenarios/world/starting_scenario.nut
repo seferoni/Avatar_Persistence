@@ -15,12 +15,9 @@ local AP = ::RPGR_Avatar_Persistence;
 
 		local roster = ::World.getPlayerRoster().getAll();
 
-		foreach( bro in roster )
+		if (AP.Persistence.isPlayerInRoster())
 		{
-			if (AP.Standard.getFlag("IsPlayerCharacter", bro))
-			{
-				return true;
-			}
+			return true;
 		}
 
 		return false;
