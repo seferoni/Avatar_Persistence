@@ -14,13 +14,13 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		this.m.IsDroppedAsLoot = true;
 		this.m.IsAllowedInBag = false;
 		this.m.IsUsable = true;
-		this.m.Value = 100; // TODO:
+		this.m.Value = 1500;
 	}
 	Tooltip =
 	{
 		Icons =
 		{
-			Instruction = "ui/icons/special.png",
+			Special = "ui/icons/special.png",
 			Warning = "ui/icons/warning.png"
 		},
 		Template =
@@ -35,23 +35,25 @@ this.elixir_item <- ::inherit("scripts/items/item",
 			Warnings =
 			{
 				AvatarAlreadyPresent = "A player character is already present in your roster.",
-				CharacterNotEligible = "This character is not the player character.",
-				NoInjuriesPresent = "This character has incurred no injuries."
+				CharacterNotEligible = "This character does not have player character status.",
+				NoInjuriesSustained = "This character has sustained no injuries."
 			}
-			Instruction = "Will remove all temporary or permanent injuries, but only for player characters.",
+			Conferment = format("The elixir can confer the %s upon the currently selected character.", AP.Standard.colourWrap("player character trait", AP.Standard.Colour.Green)),
+			Instruction = format("Will remove all %s, but only for player characters.", AP.Standard.colourWrap("temporary or permanent injuries", AP.Standard.Colour.Green)),
 			Use = "Right-click or drag onto the currently selected character in order to drink. This item will be consumed in the process."
 		}
 	}
 	Sounds =
 	{
-		Inventory = "sounds/bottle_01.wav",
-		Use = "sounds/combat/drink_03.wav"
+		Move = "sounds/bottle_01.wav",
+		Use = "sounds/combat/drink_03.wav",
+		Warning = "sounds/move_pot_clay_01.wav"
 	},
 	Warnings =
 	{
 		AvatarAlreadyPresent = false,
 		CharacterNotEligible = false,
-		NoInjuriesPresent = false
+		NoInjuriesSustained = false
 	}
 
 	function consume( _actor )
@@ -59,6 +61,14 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		this.playUseSound();
 		this.updateActor(_actor);
 		this.updateSprites(_actor);
+	}
+
+	function createConfermentEntry()
+	{
+		local entry = clone this.Tooltip.Template;
+		entry.icon = this.Tooltip.Icons.Special;
+		entry.text = this.Tooltip.Text.Conferment;
+		return entry;
 	}
 
 	function createWarningEntry()
@@ -72,7 +82,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 
 		local entry = clone this.Tooltip.Template;
 		entry.icon = this.Tooltip.Icons.Warning;
-		entry.text = this.Tooltip.Text.Warnings[warning];
+		entry.text = AP.Standard.colourWrap(this.Tooltip.Text.Warnings[warning], AP.Standard.Colour.Red);
 		this.resetWarnings();
 		return entry;
 	}
@@ -81,6 +91,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 	{
 		_actor.getSkills().add(::new("scripts/skills/traits/player_character_trait"));
 		AP.Standard.setFlag("IsPlayerCharacter", true, _actor, true);
+		AP.Standard.setFlag("AvatarStatusConferred", true, ::World.Statistics);
 	}
 
 	function getActiveWarning()
@@ -116,10 +127,19 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		push({id = 66, type = "text", text = this.getValueString()});
 		push({id = 3, type = "image", image = this.getIcon()});
 
-		# Create instruction entries.
-		push({id = 6, type = "text", icon = this.Tooltip.Icons.Instruction, text = this.Tooltip.Text.Instruction});
+		# Create instruction entry.
+		push({id = 6, type = "text", icon = this.Tooltip.Icons.Special, text = this.Tooltip.Text.Instruction});
+
+		# Create conferment entry.
+		if (AP.Standard.getSetting("ElixirConfersAvatarStatus"))
+		{
+			push(this.createConfermentEntry());
+		}
+
+		# Create usage entry.
 		push({id = 65, type = "text", text = this.Tooltip.Text.Use});
 
+		# If a warning is queued to be displayed, create a warning entry, and reset all warnings to default values.
 		local warningEntry = this.createWarningEntry();
 
 		if (warningEntry != null)
@@ -130,10 +150,73 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		return tooltipArray;
 	}
 
+	function handleInvalidUse( _reasonString )
+	{
+		this.setWarning(_reasonString);
+		this.playWarningSound();
+		return false;
+	}
+
+	function handleUseForCharacter( _actor )
+	{
+		if (!AP.Standard.getSetting("ElixirConfersAvatarStatus"))
+		{
+			return this.handleInvalidUse("CharacterNotEligible");
+		}
+
+		if (AP.Persistence.isPlayerInRoster())
+		{
+			return this.handleInvalidUse("AvatarAlreadyPresent");
+		}
+
+		this.conferAvatarStatus(_actor);
+		this.consume(_actor);
+		return true;
+	}
+
+	function handleUseForPlayer( _player )
+	{
+		if (!this.isActorInjured(_player))
+		{
+			return this.handleInvalidUse("NoInjuriesSustained");
+		}
+
+		this.consume(_player);
+		return true;
+	}
+
 	function isActorInjured( _actor )
 	{
-		if (!_actor.getSkills().hasSkillOfType(::Const.SkillType.Injury))
+		return _actor.getSkills().hasSkillOfType(::Const.SkillType.Injury);
+	}
+
+	function isActorViable( _actor )
+	{
+		if (!AP.Persistence.isActorViable(_actor))
 		{
+			return false;
+		}
+
+		if (!this.isActorInjured(_actor))
+		{
+			this.setWarning("NoInjuriesSustained");
+			return false;
+		}
+
+		return true;
+	}
+
+	function isActorViableForConferment( _actor )
+	{
+		if (!AP.Standard.getSetting("ElixirConfersAvatarStatus"))
+		{
+			this.setWarning("CharacterNotEligible");
+			return false;
+		}
+
+		if (AP.Persistence.isPlayerInRoster())
+		{
+			this.setWarning("AvatarAlreadyPresent");
 			return false;
 		}
 
@@ -142,12 +225,17 @@ this.elixir_item <- ::inherit("scripts/items/item",
 
 	function playInventorySound( _eventType )
 	{
-		::Sound.play(this.Sounds.Inventory, ::Const.Sound.Volume.Inventory);
+		::Sound.play(this.Sounds.Move, ::Const.Sound.Volume.Inventory);
 	}
 
 	function playUseSound()
 	{
 		::Sound.play(this.Sounds.Use, ::Const.Sound.Volume.Inventory);
+	}
+
+	function playWarningSound()
+	{
+		::Sound.play(this.Sounds.Warning, ::Const.Sound.Volume.Inventory);
 	}
 
 	function setWarning( _warning, _boolean = true )
@@ -166,33 +254,12 @@ this.elixir_item <- ::inherit("scripts/items/item",
 
 	function onUse( _actor, _item = null )
 	{
-		if (!this.isActorInjured(_actor))
-		{
-			this.setWarning("NoInjuriesPresent");
-			return false;
-		}
-
 		if (AP.Persistence.isActorViable(_actor))
 		{
-			this.consume(_actor);
-			return true;
+			return this.handleUseForPlayer(_actor);
 		}
-
-		if (!AP.Standard.getSetting("ElixirConfersAvatarStatus"))
-		{
-			this.setWarning("CharacterNotEligible");
-			return false;
-		}
-
-		if (AP.Persistence.isPlayerInRoster())
-		{
-			this.setWarning("AvatarAlreadyPresent");
-			return false;
-		}
-
-		this.conferAvatarStatus(_actor);
-		this.consume(_actor);
-		return true;
+		
+		return this.handleUseForCharacter(_actor);
 	}
 
 	function updateActor( _actor )
