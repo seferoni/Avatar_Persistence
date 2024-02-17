@@ -3,17 +3,12 @@ local AP = ::RPGR_Avatar_Persistence;
 {
 	AP.Standard.wrap(_object, "fillStash", function( _list, _stash, _priceMult, _allowDamagedEquipment = false )
 	{
-		if (!AP.Standard.getSetting("ElixirAddedToMarketplace"))
-		{
-			return;
-		}
-
 		if (!this.m.Settlement.hasBuilding("building.temple"))
 		{
 			return;
 		}
 
-		if (::Math.rand(1, 100) > AP.Persistence.Parameters.ElixirChance)
+		if (::Math.rand(1, 100) > AP.Standard.getSetting("ElixirMarketplaceChance"))
 		{
 			return;
 		}

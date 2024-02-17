@@ -10,7 +10,8 @@
 	Defaults =
 	{
 		AmmoLossPercentage = 40,
-		ElixirAddedToMarketplace = true,
+		ArmorPartsLossPercentage = 50,
+		ElixirMarketplaceChance = 30,
 		ElixirConfersAvatarStatus = true,
 		PermanentInjuryChance = 66,
 		PermanentInjuryThreshold = 3,
@@ -20,7 +21,6 @@
 		MedicineLossPercentage = 50,
 		ModifyTooltip = true,
 		MoneyLossPercentage = 85,
-		ToolsLossPercentage = 50,
 		VerboseLogging = true
 	}
 }
@@ -48,7 +48,8 @@ if (!AP.Internal.MSUFound)
 	local Defaults = AP.Defaults;
 
 	local pageGeneral = AP.Mod.ModSettings.addPage("General"),
-	pageItemLoss = AP.Mod.ModSettings.addPage("Item Loss");
+	pageItemLoss = AP.Mod.ModSettings.addPage("Item Loss"),
+	pageElixir = AP.Mod.ModSettings.addPage("Elixir");
 
 	local ammoLossPercentage = pageItemLoss.addRangeSetting("AmmoLossPercentage", Defaults.AmmoLossPercentage, 0, 100, 1, "Ammo Loss Percentage");
 	ammoLossPercentage.setDescription("Determines the percentage of ammo lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.");
@@ -62,12 +63,12 @@ if (!AP.Internal.MSUFound)
 	local itemRemovalCeiling = pageItemLoss.addRangeSetting("ItemRemovalCeiling", Defaults.ItemRemovalCeiling, 1, 10, 1, "Item Removal Ceiling");
 	itemRemovalCeiling.setDescription("Determines the maximum number of items that may be removed per instance of player defeat. Does nothing if Lose Items Upon Defeat is disabled.");
 
-	local elixirAddedToMarketplace = pageGeneral.addBooleanSetting("ElixirAddedToMarketplace", Defaults.ElixirAddedToMarketplace, "Elixir Added To Marketplace");
-	elixirAddedToMarketplace.setDescription("Determines whether or not the elixir can be found in marketplaces. Disabling this will not remove currently existing elixirs, but will prevent the creation of new ones.");
+	local elixirMarketplaceChance = pageElixir.addRangeSetting("ElixirMarketplaceChance", Defaults.ElixirMarketplaceChance, 0, 100, 1, "Elixir Marketplace Chance");
+	elixirMarketplaceChance.setDescription("Determines the percentage chance for elixirs to be found in marketplaces.");
 
-	local elixirConfersAvatarStatus = pageGeneral.addBooleanSetting("ElixirConfersAvatarStatus", Defaults.ElixirConfersAvatarStatus, "Elixir Confers Avatar Status");
+	local elixirConfersAvatarStatus = pageElixir.addBooleanSetting("ElixirConfersAvatarStatus", Defaults.ElixirConfersAvatarStatus, "Elixir Confers Avatar Status");
 	elixirConfersAvatarStatus.setDescription("Determines whether or not the elixir has the ability to confer player character status to selected non-player characters on consumption.");
-	
+
 	local loseItemsUponDefeat = pageGeneral.addBooleanSetting("LoseItemsUponDefeat", Defaults.LoseItemsUponDefeat, "Lose Items Upon Defeat");
 	loseItemsUponDefeat.setDescription("Determines whether items kept in the player's stash are removed at random upon defeat, in the case of persistence.");
 
@@ -80,7 +81,7 @@ if (!AP.Internal.MSUFound)
 	local medicineLossPercentage = pageItemLoss.addRangeSetting("MedicineLossPercentage", Defaults.MedicineLossPercentage, 0, 100, 1, "Medicine Loss Percentage");
 	medicineLossPercentage.setDescription("Determines the percentage of medicine lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.");
 
-	local toolsLossPercentage = pageItemLoss.addRangeSetting("ToolsLossPercentage", Defaults.ToolsLossPercentage, 0, 100, 1, "Tools Loss Percentage");
+	local toolsLossPercentage = pageItemLoss.addRangeSetting("ArmorPartsLossPercentage", Defaults.ArmorPartsLossPercentage, 0, 100, 1, "Tools Loss Percentage");
 	toolsLossPercentage.setDescription("Determines the percentage of tools lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.");
 
 	local verboseLogging = pageGeneral.addBooleanSetting("VerboseLogging", Defaults.VerboseLogging, "Verbose Logging");

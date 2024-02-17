@@ -13,16 +13,12 @@ AP.Persistence <-
 		Uninjured = "Was struck down",
 		Injured = "Was grievously struck down"
 	},
-	Parameters =
-	{
-		ElixirChance = 100
-	},
 	Resources =
 	[
 		"Ammo",
+		"ArmorParts",
 		"Medicine",
-		"Money",
-		"Tools"
+		"Money"
 	],
 	Tooltip =
 	{
