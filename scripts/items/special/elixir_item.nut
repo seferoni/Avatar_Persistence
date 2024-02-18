@@ -35,6 +35,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 			Warnings =
 			{
 				AvatarAlreadyPresent = "A player character is already present in your roster.",
+				ActorIsSick = "This character is currently sick.",
 				CharacterNotEligible = "This character does not have player character status.",
 				NoInjuriesSustained = "This character has sustained no injuries."
 			},
@@ -52,6 +53,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 	Warnings =
 	{
 		AvatarAlreadyPresent = false,
+		ActorIsSick = false,
 		CharacterNotEligible = false,
 		NoInjuriesSustained = false
 	}
@@ -176,6 +178,11 @@ this.elixir_item <- ::inherit("scripts/items/item",
 
 	function handleUseForPlayer( _player )
 	{
+		if (this.isActorSick(_player))
+		{
+			return this.handleInvalidUse("ActorIsSick");
+		}
+
 		if (!this.isActorInjured(_player))
 		{
 			return this.handleInvalidUse("NoInjuriesSustained");
@@ -187,19 +194,18 @@ this.elixir_item <- ::inherit("scripts/items/item",
 
 	function isActorInjured( _actor )
 	{
-		return _actor.getSkills().hasSkillOfType(::Const.SkillType.Injury);
-	}
-
-	function isActorViable( _actor )
-	{
-		if (!AP.Persistence.isActorViable(_actor))
+		if  (!_actor.getSkills().hasSkillOfType(::Const.SkillType.Injury))
 		{
 			return false;
 		}
 
-		if (!this.isActorInjured(_actor))
+		return true;
+	}
+
+	function isActorSick( _actor )
+	{
+		if (!_actor.getSkills().hasSkill("injury.sickness"))
 		{
-			this.setWarning("NoInjuriesSustained");
 			return false;
 		}
 
