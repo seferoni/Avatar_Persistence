@@ -13,7 +13,7 @@ local AP = ::RPGR_Avatar_Persistence;
 			return;
 		}
 
-		this.m.Stash.add(::new("scripts/items/special/elixir_item"));
+		this.m.Stash.add(::new(AP.Persistence.Paths.Elixir));
 		this.m.Stash.sort();
 	});
 });

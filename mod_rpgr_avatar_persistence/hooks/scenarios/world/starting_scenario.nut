@@ -1,5 +1,5 @@
 local AP = ::RPGR_Avatar_Persistence;
-::mods_hookBaseClass("scripts/scenarios/world/starting_scenario", function( _object )
+::mods_hookBaseClass("scenarios/world/starting_scenario", function( _object )
 {
 	AP.Standard.wrap(_object, "onCombatFinished", function( ... )
 	{

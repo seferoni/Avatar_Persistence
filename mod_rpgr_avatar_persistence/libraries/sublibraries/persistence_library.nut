@@ -13,6 +13,10 @@ AP.Persistence <-
 		Uninjured = "Was struck down",
 		Injured = "Was grievously struck down"
 	},
+	Paths =
+	{
+		Elixir = "scripts/items/special/elixir_item"
+	},
 	Resources =
 	[
 		"Ammo",
@@ -80,26 +84,40 @@ AP.Persistence <-
 
 	function removeItemsUponCombatLoss()
 	{
-		local items = ::World.Assets.getStash().getItems(),
-		candidates = items.filter(function( _itemIndex, _item )
+		local garbage = [],
+		skipCurrent = @() ::Math.rand(1, 100) > 50,
+		itemRemovalCount = AP.Standard.getSetting("ItemRemovalCeiling"),
+		stash = ::World.Assets.getStash().getItems();
+		
+		foreach( item in stash )
 		{
-			return _item != null && AP.Persistence.isItemViableForRemoval(_item);
-		});
+			if (garbage.len() == itemRemovalCount)
+			{
+				break;
+			}
 
-		if (candidates.len() == 0)
-		{
-			return;
+			if (item == null)
+			{
+				continue;
+			}
+
+			if (!AP.Persistence.isItemViableForRemoval(item))
+			{
+				continue;
+			}
+
+			if (skipCurrent())
+			{
+				continue;
+			}
+
+			garbage.push(item);
 		}
 
-		local count = 0,
-		naiveCeiling = AP.Standard.getSetting("ItemRemovalCeiling"),
-		actualCeiling = ::Math.rand(1, ::Math.min(candidates.len(), naiveCeiling));
-
-		while( count < actualCeiling )
+		foreach( item in garbage )
 		{
-			local index  = items.find(candidates[::Math.rand(0, candidates.len() - 1)]);
-			items.remove(index);
-			count++;
+			local index = stash.find(item);
+			stash.remove(index);
 		}
 	}
 
