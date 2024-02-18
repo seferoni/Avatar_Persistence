@@ -16,6 +16,17 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		this.m.IsUsable = true;
 		this.m.Value = 1500;
 	},
+	Paths =
+	{
+		Avatar = "scripts/skills/traits/player_character_trait",
+		Sick = "scripts/skills/injury/sickness_injury"
+	},
+	Sounds =
+	{
+		Move = "sounds/bottle_01.wav",
+		Use = "sounds/combat/drink_03.wav",
+		Warning = "sounds/move_pot_clay_01.wav"
+	},
 	Tooltip =
 	{
 		Icons =
@@ -43,12 +54,6 @@ this.elixir_item <- ::inherit("scripts/items/item",
 			Instruction = format("Will remove all %s, but only for player characters.", AP.Standard.colourWrap("temporary or permanent injuries", AP.Standard.Colour.Green)),
 			Use = "Right-click or drag onto the currently selected character in order to drink. This item will be consumed in the process."
 		}
-	},
-	Sounds =
-	{
-		Move = "sounds/bottle_01.wav",
-		Use = "sounds/combat/drink_03.wav",
-		Warning = "sounds/move_pot_clay_01.wav"
 	},
 	Warnings =
 	{
@@ -91,7 +96,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 
 	function conferAvatarStatus( _actor )
 	{
-		_actor.getSkills().add(::new("scripts/skills/traits/player_character_trait"));
+		_actor.getSkills().add(::new(this.Paths.Avatar));
 		AP.Standard.setFlag("IsPlayerCharacter", true, _actor, true);
 		AP.Standard.setFlag("AvatarStatusConferred", true, ::World.Statistics);
 	}
@@ -271,7 +276,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 	function updateActor( _actor )
 	{
 		_actor.getSkills().removeByType(::Const.SkillType.Injury);
-		_actor.getSkills().add(::new("scripts/skills/injury/sickness_injury"));
+		_actor.getSkills().add(::new(this.Paths.Sick));
 		_actor.setHitpoints(_actor.getHitpointsMax());
 	}
 
