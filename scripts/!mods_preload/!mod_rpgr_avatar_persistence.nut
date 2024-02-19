@@ -37,14 +37,12 @@ if (!AP.Internal.MSUFound)
 ::mods_registerMod(AP.ID, AP.Version, AP.Name);
 ::mods_queue(AP.ID, ">mod_msu", function()
 {
-	AP.Internal.ARFound <- ::mods_getRegisteredMod("mod_rpgr_avatar_resistances") != null;
-
 	if (!AP.Internal.MSUFound)
 	{
 		return;
 	}
 
-	AP.Mod <- ::MSU.Class.Mod(AP.ID, AP.Version.tostring(), AP.Name);
+	AP.Mod <- ::MSU.Class.Mod(AP.ID, AP.Version, AP.Name);
 	local Defaults = AP.Defaults;
 
 	local pageGeneral = AP.Mod.ModSettings.addPage("General"),

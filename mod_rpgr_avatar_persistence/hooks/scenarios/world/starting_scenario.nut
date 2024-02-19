@@ -13,8 +13,6 @@ local AP = ::RPGR_Avatar_Persistence;
 			return;
 		}
 
-		local roster = ::World.getPlayerRoster().getAll();
-
 		if (AP.Persistence.isPlayerInRoster())
 		{
 			return true;
