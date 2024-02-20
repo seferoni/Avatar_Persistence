@@ -3,7 +3,12 @@ local AP = ::RPGR_Avatar_Persistence;
 {
 	AP.Standard.wrap(_object, "gatherBrothers", function( _isVictory )
 	{
-		if (!AP.Persistence.isPlayerInSurvivorRoster())
+		if (AP.Persistence.isCombatInArena())
+		{
+			return;
+		}
+		
+		if (!AP.Persistence.isPlayerInRoster(AP.Persistence.Rosters.Survivor))
 		{
 			return;
 		}

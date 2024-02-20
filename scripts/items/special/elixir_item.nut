@@ -171,7 +171,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 			return this.handleInvalidUse("CharacterNotEligible");
 		}
 
-		if (AP.Persistence.isPlayerInRoster())
+		if (AP.Persistence.isPlayerInRoster(AP.Persistence.Rosters.World))
 		{
 			return this.handleInvalidUse("AvatarAlreadyPresent");
 		}
@@ -225,7 +225,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 			return false;
 		}
 
-		if (AP.Persistence.isPlayerInRoster())
+		if (AP.Persistence.isPlayerInRoster(AP.Persistence.Rosters.World))
 		{
 			this.setWarning("AvatarAlreadyPresent");
 			return false;

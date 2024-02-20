@@ -24,6 +24,11 @@ AP.Persistence <-
 		"Medicine",
 		"Money"
 	],
+	Rosters =
+	{
+		Survivor = ::Tactical.getSurvivorRoster,
+		World = ::World.getPlayerRoster
+	},
 	Tooltip =
 	{
 		Icons =
@@ -126,34 +131,9 @@ AP.Persistence <-
 		return AP.Standard.getFlag("IsPlayerCharacter", _actor);
 	}
 
-	function isPlayerInRoster()
+	function isCombatInArena()
 	{
-		local roster = ::World.getPlayerRoster().getAll();
-
-		foreach( brother in roster )
-		{
-			if (this.isActorViable(brother))
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	function isPlayerInSurvivorRoster()
-	{
-		local survivorRoster = ::Tactical.getSurvivorRoster().getAll();
-
-		foreach( brother in survivorRoster )
-		{
-			if (this.isActorViable(brother))
-			{
-				return true;
-			}
-		}
-
-		return false;
+		return ::Tactical.State.m.StrategicProperties != null && ::Tactical.State.m.StrategicProperties.IsArenaMode;
 	}
 
 	function isItemViableForRemoval( _item )
@@ -174,6 +154,21 @@ AP.Persistence <-
 		}
 
 		return true;
+	}
+
+	function isPlayerInRoster( _rosterType )
+	{
+		local roster = _rosterType().getAll();
+
+		foreach( brother in roster )
+		{
+			if (this.isActorViable(brother))
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	function isWithinInjuryThreshold( _player )
