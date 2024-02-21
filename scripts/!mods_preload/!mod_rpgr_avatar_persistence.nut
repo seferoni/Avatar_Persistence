@@ -14,7 +14,7 @@
 		ElixirMarketplaceChance = 30,
 		ElixirConfersAvatarStatus = true,
 		PermanentInjuryChance = 66,
-		PermanentInjuryThreshold = 3,
+		PermanentInjuryThreshold = 0,
 		ItemRemovalChance = 33,
 		ItemRemovalCeiling = 6,
 		LoseItemsUponDefeat = true,

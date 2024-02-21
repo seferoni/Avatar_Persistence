@@ -72,8 +72,8 @@ AP.Persistence <-
 
 	function generateInjuryCandidates( _player )
 	{
-		local injuriesToCull = this.Excluded;
-		return ::Const.Injury.Permanent.filter(@(_injuryIndex, _injury) injuriesToCull.find(_injury.ID) == null && !_player.getSkills().hasSkill(_injury.ID));
+		local filteredInjuries = ::Const.Injury.Permanent.filter(@(_injuryIndex, _injuryTable) AP.Persistence.Excluded.find(_injuryTable.ID) == null && !_player.getSkills().hasSkill(_injuryTable.ID));
+		return filteredInjuries;
 	}
 
 	function reduceResources()
