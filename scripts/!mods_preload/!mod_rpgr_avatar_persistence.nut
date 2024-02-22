@@ -20,8 +20,7 @@
 		LoseItemsUponDefeat = true,
 		MedicineLossPercentage = 50,
 		ModifyTooltip = true,
-		MoneyLossPercentage = 85,
-		VerboseLogging = true
+		MoneyLossPercentage = 85
 	}
 }
 
@@ -81,8 +80,5 @@ if (!AP.Internal.MSUFound)
 
 	local toolsLossPercentage = pageItemLoss.addRangeSetting("ArmorPartsLossPercentage", Defaults.ArmorPartsLossPercentage, 0, 100, 1, "Tools Loss Percentage");
 	toolsLossPercentage.setDescription("Determines the percentage of tools lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.");
-
-	local verboseLogging = pageGeneral.addBooleanSetting("VerboseLogging", Defaults.VerboseLogging, "Verbose Logging");
-	verboseLogging.setDescription("Enables verbose logging. Recommended for testing purposes only, as the volume of logged messages can make parsing the log more difficult for general use and debugging.");
 });
 

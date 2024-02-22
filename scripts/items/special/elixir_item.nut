@@ -14,7 +14,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		this.m.IsDroppedAsLoot = true;
 		this.m.IsAllowedInBag = false;
 		this.m.IsUsable = true;
-		this.m.Value = 1500;
+		this.m.Value = 800;
 	},
 	Paths =
 	{
