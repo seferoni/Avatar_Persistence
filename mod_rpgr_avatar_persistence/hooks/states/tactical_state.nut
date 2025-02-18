@@ -1,26 +1,25 @@
-local AP = ::RPGR_Avatar_Persistence;
-::mods_hookExactClass("states/tactical_state", function( _object )
+::AP.Patcher.hook("scripts/states/tactical_state", function( p )
 {
-	AP.Standard.wrap(_object, "gatherBrothers", function( _isVictory )
+	::AP.Patcher.wrap(p, "gatherBrothers", function( _isVictory )
 	{
-		if (AP.Persistence.isCombatInArena())
-		{
-			return;
-		}
-		
-		if (!AP.Persistence.isPlayerInRoster(AP.Persistence.Rosters.Survivor))
+		if (::AP.Persistence.isCombatInArena())
 		{
 			return;
 		}
 
-		if (!AP.Standard.getSetting("LoseItemsUponDefeat"))
+		if (!::AP.Persistence.isPlayerInRoster(::Tactical.getSurvivorRoster()))
+		{
+			return;
+		}
+
+		if (!::AP.Standard.getSetting("LoseItemsUponDefeat"))
 		{
 			return true;
 		}
 
 		if (!_isVictory)
 		{
-			AP.Persistence.executeDefeatRoutine();
+			::AP.Persistence.executeDefeatRoutine();
 		}
 
 		return true;

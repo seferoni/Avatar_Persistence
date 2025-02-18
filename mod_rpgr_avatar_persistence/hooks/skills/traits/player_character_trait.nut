@@ -1,20 +1,18 @@
-local AP = ::RPGR_Avatar_Persistence;
-::mods_hookExactClass("skills/traits/player_character_trait", function( _object )
+::AP.Patcher.hook("scripts/skills/traits/player_character_trait", function( p )
 {
-	AP.Standard.wrap(_object, "getTooltip", function( _tooltipArray )
+	::AP.Patcher.wrap(p, "getTooltip", function( _tooltipArray )
 	{
-		if (!AP.Standard.getSetting("ModifyTooltip"))
+		if (!::AP.Standard.getSetting("ModifyTooltip"))
 		{
 			return;
 		}
 
-		# Hide entries when the player sustains permanent injuries numbering greater than the designated threshold.
-		if (!AP.Persistence.isWithinInjuryThreshold(this.getContainer().getActor()))
+		if (!::AP.Persistence.isWithinInjuryThreshold(this.getContainer().getActor()))
 		{
 			return;
 		}
 
-		_tooltipArray.extend(AP.Persistence.createTooltipEntries());
+		_tooltipArray.extend(::AP.Persistence.createTooltipEntries());
 		return _tooltipArray;
-	}, "overrideReturn");
+	});
 });

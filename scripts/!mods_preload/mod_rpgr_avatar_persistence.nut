@@ -1,8 +1,8 @@
-::RPGR_Avatar_Persistence <-
+::AP <-
 {
 	ID = "mod_rpgr_avatar_persistence",
 	Name = "RPG Rebalance - Avatar Persistence",
-	Version = "2.0.0",
+	Version = "3.0.0",
 	Internal =
 	{
 		TERMINATE = "__end"
@@ -23,30 +23,29 @@
 		MoneyLossPercentage = 85
 	}
 }
-
-local AP = ::RPGR_Avatar_Persistence;
-AP.Internal.MSUFound <- "MSU" in ::getroottable();
+// TODO: refactor this
+::AP.Internal.MSUFound <- "MSU" in ::getroottable();
 ::include("mod_rpgr_avatar_persistence/libraries/standard_library.nut");
 
-if (!AP.Internal.MSUFound)
+if (!::AP.Internal.MSUFound)
 {
-	AP.Version = AP.Standard.parseSemVer(AP.Version);
+	::AP.Version = ::AP.Standard.parseSemVer(::AP.Version);
 }
 
-::mods_registerMod(AP.ID, AP.Version, AP.Name);
-::mods_queue(AP.ID, ">mod_msu", function()
+::mods_registerMod(::AP.ID, ::AP.Version, ::AP.Name);
+::mods_queue(::AP.ID, ">mod_msu", function()
 {
-	if (!AP.Internal.MSUFound)
+	if (!::AP.Internal.MSUFound)
 	{
 		return;
 	}
 
-	AP.Mod <- ::MSU.Class.Mod(AP.ID, AP.Version, AP.Name);
-	local Defaults = AP.Defaults;
+	::AP.Mod <- ::MSU.Class.Mod(::AP.ID, ::AP.Version, ::AP.Name);
+	local Defaults = ::AP.Defaults;
 
-	local pageGeneral = AP.Mod.ModSettings.addPage("General"),
-	pageItemLoss = AP.Mod.ModSettings.addPage("Item Loss"),
-	pageElixir = AP.Mod.ModSettings.addPage("Elixir");
+	local pageGeneral = ::AP.Mod.ModSettings.addPage("General"),
+	pageItemLoss = ::AP.Mod.ModSettings.addPage("Item Loss"),
+	pageElixir = ::AP.Mod.ModSettings.addPage("Elixir");
 
 	local ammoLossPercentage = pageItemLoss.addRangeSetting("AmmoLossPercentage", Defaults.AmmoLossPercentage, 0, 100, 1, "Ammo Loss Percentage");
 	ammoLossPercentage.setDescription("Determines the percentage of ammo lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.");

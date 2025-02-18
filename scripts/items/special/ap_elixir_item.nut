@@ -1,5 +1,4 @@
-local AP = ::RPGR_Avatar_Persistence;
-this.elixir_item <- ::inherit("scripts/items/item",
+this.ap_elixir_item <- ::inherit("scripts/items/item",
 {
 	m = {},
 	function create()
@@ -16,11 +15,6 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		this.m.IsUsable = true;
 		this.m.Value = 800;
 	},
-	Paths =
-	{
-		Avatar = "scripts/skills/traits/player_character_trait",
-		Sick = "scripts/skills/injury/sickness_injury"
-	},
 	Sounds =
 	{
 		Move = "sounds/bottle_01.wav",
@@ -28,19 +22,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		Warning = "sounds/move_pot_clay_01.wav"
 	},
 	Tooltip =
-	{
-		Icons =
-		{
-			Special = "ui/icons/special.png",
-			Warning = "ui/icons/warning.png"
-		},
-		Template =
-		{
-			id = 6,
-			type = "text",
-			icon = "",
-			text = ""
-		}
+	{	// TODO: this direly needs to be moved to the strings database
 		Text =
 		{
 			Warnings =
@@ -50,8 +32,8 @@ this.elixir_item <- ::inherit("scripts/items/item",
 				CharacterNotEligible = "This character does not have player character status.",
 				NoInjuriesSustained = "This character has sustained no injuries."
 			},
-			Conferment = format("The elixir can confer the %s upon the currently selected character.", AP.Standard.colourWrap("player character trait", AP.Standard.Colour.Green)),
-			Instruction = format("Will remove all %s, but only for player characters.", AP.Standard.colourWrap("temporary or permanent injuries", AP.Standard.Colour.Green)),
+			Conferment = format("The elixir can confer the %s upon the currently selected character.", ::AP.Standard.colourWrap("player character trait", ::AP.Standard.Colour.Green)),
+			Instruction = format("Will remove all %s, but only for player characters.", ::AP.Standard.colourWrap("temporary or permanent injuries", ::AP.Standard.Colour.Green)),
 			Use = "Right-click or drag onto the currently selected character in order to drink. This item will be consumed in the process."
 		}
 	},
@@ -89,16 +71,16 @@ this.elixir_item <- ::inherit("scripts/items/item",
 
 		local entry = clone this.Tooltip.Template;
 		entry.icon = this.Tooltip.Icons.Warning;
-		entry.text = AP.Standard.colourWrap(this.Tooltip.Text.Warnings[warning], AP.Standard.Colour.Red);
+		entry.text = ::AP.Standard.colourWrap(this.Tooltip.Text.Warnings[warning], ::AP.Standard.Colour.Red);
 		this.resetWarnings();
 		return entry;
 	}
 
 	function conferAvatarStatus( _actor )
 	{
-		_actor.getSkills().add(::new(this.Paths.Avatar));
-		AP.Standard.setFlag("IsPlayerCharacter", true, _actor, true);
-		AP.Standard.setFlag("AvatarStatusConferred", true, ::World.Statistics);
+		_actor.getSkills().add(::new(::AP.Persistence.getField("SkillPaths").Avatar));
+		::AP.Standard.setFlag("IsPlayerCharacter", true, _actor, true);
+		::AP.Standard.setFlag("AvatarStatusConferred", true, ::World.Statistics);
 	}
 
 	function getActiveWarning()
@@ -138,7 +120,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 		push({id = 6, type = "text", icon = this.Tooltip.Icons.Special, text = this.Tooltip.Text.Instruction});
 
 		# Create conferment entry.
-		if (AP.Standard.getSetting("ElixirConfersAvatarStatus"))
+		if (::AP.Standard.getSetting("ElixirConfersAvatarStatus"))
 		{
 			push(this.createConfermentEntry());
 		}
@@ -166,12 +148,12 @@ this.elixir_item <- ::inherit("scripts/items/item",
 
 	function handleUseForCharacter( _actor )
 	{
-		if (!AP.Standard.getSetting("ElixirConfersAvatarStatus"))
+		if (!::AP.Standard.getSetting("ElixirConfersAvatarStatus"))
 		{
 			return this.handleInvalidUse("CharacterNotEligible");
 		}
 
-		if (AP.Persistence.isPlayerInRoster(AP.Persistence.Rosters.World))
+		if (::AP.Persistence.isPlayerInRoster(::World.getPlayerRoster()))
 		{
 			return this.handleInvalidUse("AvatarAlreadyPresent");
 		}
@@ -219,13 +201,13 @@ this.elixir_item <- ::inherit("scripts/items/item",
 
 	function isActorViableForConferment( _actor )
 	{
-		if (!AP.Standard.getSetting("ElixirConfersAvatarStatus"))
+		if (!::AP.Standard.getSetting("ElixirConfersAvatarStatus"))
 		{
 			this.setWarning("CharacterNotEligible");
 			return false;
 		}
 
-		if (AP.Persistence.isPlayerInRoster(AP.Persistence.Rosters.World))
+		if (::AP.Persistence.isPlayerInRoster(::World.getPlayerRoster()))
 		{
 			this.setWarning("AvatarAlreadyPresent");
 			return false;
@@ -265,7 +247,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 
 	function onUse( _actor, _item = null )
 	{
-		if (AP.Persistence.isActorViable(_actor))
+		if (::AP.Persistence.isActorViable(_actor))
 		{
 			return this.handleUseForPlayer(_actor);
 		}
@@ -276,7 +258,7 @@ this.elixir_item <- ::inherit("scripts/items/item",
 	function updateActor( _actor )
 	{
 		_actor.getSkills().removeByType(::Const.SkillType.Injury);
-		_actor.getSkills().add(::new(this.Paths.Sick));
+		_actor.getSkills().add(::new(::AP.Persistence.getField("SkillPaths").Sickness));
 		_actor.setHitpoints(_actor.getHitpointsMax());
 	}
 
