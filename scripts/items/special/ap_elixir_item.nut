@@ -1,48 +1,42 @@
-this.ap_elixir_item <- ::inherit("scripts/items/item",
+this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 {
 	m = {},
 	function create()
 	{
-		this.item.create();
-		this.m.ID = "misc.elixir";
-		this.m.Name = "Elixir";
-		this.m.Description = "A caustic and volatile concoction, coveted throughout the realms for its curative powers.";
-		this.m.Icon = "special/elixir_01.png";
-		this.m.SlotType = ::Const.ItemSlot.None;
-		this.m.ItemType = ::Const.Items.ItemType.Usable;
-		this.m.IsDroppedAsLoot = true;
-		this.m.IsAllowedInBag = false;
-		this.m.IsUsable = true;
+		this.ap_item.create();
+		this.assignPropertiesByName("Elixir");
+	}
+
+	function assignGenericProperties()
+	{
+		this.ap_item.assignGenericProperties();
 		this.m.Value = 800;
-	},
-	Sounds =
+	}
+
+	function assignSoundProperties()
 	{
-		Move = "sounds/bottle_01.wav",
-		Use = "sounds/combat/drink_03.wav",
-		Warning = "sounds/move_pot_clay_01.wav"
-	},
-	Tooltip =
-	{	// TODO: this direly needs to be moved to the strings database
-		Text =
+		this.ap_item.assignSoundProperties();
+		this.m.InventorySound = "sounds/bottle_01.wav",
+		this.m.UseSound = "sounds/combat/drink_03.wav";
+	}
+
+	function assignSpecialProperties()
+	{
+		this.ap_item.assignSpecialProperties();
+		this.m.Warnings =
 		{
-			Warnings =
-			{
-				AvatarAlreadyPresent = "A player character is already present in your roster.",
-				ActorIsSick = "This character is currently sick.",
-				CharacterNotEligible = "This character does not have player character status.",
-				NoInjuriesSustained = "This character has sustained no injuries."
-			},
-			Conferment = format("The elixir can confer the %s upon the currently selected character.", ::AP.Standard.colourWrap("player character trait", ::AP.Standard.Colour.Green)),
-			Instruction = format("Will remove all %s, but only for player characters.", ::AP.Standard.colourWrap("temporary or permanent injuries", ::AP.Standard.Colour.Green)),
-			Use = "Right-click or drag onto the currently selected character in order to drink. This item will be consumed in the process."
-		}
-	},
-	Warnings =
+			AvatarAlreadyPresent = false,
+			ActorIsSick = false,
+			CharacterNotEligible = false,
+			NoInjuriesSustained = false
+		};
+	}
+
+	function conferAvatarStatus( _playerObject )
 	{
-		AvatarAlreadyPresent = false,
-		ActorIsSick = false,
-		CharacterNotEligible = false,
-		NoInjuriesSustained = false
+		_playerObject.getSkills().add(::new(::AP.Persistence.getField("SkillPaths").Avatar));
+		::AP.Standard.setFlag("IsPlayerCharacter", true, _playerObject, true);
+		::AP.Standard.setFlag("AvatarStatusConferred", true, ::World.Statistics);
 	}
 
 	function consume( _actor )
@@ -54,88 +48,40 @@ this.ap_elixir_item <- ::inherit("scripts/items/item",
 
 	function createConfermentEntry()
 	{
-		local entry = clone this.Tooltip.Template;
-		entry.icon = this.Tooltip.Icons.Special;
-		entry.text = this.Tooltip.Text.Conferment;
-		return entry;
+		return ::AP.Standard.constructEntry
+		(
+			"Special",
+			::AP.Strings.Items.ElixirConfermentText
+		);
 	}
 
-	function createWarningEntry()
+	function createTutorialEntry()
 	{
-		local warning = this.getActiveWarning();
-
-		if (warning == null)
-		{
-			return null;
-		}
-
-		local entry = clone this.Tooltip.Template;
-		entry.icon = this.Tooltip.Icons.Warning;
-		entry.text = ::AP.Standard.colourWrap(this.Tooltip.Text.Warnings[warning], ::AP.Standard.Colour.Red);
-		this.resetWarnings();
-		return entry;
+		return ::AP.Standard.constructEntry
+		(
+			"Special",
+			::AP.Strings.Items.ElixirTutorialText
+		);
 	}
 
-	function conferAvatarStatus( _actor )
+	function createInstructionEntry()
 	{
-		_actor.getSkills().add(::new(::AP.Persistence.getField("SkillPaths").Avatar));
-		::AP.Standard.setFlag("IsPlayerCharacter", true, _actor, true);
-		::AP.Standard.setFlag("AvatarStatusConferred", true, ::World.Statistics);
-	}
-
-	function getActiveWarning()
-	{
-		foreach( warning, warningState in this.Warnings )
-		{
-			if (warningState) return warning;
-		}
-
-		return null;
-	}
-
-	function getAllSprites()
-	{
-		local sprites = [];
-
-		for( local i = 1; i <= 4; i++ )
-		{
-			sprites.push(format("permanent_injury_%i", i));
-		}
-
-		return sprites;
+		return ::AP.Standard.constructEntry
+		(
+			null,
+			::AP.Strings.Items.ElixirInstructionText
+		);
 	}
 
 	function getTooltip()
 	{
-		local tooltipArray = [],
-		push = @(_entry) tooltipArray.push(_entry);
+		local tooltipArray = this.ap_item.getTooltip();
+		local push = @(_entry) ::AP.Standard.push(_entry, tooltipArray);
 
-		# Create generic entries.
-		push({id = 1, type = "title", text = this.getName()});
-		push({id = 2, type = "description", text = this.getDescription()});
-		push({id = 66, type = "text", text = this.getValueString()});
-		push({id = 3, type = "image", image = this.getIcon()});
-
-		# Create instruction entry.
-		push({id = 6, type = "text", icon = this.Tooltip.Icons.Special, text = this.Tooltip.Text.Instruction});
-
-		# Create conferment entry.
-		if (::AP.Standard.getSetting("ElixirConfersAvatarStatus"))
-		{
-			push(this.createConfermentEntry());
-		}
-
-		# Create usage entry.
-		push({id = 65, type = "text", text = this.Tooltip.Text.Use});
-
-		# If a warning is queued to be displayed, create a warning entry, and reset all warnings to default values.
-		local warningEntry = this.createWarningEntry();
-
-		if (warningEntry != null)
-		{
-			push(warningEntry);
-		}
-
+		push(this.createConfermentEntry());
+		push(this.createTutorialEntry());
+		push(this.createWarningEntries());
+		push(this.createInstructionEntry());
 		return tooltipArray;
 	}
 
@@ -146,7 +92,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/item",
 		return false;
 	}
 
-	function handleUseForCharacter( _actor )
+	function handleUseForCharacter( _playerObject )
 	{
 		if (!::AP.Standard.getSetting("ElixirConfersAvatarStatus"))
 		{
@@ -158,30 +104,30 @@ this.ap_elixir_item <- ::inherit("scripts/items/item",
 			return this.handleInvalidUse("AvatarAlreadyPresent");
 		}
 
-		this.conferAvatarStatus(_actor);
-		this.consume(_actor);
+		this.conferAvatarStatus(_playerObject);
+		this.consume(_playerObject);
 		return true;
 	}
 
-	function handleUseForPlayer( _player )
+	function handleUseForPlayer( _playerObject )
 	{
-		if (this.isActorSick(_player))
+		if (this.isActorSick(_playerObject))
 		{
 			return this.handleInvalidUse("ActorIsSick");
 		}
 
-		if (!this.isActorInjured(_player))
+		if (!this.isActorInjured(_playerObject))
 		{
 			return this.handleInvalidUse("NoInjuriesSustained");
 		}
 
-		this.consume(_player);
+		this.consume(_playerObject);
 		return true;
 	}
 
-	function isActorInjured( _actor )
+	function isActorInjured( _playerObject )
 	{
-		if  (!_actor.getSkills().hasSkillOfType(::Const.SkillType.Injury))
+		if  (!_playerObject.getSkills().hasSkillOfType(::Const.SkillType.Injury))
 		{
 			return false;
 		}
@@ -189,9 +135,9 @@ this.ap_elixir_item <- ::inherit("scripts/items/item",
 		return true;
 	}
 
-	function isActorSick( _actor )
+	function isActorSick( _playerObject )
 	{
-		if (!_actor.getSkills().hasSkill("injury.sickness"))
+		if (!_playerObject.getSkills().hasSkill("injury.sickness"))
 		{
 			return false;
 		}
@@ -199,7 +145,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/item",
 		return true;
 	}
 
-	function isActorViableForConferment( _actor )
+	function getConfermentViableState( _playerObject )
 	{
 		if (!::AP.Standard.getSetting("ElixirConfersAvatarStatus"))
 		{
@@ -216,62 +162,32 @@ this.ap_elixir_item <- ::inherit("scripts/items/item",
 		return true;
 	}
 
-	function playInventorySound( _eventType )
+	function onUse( _playerObject, _item = null )
 	{
-		::Sound.play(this.Sounds.Move, ::Const.Sound.Volume.Inventory);
-	}
-
-	function playUseSound()
-	{
-		::Sound.play(this.Sounds.Use, ::Const.Sound.Volume.Inventory);
-	}
-
-	function playWarningSound()
-	{
-		::Sound.play(this.Sounds.Warning, ::Const.Sound.Volume.Inventory);
-	}
-
-	function setWarning( _warning, _boolean = true )
-	{
-		this.Warnings[_warning] = _boolean;
-		::Tooltip.reload();
-	}
-
-	function resetWarnings()
-	{
-		foreach( warning, warningState in this.Warnings )
+		if (::AP.Persistence.isActorViable(_playerObject))
 		{
-			this.Warnings[warning] = false;
-		}
-	}
-
-	function onUse( _actor, _item = null )
-	{
-		if (::AP.Persistence.isActorViable(_actor))
-		{
-			return this.handleUseForPlayer(_actor);
+			return this.handleUseForPlayer(_playerObject);
 		}
 
-		return this.handleUseForCharacter(_actor);
+		return this.handleUseForCharacter(_playerObject);
 	}
 
-	function updateActor( _actor )
+	function updateActor( _playerObject )
 	{
-		_actor.getSkills().removeByType(::Const.SkillType.Injury);
-		_actor.getSkills().add(::new(::AP.Persistence.getField("SkillPaths").Sickness));
-		_actor.setHitpoints(_actor.getHitpointsMax());
+		_playerObject.getSkills().removeByType(::Const.SkillType.Injury);
+		_playerObject.getSkills().add(::new(::AP.Persistence.getField("SkillPaths").Sickness));
+		_playerObject.setHitpoints(_playerObject.getHitpointsMax());
 	}
 
-	function updateSprites( _actor )
+	function updateSprites( _playerObject )
 	{
-		local sprites = this.getAllSprites();
+		local sprites = ::AP.Persistence.getField("PermanentInjurySprites");
 
 		foreach( sprite in sprites )
 		{
-			local injurySprite = _actor.getSprite(sprite);
+			local injurySprite = _playerObject.getSprite(sprite);
 			injurySprite.Visible = false;
 			injurySprite.resetBrush();
 		}
 	}
 });
-

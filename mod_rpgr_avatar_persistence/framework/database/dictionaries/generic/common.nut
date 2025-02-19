@@ -20,6 +20,13 @@
 		PermanentInjury = 1.35,
 		StruckDown = 0.5
 	},
+	PermanentInjurySprites =
+	[
+		"permanent_injury_1",
+		"permanent_injury_2",
+		"permanent_injury_3",
+		"permanent_injury_4"
+	],
 	SkillPaths =
 	{
 		Avatar = "scripts/skills/traits/player_character_trait",

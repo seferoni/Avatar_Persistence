@@ -71,7 +71,7 @@
 
 	function loadFolder( _path )
 	{
-		::AP.Manager.includeFiles(format("mod_rpgr_avatar_resistances/framework/database/%s", _path));
+		::AP.Manager.includeFiles(format("mod_rpgr_avatar_persistence/framework/database/%s", _path));
 	}
 
 	function loadFiles()

@@ -1,25 +1,63 @@
 ::AP.Database.Settings.Common <-
 {
-	CharmResistChance =
+	AmmoLossPercentage =
 	{
-		Default = 100,
+		Default = 40,
 		Range = [0, 100],
 		Interval = 5
 	},
-	SleepResistChance =
+	ElixirConfersAvatarStatus =
 	{
-		Default = 60,
+		Default = true,
+	},
+	ElixirMarketplaceChance =
+	{
+		Default = 30,
 		Range = [0, 100],
 		Interval = 5
 	},
-	RosterMax =
+	ItemRemovalCeiling =
 	{
 		Default = 6,
-		Range = [1, 27],
-		Interval = 1
+		Range = [1, 10],
+		Interval = 1,
+	},
+	LoseItemsUponDefeat =
+	{
+		Default = true,
 	},
 	ModifyTooltip =
 	{
-		Default = true
+		Default = true,
+	},
+	MoneyLossPercentage =
+	{
+		Default = 100,
+		Range = [1, 100],
+		Interval = 5
+	},
+	MedicineLossPercentage =
+	{
+		Default = 100,
+		Range = [1, 100],
+		Interval = 5
+	},
+	PermanentInjuryChance =
+	{
+		Default = 66,
+		Range = [0, 100],
+		Interval = 5
+	},
+	PermanentInjuryThreshold =
+	{
+		Default = 0,
+		Range = [0, 8],
+		Interval = 1
+	},
+	ToolsLossPercentage =
+	{
+		Default = 100,
+		Range = [1, 100],
+		Interval = 5
 	}
 };

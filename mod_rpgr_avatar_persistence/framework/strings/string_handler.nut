@@ -49,12 +49,10 @@
 	function loadFiles()
 	{
 		this.loadFolder("main");
-		this.loadFolder("edicts");
-		this.loadFolder("lairs");
 	}
 
 	function loadFolder( _path )
 	{
-		::AP.Manager.includeFiles(format("mod_rpgr_avatar_resistances/framework/strings/%s", _path));
+		::AP.Manager.includeFiles(format("mod_rpgr_avatar_persistence/framework/strings/%s", _path));
 	}
 };

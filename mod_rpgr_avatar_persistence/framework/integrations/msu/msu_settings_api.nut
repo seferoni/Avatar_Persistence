@@ -55,6 +55,6 @@
 
 	function loadBuilders()
 	{
-		::AP.Manager.includeFiles("mod_rpgr_avatar_resistances/framework/integrations/msu/builders");
+		::AP.Manager.includeFiles("mod_rpgr_avatar_persistence/framework/integrations/msu/builders");
 	}
 };

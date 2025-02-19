@@ -75,22 +75,22 @@
 
 	function loadHandlers()
 	{
-		::include("mod_rpgr_avatar_resistances/framework/database/database_handler.nut");
-		::include("mod_rpgr_avatar_resistances/framework/strings/string_handler.nut");
-		::include("mod_rpgr_avatar_resistances/framework/integrations/mod_integration.nut");
+		::include("mod_rpgr_avatar_persistence/framework/database/database_handler.nut");
+		::include("mod_rpgr_avatar_persistence/framework/strings/string_handler.nut");
+		::include("mod_rpgr_avatar_persistence/framework/integrations/mod_integration.nut");
 	}
 
 	function loadLibraries()
 	{
-		::include("mod_rpgr_avatar_resistances/framework/libraries/standard_library.nut");
-		::include("mod_rpgr_avatar_resistances/framework/libraries/patcher_library.nut");
+		::include("mod_rpgr_avatar_persistence/framework/libraries/standard_library.nut");
+		::include("mod_rpgr_avatar_persistence/framework/libraries/patcher_library.nut");
 	}
 
 	function loadFiles()
 	{
-		this.includeFiles("mod_rpgr_avatar_resistances/framework/classes/main");
-		this.includeFiles("mod_rpgr_avatar_resistances/framework/classes/utilities");
-		this.includeFiles("mod_rpgr_avatar_resistances/hooks");
+		this.includeFiles("mod_rpgr_avatar_persistence/framework/classes/main");
+		this.includeFiles("mod_rpgr_avatar_persistence/framework/classes/utilities");
+		this.includeFiles("mod_rpgr_avatar_persistence/hooks");
 	}
 
 	function parseSemVer( _versionString )
@@ -128,11 +128,11 @@
 	{
 		if (this.isModernHooksInstalled())
 		{
-			::Hooks.registerJS(format("ui/mods/mod_rpgr_avatar_resistances/%s", _path));
+			::Hooks.registerJS(format("ui/mods/mod_rpgr_avatar_persistence/%s", _path));
 			return;
 		}
 
-		::mods_registerJS(format("mod_rpgr_avatar_resistances/%s", _path));
+		::mods_registerJS(format("mod_rpgr_avatar_persistence/%s", _path));
 	}
 
 	function registerMod()

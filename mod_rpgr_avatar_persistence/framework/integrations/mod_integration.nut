@@ -23,7 +23,7 @@
 
 	function loadFile( _fileName )
 	{
-		::include(format("mod_rpgr_avatar_resistances/framework/integrations/%s", _fileName));
+		::include(format("mod_rpgr_avatar_persistence/framework/integrations/%s", _fileName));
 	}
 
 	function loadAPI()
