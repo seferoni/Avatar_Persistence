@@ -12,7 +12,7 @@
 			return;
 		}
 
-		if (!::AP.Standard.getSetting("LoseItemsUponDefeat"))
+		if (!::AP.Standard.getParameter("LoseItemsUponDefeat"))
 		{
 			return true;
 		}

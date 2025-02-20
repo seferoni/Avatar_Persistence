@@ -88,8 +88,7 @@
 
 	function loadFiles()
 	{
-		this.includeFiles("mod_rpgr_avatar_persistence/framework/classes/main");
-		this.includeFiles("mod_rpgr_avatar_persistence/framework/classes/utilities");
+		this.includeFiles("mod_rpgr_avatar_persistence/framework/classes");
 		this.includeFiles("mod_rpgr_avatar_persistence/hooks");
 	}
 

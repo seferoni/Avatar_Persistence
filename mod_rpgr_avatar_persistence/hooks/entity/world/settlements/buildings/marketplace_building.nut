@@ -7,7 +7,7 @@
 			return;
 		}
 
-		if (::Math.rand(1, 100) > ::AP.Standard.getSetting("ElixirMarketplaceChance"))
+		if (::Math.rand(1, 100) > ::AP.Standard.getParameter("ElixirMarketplaceChance"))
 		{
 			return;
 		}

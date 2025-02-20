@@ -22,7 +22,7 @@
 
 	function createTutorialEntry()
 	{
-		local threshold = ::AP.Standard.getSetting("PermanentInjuryThreshold");
+		local threshold = ::AP.Standard.getParameter("PermanentInjuryThreshold");
 		local tutorialText = ::AP.Strings.Generic.InjuryThresholdTooltipBaseline;
 
 		if (threshold != 0)
@@ -74,7 +74,7 @@
 
 	function reduceResources()
 	{
-		local getRetainedProportion = @(_resourceString) 1 - ::AP.Standard.getPercentageSetting(format("%sLossPercentage", resourceString));
+		local getRetainedProportion = @(_resourceString) 1 - ::AP.Standard.getPercentageParameter(format("%sLossPercentage", resourceString));
 
 		foreach( resourceString in this.getField("ResourceStrings") )
 		{
@@ -89,7 +89,7 @@
 
 		foreach( item in stash )
 		{
-			if (garbage.len() == ::AP.Standard.getSetting("ItemRemovalCeiling"))
+			if (garbage.len() == ::AP.Standard.getParameter("ItemRemovalCeiling"))
 			{
 				break;
 			}
@@ -162,7 +162,7 @@
 	function isWithinInjuryThreshold( _player )
 	{
 		local permanentInjuryCount = _player.getSkills().getAllSkillsOfType(::Const.SkillType.PermanentInjury).len();
-		return permanentInjuryCount <= ::AP.Standard.getSetting("PermanentInjuryThreshold");
+		return permanentInjuryCount <= ::AP.Standard.getParameter("PermanentInjuryThreshold");
 	}
 
 	function worsenMoodOnStruckDown( _playerObject )

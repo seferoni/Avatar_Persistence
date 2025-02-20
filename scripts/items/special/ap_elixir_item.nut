@@ -94,7 +94,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 
 	function handleUseForCharacter( _playerObject )
 	{
-		if (!::AP.Standard.getSetting("ElixirConfersAvatarStatus"))
+		if (!::AP.Standard.getParameter("ElixirConfersAvatarStatus"))
 		{
 			return this.handleInvalidUse("CharacterNotEligible");
 		}
@@ -147,7 +147,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 
 	function getConfermentViableState( _playerObject )
 	{
-		if (!::AP.Standard.getSetting("ElixirConfersAvatarStatus"))
+		if (!::AP.Standard.getParameter("ElixirConfersAvatarStatus"))
 		{
 			this.setWarning("CharacterNotEligible");
 			return false;

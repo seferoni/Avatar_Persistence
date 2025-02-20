@@ -12,7 +12,7 @@
 			return;
 		}
 
-		if (::Math.rand(1, 100) > ::AP.Standard.getSetting("PermanentInjuryChance"))
+		if (::Math.rand(1, 100) > ::AP.Standard.getParameter("PermanentInjuryChance"))
 		{
 			::AP.Persistence.executePersistenceRoutine(this);
 			return false;
