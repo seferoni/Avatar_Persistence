@@ -23,7 +23,7 @@
 	function createTutorialEntry()
 	{
 		local threshold = ::AP.Standard.getParameter("PermanentInjuryThreshold");
-		local tutorialText = ::AP.Strings.Generic.InjuryThresholdTooltipBaseline;
+		local tutorialText = ::AP.Strings.getFragmentsAsCompiledString("InjuryThresholdTooltipBaselineFragment", "Generic");
 
 		if (threshold != 0)
 		{
