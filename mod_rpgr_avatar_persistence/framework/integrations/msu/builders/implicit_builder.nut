@@ -1,24 +1,35 @@
 ::AP.Integrations.MSU.Builders.Implicit <-
 {
-	function addSettingImplicitly( _settingID, _settingValues, _pageID )
+	function addSettingsImplicitly( _settingTable, _pageID )
 	{
-		local settingElement = null;
+		local elements = [];
+		local booleanSettings = [];
 
-		switch (typeof _settingValues.Default)
+		foreach( settingID, settingGroup in _settingTable )
 		{
-			case ("bool"): settingElement = this.createBooleanSetting(_settingID, _settingValues); break;
-			case ("float"):
-			case ("integer"): settingElement = this.createNumericalSetting(_settingID, _settingValues); break;
+			local settingElement = this.buildSettingElement(settingID, settingGroup);
+
+			if (settingElement == null)
+			{
+				continue;
+			}
+
+			if (settingElement instanceof ::MSU.Class.BooleanSetting)
+			{
+				booleanSettings.push(settingElement);
+				continue;
+			}
+
+			elements.push(settingElement);
 		}
 
-		if (settingElement == null)
-		{
-			::AP.Standard.log(format("Passed element with ID %s had an unexpected default value type, skipping for implicit construction.", _settingID), true);
-			return;
-		}
+		elements.push(::AP.Integrations.MSU.createDivider(format("%sDivider", _pageID)));
+		elements.extend(booleanSettings);
 
-		::AP.Integrations.MSU.buildDescription(settingElement);
-		::AP.Integrations.MSU.appendElementToPage(settingElement, _pageID);
+		foreach( element in elements )
+		{
+			::AP.Integrations.MSU.appendElementToPage(element, _pageID);
+		}
 	}
 
 	function build()
@@ -28,7 +39,7 @@
 		foreach( category, settingGroup in ::AP.Database.Settings )
 		{
 			local pageID = format("Page%s", category);
-			this.buildImplicitly(pageID, settingGroup);
+			this.addSettingsImplicitly(settingGroup, pageID);
 		}
 	}
 
@@ -44,12 +55,25 @@
 		}
 	}
 
-	function buildImplicitly( _pageID, _settingGroup )
+	function buildSettingElement( _settingID, _settingValues )
 	{
-		foreach( settingID, settingValues in _settingGroup )
+		local settingElement = null;
+
+		switch (typeof _settingValues.Default)
 		{
-			this.addSettingImplicitly(settingID, settingValues, _pageID);
+			case ("bool"): settingElement = this.createBooleanSetting(_settingID, _settingValues); break;
+			case ("float"):
+			case ("integer"): settingElement = this.createNumericalSetting(_settingID, _settingValues); break;
 		}
+
+		if (settingElement == null)
+		{
+			::AP.Standard.log(format("Passed element with ID %s had an unexpected default value type, skipping for implicit construction.", _settingID), true);
+			return null;
+		}
+
+		::AP.Integrations.MSU.buildDescription(settingElement);
+		return settingElement;
 	}
 
 	function createBooleanSetting( _settingID, _settingValues )

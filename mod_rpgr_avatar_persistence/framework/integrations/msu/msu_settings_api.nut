@@ -21,6 +21,11 @@
 		_settingElement.setDescription(description);
 	}
 
+	function createDivider( _elementID )
+	{
+		return ::MSU.Class.SettingsDivider(_elementID);
+	}
+
 	function createTables()
 	{
 		this.Builders <- {};
