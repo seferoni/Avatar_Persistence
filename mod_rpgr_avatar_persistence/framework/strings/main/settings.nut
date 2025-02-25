@@ -7,6 +7,9 @@
 	AmmoLossPercentageName = "Ammo Loss Percentage",
 	AmmoLossPercentageDescription = "Determines the percentage of ammo lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.",
 
+	ArmorPartsLossPercentageName = "Tools Loss Percentage",
+	ArmorPartsLossPercentageDescription = "Determines the percentage of tools lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled."
+
 	ElixirConfersAvatarStatusName = "Elixir Confers Avatar Status",
 	ElixirConfersAvatarStatusDescription = "Determines whether or not the elixir has the ability to confer player character status to selected non-player characters on consumption.",
 
@@ -33,7 +36,4 @@
 
 	PermanentInjuryThresholdName = "Permanent Injury Threshold",
 	PermanentInjuryThresholdDescription = "Determines the threshold value of the number of permanent injuries the player character can have before persistence is lost.",
-
-	ToolsLossPercentageName = "Tools Loss Percentage",
-	ToolsLossPercentageDescription = "Determines the percentage of tools lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled."
 };

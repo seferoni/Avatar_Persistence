@@ -1,6 +1,6 @@
 ::AP.Persistence <-
 {
-	function addInjuryByScript( _playerObject, _injuryScript )
+	function addInjuryByScript( _injuryScript, _playerObject )
 	{
 		_playerObject.getSkills().add(::new(_injuryScript));
 	}
@@ -45,7 +45,7 @@
 
 	function executePersistenceRoutine( _playerObject, _permanentInjurySustained = false )
 	{
-		this.worsenMoodOnStruckDown(_playerObject);
+		this.worsenMoodOnStruckDown(_playerObject, _permanentInjurySustained);
 		this.addToSurvivorRoster(_playerObject);
 	}
 
@@ -53,7 +53,7 @@
 	{
 		return ::Const.Injury.Permanent.filter(function(_injuryIndex, _injuryTable)
 		{
-			if (this.getField("ExcludedInjuries").find(_injuryTable.ID) != null)
+			if (::AP.Persistence.getField("ExcludedInjuries").find(_injuryTable.ID) != null)
 			{
 				return false;
 			}
@@ -74,7 +74,7 @@
 
 	function reduceResources()
 	{
-		local getRetainedProportion = @(_resourceString) 1 - ::AP.Standard.getPercentageParameter(format("%sLossPercentage", resourceString));
+		local getRetainedProportion = @(_resourceString) 1 - ::AP.Standard.getPercentageParameter(format("%sLossPercentage", _resourceString));
 
 		foreach( resourceString in this.getField("ResourceStrings") )
 		{
@@ -146,7 +146,7 @@
 
 	function isPlayerInRoster( _rosterObject )
 	{
-		local rosterArray = _rosterObject().getAll();
+		local rosterArray = _rosterObject.getAll();
 
 		foreach( brother in rosterArray )
 		{
@@ -165,7 +165,7 @@
 		return permanentInjuryCount <= ::AP.Standard.getParameter("PermanentInjuryThreshold");
 	}
 
-	function worsenMoodOnStruckDown( _playerObject )
+	function worsenMoodOnStruckDown( _playerObject, _permanentInjurySustained )
 	{
 		local flavourText = ::AP.Strings.Generic.MoodStruckDownTooltip;
 		local moodChanges = this.getField("MoodChanges");

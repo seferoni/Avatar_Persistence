@@ -6,6 +6,12 @@
 		Range = [0, 100],
 		Interval = 5
 	},
+	ArmorPartsLossPercentage =
+	{
+		Default = 100,
+		Range = [1, 100],
+		Interval = 5
+	},
 	ElixirConfersAvatarStatus =
 	{
 		Default = true,
@@ -53,11 +59,5 @@
 		Default = 0,
 		Range = [0, 8],
 		Interval = 1
-	},
-	ToolsLossPercentage =
-	{
-		Default = 100,
-		Range = [1, 100],
-		Interval = 5
 	}
 };
