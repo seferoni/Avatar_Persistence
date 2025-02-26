@@ -1,5 +1,10 @@
 ::AP.Persistence <-
 {
+	Parameters =
+	{
+		SkippedTimePrefactor = 1.5,
+	}
+
 	function addInjuryByScript( _injuryScript, _playerObject )
 	{
 		_playerObject.getSkills().add(::new(_injuryScript));
@@ -21,7 +26,7 @@
 	}
 
 	function createTutorialEntry()
-	{
+	{	// TODO: this should change if you exceed threshold
 		local threshold = ::AP.Standard.getParameter("PermanentInjuryThreshold");
 		local tutorialText = ::AP.Strings.getFragmentsAsCompiledString("InjuryThresholdTooltipBaselineFragment", "Generic");
 
@@ -35,6 +40,11 @@
 			"Warning",
 			tutorialText
 		);
+	}
+
+	function displaceParty()
+	{
+		// TODO:
 	}
 
 	function executeDefeatRoutine()
@@ -70,48 +80,6 @@
 	function getField( _fieldName )
 	{
 		return ::AP.Database.getField("Generic", _fieldName);
-	}
-
-	function reduceResources()
-	{
-		local getRetainedProportion = @(_resourceString) 1 - ::AP.Standard.getPercentageParameter(format("%sLossPercentage", _resourceString));
-
-		foreach( resourceString in this.getField("ResourceStrings") )
-		{
-			::World.Assets.m[resourceString] = ::Math.floor(::World.Assets.m[resourceString] * getRetainedProportion(resourceString));
-		}
-	}
-
-	function removeItemsUponCombatLoss()
-	{
-		local garbage = [];
-		local stash = ::World.Assets.getStash().getItems();
-
-		foreach( item in stash )
-		{
-			if (garbage.len() == ::AP.Standard.getParameter("ItemRemovalCeiling"))
-			{
-				break;
-			}
-
-			if (item == null)
-			{
-				continue;
-			}
-
-			if (!this.isItemViableForRemoval(item))
-			{
-				continue;
-			}
-
-			garbage.push(item);
-		}
-
-		foreach( item in garbage )
-		{
-			local index = stash.find(item);
-			stash.remove(index);
-		}
 	}
 
 	function isActorViable( _actor )
@@ -163,6 +131,56 @@
 	{
 		local permanentInjuryCount = _player.getSkills().getAllSkillsOfType(::Const.SkillType.PermanentInjury).len();
 		return permanentInjuryCount <= ::AP.Standard.getParameter("PermanentInjuryThreshold");
+	}
+
+	function reduceResources()
+	{
+		local getRetainedProportion = @(_resourceString) 1 - ::AP.Standard.getPercentageParameter(format("%sLossPercentage", _resourceString));
+
+		foreach( resourceString in this.getField("ResourceStrings") )
+		{
+			::World.Assets.m[resourceString] = ::Math.floor(::World.Assets.m[resourceString] * getRetainedProportion(resourceString));
+		}
+	}
+
+	function removeItemsUponCombatLoss()
+	{
+		local garbage = [];
+		local stash = ::World.Assets.getStash().getItems();
+
+		foreach( item in stash )
+		{
+			if (garbage.len() == ::AP.Standard.getParameter("ItemRemovalCeiling"))
+			{
+				break;
+			}
+
+			if (item == null)
+			{
+				continue;
+			}
+
+			if (!this.isItemViableForRemoval(item))
+			{
+				continue;
+			}
+
+			garbage.push(item);
+		}
+
+		foreach( item in garbage )
+		{
+			local index = stash.find(item);
+			stash.remove(index);
+		}
+
+		::World.Assets.updateFood();
+	}
+
+	function skipTime()
+	{	// TODO: this has yet to be implemented
+		local newTime = ::Time.getVirtualTimeF() + ::World.getTime().SecondsPerDay * this.Parameters.SkippedTimePrefactor;
+		::Time.setVirtualTime(newTime);
 	}
 
 	function worsenMoodOnStruckDown( _playerObject, _permanentInjurySustained )

@@ -49,9 +49,9 @@ this.ap_item <- ::inherit("scripts/items/item",
 	function createWarningEntries()
 	{
 		local entries = [];
-		local warning = this.getActiveWarnings();
+		local warnings = this.getActiveWarnings();
 
-		if (warning.len() == 0)
+		if (warnings.len() == 0)
 		{
 			return null;
 		}
@@ -148,7 +148,7 @@ this.ap_item <- ::inherit("scripts/items/item",
 	function setDescription( _properName )
 	{
 		local key = format("%sDescription", this.formatName(_properName));
-		this.m.Name = ::AP.Strings.Items[key];
+		this.m.Description = ::AP.Strings.Items[key];
 	}
 
 	function setIDByName( _properName )

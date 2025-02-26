@@ -57,7 +57,7 @@
 	PermanentInjuryThreshold =
 	{
 		Default = 0,
-		Range = [0, 8],
+		Range = [0, 7],
 		Interval = 1
 	}
 };
