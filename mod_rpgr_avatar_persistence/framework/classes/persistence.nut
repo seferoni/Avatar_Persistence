@@ -16,17 +16,17 @@
 		::Tactical.getSurvivorRoster().add(_playerObject);
 	}
 
-	function createTooltipEntries()
+	function createTooltipEntries( _playerObject )
 	{
 		local entries = [];
 		local push = @(_entry) ::AP.Standard.push(_entry, entries);
 
-		push(this.createTutorialEntry());
+		push(this.createTutorialEntry(_playerObject));
 		return entries;
 	}
 
-	function createTutorialEntry()
-	{	// TODO: this should change if you exceed threshold
+	function createTutorialEntry( _playerObject )
+	{
 		local threshold = ::AP.Standard.getParameter("PermanentInjuryThreshold");
 		local tutorialText = ::AP.Strings.getFragmentsAsCompiledString("InjuryThresholdTooltipBaselineFragment", "Generic");
 
@@ -35,9 +35,18 @@
 			tutorialText = format(::AP.Strings.Generic.InjuryThresholdTooltip, ::AP.Standard.colourWrap(threshold, ::AP.Standard.Colour.Red));
 		}
 
+		local iconKey = "Warning";
+		local exceedsThreshold = !this.isWithinInjuryThreshold(_playerObject);
+
+		if (exceedsThreshold)
+		{
+			iconKey = "Skull";
+			tutorialText = ::AP.Standard.colourWrap(::AP.Strings.Generic.InjuryThresholdExceededTooltip, ::AP.Standard.Colour.Red);
+		}
+
 		return ::AP.Standard.constructEntry
 		(
-			"Warning",
+			iconKey,
 			tutorialText
 		);
 	}
@@ -127,9 +136,9 @@
 		return false;
 	}
 
-	function isWithinInjuryThreshold( _player )
+	function isWithinInjuryThreshold( _playerObject )
 	{
-		local permanentInjuryCount = _player.getSkills().getAllSkillsOfType(::Const.SkillType.PermanentInjury).len();
+		local permanentInjuryCount = _playerObject.getSkills().getAllSkillsOfType(::Const.SkillType.PermanentInjury).len();
 		return permanentInjuryCount <= ::AP.Standard.getParameter("PermanentInjuryThreshold");
 	}
 

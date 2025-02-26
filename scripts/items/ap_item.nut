@@ -145,6 +145,14 @@ this.ap_item <- ::inherit("scripts/items/item",
 		this.playSound(this.m.WarningSound);
 	}
 
+	function resetWarnings()
+	{
+		foreach( warningKey, warningValue in this.m.Warnings )
+		{
+			warningValue = false;
+		}
+	}
+
 	function setDescription( _properName )
 	{
 		local key = format("%sDescription", this.formatName(_properName));

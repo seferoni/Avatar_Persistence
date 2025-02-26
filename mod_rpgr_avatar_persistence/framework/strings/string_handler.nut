@@ -11,7 +11,7 @@
 
 		for( local i = 0; i < _fragmentsArray.len(); i++ )
 		{
-			local fragment = i % 2 == 0 ? _fragmentsArray[i] : ::AP.Standard.colourWrap(_fragmentsArray[i], ::AP.Standard.Colour[_colour]);
+			local fragment = i % 2 == 0 ? _fragmentsArray[i] : ::AP.Standard.colourWrap(_fragmentsArray[i], _colour);
 			compiledString = ::AP.Standard.appendToStringList(fragment, compiledString, "");
 		}
 
@@ -35,7 +35,7 @@
 		return fragmentKeys.map(@(_fragmentKey) database[_fragmentKey]);
 	}
 
-	function getFragmentsAsCompiledString( _fragmentBase, _tableKey, _subTableKey = null, _colour = "Red")
+	function getFragmentsAsCompiledString( _fragmentBase, _tableKey, _subTableKey = null, _colour = ::AP.Standard.Colour.Red)
 	{
 		local fragmentsArray = this.getFragmentsAsSortedArray(_fragmentBase, _tableKey, _subTableKey);
 		return this.compileFragments(fragmentsArray, _colour);

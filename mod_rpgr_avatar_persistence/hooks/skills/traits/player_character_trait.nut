@@ -7,12 +7,7 @@
 			return;
 		}
 
-		if (!::AP.Persistence.isWithinInjuryThreshold(this.getContainer().getActor()))
-		{
-			return;
-		}
-
-		_tooltipArray.extend(::AP.Persistence.createTooltipEntries());
+		_tooltipArray.extend(::AP.Persistence.createTooltipEntries(this.getContainer().getActor()));
 		return _tooltipArray;
 	});
 });
