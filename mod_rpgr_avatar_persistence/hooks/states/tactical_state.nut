@@ -19,7 +19,7 @@
 
 		if (!_isVictory)
 		{
-			::AP.Persistence.executeDefeatRoutine();
+			::AP.Persistence.fireDefeatEvent();
 		}
 
 		return true;

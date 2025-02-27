@@ -56,16 +56,18 @@
 		// TODO:
 	}
 
-	function executeDefeatRoutine()
-	{
-		this.reduceResources();
-		this.removeItemsUponCombatLoss();
-	}
-
 	function executePersistenceRoutine( _playerObject, _permanentInjurySustained = false )
 	{
 		this.worsenMoodOnStruckDown(_playerObject, _permanentInjurySustained);
 		this.addToSurvivorRoster(_playerObject);
+	}
+
+	function fireDefeatEvent()
+	{
+		::Time.scheduleEvent(::TimeUnit.Real, 1000, function( _dummy )
+		{
+			::World.Events.fire("event.ap_defeat");
+		}, null);
 	}
 
 	function generateInjuryCandidates( _player )
@@ -194,12 +196,6 @@
 		}
 
 		::World.Assets.updateFood();
-	}
-
-	function skipTime()
-	{	// TODO: this has yet to be implemented
-		local newTime = ::Time.getVirtualTimeF() + ::World.getTime().SecondsPerDay * this.Parameters.SkippedTimePrefactor;
-		::Time.setVirtualTime(newTime);
 	}
 
 	function worsenMoodOnStruckDown( _playerObject, _permanentInjurySustained )
