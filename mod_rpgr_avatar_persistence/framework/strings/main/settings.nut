@@ -36,4 +36,7 @@
 
 	PermanentInjuryThresholdName = "Permanent Injury Threshold",
 	PermanentInjuryThresholdDescription = "Determines the threshold value of the number of permanent injuries the player character can have before persistence is lost.",
+
+	RandomiseResourceLossName = "Randomise Resource Loss",
+	RandomiseResourceLossDescription = "If this setting is enabled, the resource loss settings denote a ceiling rather than a fixed percentage value of resources removed upon defeat. Has no effect on item removal."
 };

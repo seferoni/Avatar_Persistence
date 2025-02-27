@@ -79,11 +79,11 @@ this.ap_item <- ::inherit("scripts/items/item",
 	{
 		local warnings = [];
 
-		foreach( warning, warningState in this.m.Warnings )
+		foreach( warningKey, warningValue in this.m.Warnings )
 		{
-			if (warningState)
+			if (warningValue)
 			{
-				warnings.push(warning);
+				warnings.push(warningKey);
 			}
 		}
 
@@ -149,7 +149,7 @@ this.ap_item <- ::inherit("scripts/items/item",
 	{
 		foreach( warningKey, warningValue in this.m.Warnings )
 		{
-			warningValue = false;
+			this.m.Warnings[warningKey] = false;
 		}
 	}
 

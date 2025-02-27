@@ -271,6 +271,11 @@
 		_targetArray.extend(entry);
 	}
 
+	function randomFloat( _minFloat, _maxFloat )
+	{
+		return _minFloat + (1.0 * ::Math.rand() / RAND_MAX) * (_maxFloat - _minFloat);
+	}
+
 	function replaceSubstring( _substring, _newSubstring, _targetString )
 	{
 		local startIndex = _targetString.find(_substring);

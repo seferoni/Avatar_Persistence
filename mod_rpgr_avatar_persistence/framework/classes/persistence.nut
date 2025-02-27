@@ -144,7 +144,17 @@
 
 	function reduceResources()
 	{
-		local getRetainedProportion = @(_resourceString) 1 - ::AP.Standard.getPercentageParameter(format("%sLossPercentage", _resourceString));
+		local getRetainedProportion = function( _resourceString )
+		{
+			local prefactor = ::AP.Standard.getPercentageParameter(format("%sLossPercentage", _resourceString));
+
+			if (::AP.Standard.getParameter("RandomiseResourceLoss"))
+			{
+				prefactor = ::AP.Standard.randomFloat(0.0, prefactor);
+			}
+
+			return 1 - prefactor;
+		}
 
 		foreach( resourceString in this.getField("ResourceStrings") )
 		{

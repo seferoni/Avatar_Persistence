@@ -48,6 +48,11 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 
 	function createConfermentEntry()
 	{
+		if (!::AP.Standard.getParameter("ElixirConfersAvatarStatus"))
+		{
+			return null;
+		}
+
 		local confermentText = ::AP.Strings.getFragmentsAsCompiledString("ElixirConfermentFragment", "Items", null, ::AP.Standard.Colour.Green);
 		return ::AP.Standard.constructEntry
 		(

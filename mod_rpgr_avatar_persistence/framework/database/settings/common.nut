@@ -59,5 +59,9 @@
 		Default = 0,
 		Range = [0, 7],
 		Interval = 1
+	},
+	RandomiseResourceLoss =
+	{
+		Default = true
 	}
 };
