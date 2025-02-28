@@ -9,6 +9,7 @@
 	],
 	ExcludedItems =
 	[
+		"special.ap_elixir_item",
 		"weapon.player_banner"
 	],
 	ItemPaths =
@@ -27,16 +28,16 @@
 		"permanent_injury_3",
 		"permanent_injury_4"
 	],
-	SkillPaths =
-	{
-		Avatar = "scripts/skills/traits/player_character_trait",
-		Sickness = "scripts/skills/injury/sickness_injury"
-	},
 	ResourceStrings =
 	[
 		"Ammo",
 		"ArmorParts",
 		"Medicine",
 		"Money"
-	]
+	].
+	SkillPaths =
+	{
+		Avatar = "scripts/skills/traits/player_character_trait",
+		Sickness = "scripts/skills/injury/sickness_injury"
+	}
 };
