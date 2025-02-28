@@ -61,16 +61,6 @@
 		);
 	}
 
-	function displaceParty()
-	{
-		// TODO:
-	}
-
-	function executeDefeatRoutine()
-	{
-
-	}
-
 	function executePersistenceRoutine( _playerObject, _permanentInjurySustained = false )
 	{
 		this.worsenMoodOnStruckDown(_playerObject, _permanentInjurySustained);
@@ -148,7 +138,7 @@
 			removedItems.push(item);
 		}
 
-		return removedItems
+		return removedItems;
 	}
 
 	function getCulledResources()
