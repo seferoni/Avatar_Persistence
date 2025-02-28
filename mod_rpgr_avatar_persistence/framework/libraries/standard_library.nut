@@ -254,6 +254,13 @@
 		::logInfo(format("[AP] %s", _string));
 	}
 
+	function mapIntegerToAlphabet( _integer )
+	{
+		# Counting up from the ASCII equivalent of the letter "A".
+		local ASCIIValue = 64 + _integer;
+		return ASCIIValue.tochar();
+	}
+
 	function push( _object, _targetArray )
 	{
 		if (_object == null)

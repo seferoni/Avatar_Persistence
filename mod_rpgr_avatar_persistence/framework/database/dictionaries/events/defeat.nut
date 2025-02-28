@@ -1,5 +1,4 @@
 ::AP.Database.Events.Defeat <-
 {
-	ImageA = "",
-	BannerA = ""
+	ScreenAImagePath = "gfx/ui/events/event_21.png",
 };

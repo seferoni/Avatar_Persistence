@@ -16,6 +16,16 @@
 		::Tactical.getSurvivorRoster().add(_playerObject);
 	}
 
+	function createEventItemRemovalEntries( _itemsArray )
+	{
+
+	}
+
+	function createEventResourceReductionEntries( _reductionTable )
+	{
+
+	}
+
 	function createTooltipEntries( _playerObject )
 	{
 		local entries = [];
@@ -56,6 +66,11 @@
 		// TODO:
 	}
 
+	function executeDefeatRoutine()
+	{
+
+	}
+
 	function executePersistenceRoutine( _playerObject, _permanentInjurySustained = false )
 	{
 		this.worsenMoodOnStruckDown(_playerObject, _permanentInjurySustained);
@@ -93,6 +108,72 @@
 		return ::AP.Database.getField("Generic", _fieldName);
 	}
 
+	function getPlayerInRoster( _rosterObject )
+	{
+		local rosterArray = _rosterObject.getAll();
+
+		foreach( brother in rosterArray )
+		{
+			if (this.isActorViable(brother))
+			{
+				return brother;
+			}
+		}
+
+		return null;
+	}
+
+	function getCulledItems()
+	{
+		local removedItems = [];
+		local stash = ::World.Assets.getStash().getItems();
+
+		foreach( item in stash )
+		{
+			if (removedItems.len() == ::AP.Standard.getParameter("ItemRemovalCeiling"))
+			{
+				break;
+			}
+
+			if (item == null)
+			{
+				continue;
+			}
+
+			if (!this.isItemViableForRemoval(item))
+			{
+				continue;
+			}
+
+			removedItems.push(item);
+		}
+
+		return removedItems
+	}
+
+	function getCulledResources()
+	{
+		local reductionTable = {};
+		local getReducedProportion = function( _resourceString )
+		{
+			local prefactor = ::AP.Standard.getPercentageParameter(format("%sLossPercentage", _resourceString));
+
+			if (::AP.Standard.getParameter("RandomiseResourceLoss"))
+			{
+				prefactor = ::AP.Standard.randomFloat(0.0, prefactor);
+			}
+
+			return prefactor;
+		}
+
+		foreach( resourceString in this.getField("ResourceStrings") )
+		{
+			reductionTable[resourceString] = ::Math.floor(::World.Assets.m[resourceString] * getReducedProportion(resourceString));
+		}
+
+		return reductionTable;
+	}
+
 	function isActorViable( _actor )
 	{
 		return ::AP.Standard.getFlag("IsPlayerCharacter", _actor);
@@ -123,79 +204,31 @@
 		return true;
 	}
 
-	function isPlayerInRoster( _rosterObject )
-	{
-		local rosterArray = _rosterObject.getAll();
-
-		foreach( brother in rosterArray )
-		{
-			if (this.isActorViable(brother))
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	function isWithinInjuryThreshold( _playerObject )
 	{
 		local permanentInjuryCount = _playerObject.getSkills().getAllSkillsOfType(::Const.SkillType.PermanentInjury).len();
 		return permanentInjuryCount <= ::AP.Standard.getParameter("PermanentInjuryThreshold");
 	}
 
-	function reduceResources()
+	function removeItems( _itemsArray )
 	{
-		local getRetainedProportion = function( _resourceString )
-		{
-			local prefactor = ::AP.Standard.getPercentageParameter(format("%sLossPercentage", _resourceString));
-
-			if (::AP.Standard.getParameter("RandomiseResourceLoss"))
-			{
-				prefactor = ::AP.Standard.randomFloat(0.0, prefactor);
-			}
-
-			return 1 - prefactor;
-		}
-
-		foreach( resourceString in this.getField("ResourceStrings") )
-		{
-			::World.Assets.m[resourceString] = ::Math.floor(::World.Assets.m[resourceString] * getRetainedProportion(resourceString));
-		}
-	}
-
-	function removeItemsUponCombatLoss()
-	{
-		local garbage = [];
 		local stash = ::World.Assets.getStash().getItems();
 
-		foreach( item in stash )
-		{
-			if (garbage.len() == ::AP.Standard.getParameter("ItemRemovalCeiling"))
-			{
-				break;
-			}
-
-			if (item == null)
-			{
-				continue;
-			}
-
-			if (!this.isItemViableForRemoval(item))
-			{
-				continue;
-			}
-
-			garbage.push(item);
-		}
-
-		foreach( item in garbage )
+		foreach( item in _itemsArray )
 		{
 			local index = stash.find(item);
 			stash.remove(index);
 		}
 
 		::World.Assets.updateFood();
+	}
+
+	function reduceResources( _reductionTable )
+	{
+		foreach( resourceString, reducedMagnitude in _reductionTable )
+		{
+			::World.Assets.m[resourceString] = ::Math.max(0, ::World.Assets.m[resourceString] - reducedMagnitude);
+		}
 	}
 
 	function worsenMoodOnStruckDown( _playerObject, _permanentInjurySustained )

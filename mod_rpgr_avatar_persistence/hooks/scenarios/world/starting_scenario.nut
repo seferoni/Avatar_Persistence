@@ -7,7 +7,7 @@
 			return;
 		}
 
-		if (::AP.Persistence.isPlayerInRoster(::World.getPlayerRoster()))
+		if (::AP.Persistence.getPlayerInRoster(::World.getPlayerRoster()) != null)
 		{	# This condition is evaluated in precisely the same way as implemented in scenarios that feature player characters.
 			return true;
 		}

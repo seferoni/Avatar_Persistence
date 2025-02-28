@@ -106,7 +106,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 			return this.handleInvalidUse("CharacterNotEligible");
 		}
 
-		if (::AP.Persistence.isPlayerInRoster(::World.getPlayerRoster()))
+		if (::AP.Persistence.getPlayerInRoster(::World.getPlayerRoster()) != null)
 		{
 			return this.handleInvalidUse("AvatarAlreadyPresent");
 		}
@@ -160,7 +160,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 			return false;
 		}
 
-		if (::AP.Persistence.isPlayerInRoster(::World.getPlayerRoster()))
+		if (::AP.Persistence.getPlayerInRoster(::World.getPlayerRoster()) != null)
 		{
 			this.setWarning("AvatarAlreadyPresent");
 			return false;

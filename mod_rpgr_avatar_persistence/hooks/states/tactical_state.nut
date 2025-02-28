@@ -7,7 +7,7 @@
 			return;
 		}
 
-		if (!::AP.Persistence.isPlayerInRoster(::Tactical.getSurvivorRoster()))
+		if (::AP.Persistence.getPlayerInRoster(::Tactical.getSurvivorRoster()) == null)
 		{
 			return;
 		}

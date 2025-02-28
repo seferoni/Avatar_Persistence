@@ -12,28 +12,38 @@ this.ap_event <- ::inherit("scripts/events/event",
 		this.m.IsSpecial = true;
 	}
 
-	function constructScreen( _key )
+	function buildScreenText( _eventKey, _screenID )
+	{
+		local imagePath = ::AP.Database.Events[_eventKey][format("Screen%sImagePath", newID)];
+		local screenText = ::AP.Strings.getFragmentsAsCompiledString(format("Screen%sTextFragment", _screenID), "Events", _eventKey, null);
+		return format("[img]%s[/img]{%s}", imagePath, screenText);
+	}
+
+	function constructScreen( _eventKey )
 	{
 		local newID = this.getNewScreenID();
-		local getString = @(_keyPrefix) ::AP.Strings.Events[_key][format("%s%s", _keyPrefix, newID)];
-		local getPath = @(_keyPrefix) ::AP.Database.Events[_key][format("%s%s", _keyPrefix, newID)];
+		local screenText = this.buildScreenText(_eventKey, newID);
+		local screenTitle = this.getScreenTitle(_eventKey, newID);
 		return
 		{
 			ID = newID,
-			Title = getString("Title"),
-			Text = getString("Text"),
-			Banner = getPath("Banner"),
-			Image = getPath("Image"),
+			Text = screenText,
+			Title = screenTitle,
+			Image = "",
+			Banner = "",
 			List = [],
 			Options = []
 		};
 	}
 
 	function getNewScreenID()
-	{	// TODO: looks pretty ugly. refactor asap
-		local intID = this.m.Screens.len() + 65;
-		::logInfo("getting screen ID as " + intID.tochar());
-		return intID.tochar();
+	{
+		return ::AP.Standard.mapIntegerToAlphabet(this.m.Screens.len() + 1);
+	}
+
+	function getScreenTitle( _eventKey, _screenID )
+	{
+		return ::AP.Strings.Events[_eventKey][format("Screen%sTitle", _screenID)];
 	}
 
 	function onUpdateScore()
