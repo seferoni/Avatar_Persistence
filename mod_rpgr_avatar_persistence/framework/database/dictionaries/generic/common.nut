@@ -34,7 +34,7 @@
 		"ArmorParts",
 		"Medicine",
 		"Money"
-	].
+	],
 	SkillPaths =
 	{
 		Avatar = "scripts/skills/traits/player_character_trait",

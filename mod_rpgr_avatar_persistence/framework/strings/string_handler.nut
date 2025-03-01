@@ -1,5 +1,10 @@
 ::AP.Strings <-
 {
+	function createTables()
+	{
+		this.Events <- {};
+	}
+
 	function compileFragments( _fragmentsArray, _colour )
 	{
 		local compiledString = "";
@@ -44,12 +49,14 @@
 
 	function initialise()
 	{
+		this.createTables();
 		this.loadFiles();
 	}
 
 	function loadFiles()
 	{
 		this.loadFolder("main");
+		this.loadFolder("events");
 	}
 
 	function loadFolder( _path )

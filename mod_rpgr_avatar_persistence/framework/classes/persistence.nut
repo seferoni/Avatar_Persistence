@@ -16,14 +16,44 @@
 		::Tactical.getSurvivorRoster().add(_playerObject);
 	}
 
+	function canFireEvent()
+	{
+		if (::World.State.getMenuStack().hasBacksteps())
+		{
+			return false;
+		}
+
+		if (::LoadingScreen != null && (::LoadingScreen.isAnimating() || ::LoadingScreen.isVisible()))
+		{
+			return false;
+		}
+
+		if (::World.State.m.EventScreen.isVisible() || ::World.State.m.EventScreen.isAnimating())
+		{
+			return false;
+		}
+
+		if (("State" in ::Tactical) && ::Tactical.State != null)
+		{
+			return false;
+		}
+
+		if (::World.Events.hasActiveEvent())
+		{
+			return false;
+		}
+
+		return true;
+	}
+
 	function createEventItemRemovalEntries( _itemsArray )
 	{
-
+		return;
 	}
 
 	function createEventResourceReductionEntries( _reductionTable )
 	{
-
+		return;  // TODO: placeholders
 	}
 
 	function createTooltipEntries( _playerObject )
@@ -42,7 +72,7 @@
 
 		if (threshold != 0)
 		{
-			tutorialText = format(::AP.Strings.Generic.InjuryThresholdTooltip, ::AP.Standard.colourWrap(threshold, ::AP.Standard.Colour.Red));
+			tutorialText = format(::AP.Strings.Persistence.InjuryThresholdTooltip, ::AP.Standard.colourWrap(threshold, ::AP.Standard.Colour.Red));
 		}
 
 		local iconKey = "Warning";
@@ -51,7 +81,7 @@
 		if (exceedsThreshold)
 		{
 			iconKey = "Skull";
-			tutorialText = ::AP.Standard.colourWrap(::AP.Strings.Generic.InjuryThresholdExceededTooltip, ::AP.Standard.Colour.Red);
+			tutorialText = ::AP.Standard.colourWrap(::AP.Strings.Persistence.InjuryThresholdExceededTooltip, ::AP.Standard.Colour.Red);
 		}
 
 		return ::AP.Standard.constructEntry
@@ -59,6 +89,14 @@
 			iconKey,
 			tutorialText
 		);
+	}
+
+	function executeDefeatRoutine()
+	{
+		::Time.scheduleEvent(::TimeUnit.Real, 500, function( _dummy )
+		{
+			::AP.Persistence.fireDefeatEvent();
+		}, null);
 	}
 
 	function executePersistenceRoutine( _playerObject, _permanentInjurySustained = false )
@@ -69,10 +107,13 @@
 
 	function fireDefeatEvent()
 	{
-		::Time.scheduleEvent(::TimeUnit.Real, 1000, function( _dummy )
+		if (!this.canFireEvent())
 		{
-			::World.Events.fire("event.ap_defeat");
-		}, null);
+			this.executeDefeatRoutine();
+			return;
+		}
+
+		::World.Events.fire("event.ap_defeat");
 	}
 
 	function generateInjuryCandidates( _player )
@@ -223,14 +264,13 @@
 
 	function worsenMoodOnStruckDown( _playerObject, _permanentInjurySustained )
 	{
-		local flavourText = ::AP.Strings.Generic.MoodStruckDownTooltip;
-		local moodChanges = this.getField("MoodChanges");
-		local moodMagnitude = moodChanges.StruckDown;
+		local flavourText = ::AP.Strings.Persistence.MoodStruckDownTooltip;
+		local moodMagnitude = this.getField("MoodChanges").StruckDown;
 
 		if (_permanentInjurySustained)
 		{
-			flavourText = ::AP.Strings.Generic.MoodPermanentInjuryTooltip;
-			moodMagnitude = moodChanges.PermanentInjury;
+			flavourText = ::AP.Strings.Persistence.MoodPermanentInjuryTooltip;
+			moodMagnitude = this.getField("MoodChanges").PermanentInjury;
 		}
 
 		_playerObject.worsenMood(moodMagnitude, flavourText);

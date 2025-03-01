@@ -2,8 +2,8 @@
 {
 	ScreenATitle = "After the battle...",
 
-	ScreenATextFragmentA = "" // TODO: fill this in
-	ScreenATextFragmentB = ""
+	ScreenATextFragmentA = "PLC1" // TODO: these are placeholders
+	ScreenATextFragmentB = "PLC2"
 
 	ScreenAOptionA = "Ever onward."
 };

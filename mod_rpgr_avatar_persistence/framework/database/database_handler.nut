@@ -4,6 +4,7 @@
 	{
 		this.Settings <- {};
 		this.Generic <- {};
+		this.Events <- {};
 	}
 
 	function getField( _tableName, _fieldName )
@@ -69,6 +70,12 @@
 		return ::AP.Standard.getKeys(this.Settings);
 	}
 
+	function initialise()
+	{
+		this.createTables();
+		this.loadFiles();
+	}
+
 	function loadFolder( _path )
 	{
 		::AP.Manager.includeFiles(format("mod_rpgr_avatar_persistence/framework/database/%s", _path));
@@ -76,13 +83,8 @@
 
 	function loadFiles()
 	{
-		this.loadFolder("dictionaries");
+		this.loadFolder("dictionaries/generic");
+		this.loadFolder("dictionaries/events");
 		this.loadFolder("settings");
-	}
-
-	function initialise()
-	{
-		this.createTables();
-		this.loadFiles();
 	}
 };

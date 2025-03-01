@@ -14,7 +14,7 @@ this.ap_event <- ::inherit("scripts/events/event",
 
 	function buildScreenText( _eventKey, _screenID )
 	{
-		local imagePath = ::AP.Database.Events[_eventKey][format("Screen%sImagePath", newID)];
+		local imagePath = ::AP.Database.Events[_eventKey][format("Screen%sImagePath", _screenID)];
 		local screenText = ::AP.Strings.getFragmentsAsCompiledString(format("Screen%sTextFragment", _screenID), "Events", _eventKey, null);
 		return format("[img]%s[/img]{%s}", imagePath, screenText);
 	}
@@ -31,6 +31,7 @@ this.ap_event <- ::inherit("scripts/events/event",
 			Title = screenTitle,
 			Image = "",
 			Banner = "",
+			Characters = [],
 			List = [],
 			Options = []
 		};

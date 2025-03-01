@@ -17,6 +17,6 @@ this.ap_elixir_blueprint <- ::inherit("scripts/crafting/blueprint",
 
 	function onCraft( _stash )
 	{
-		_stash.add(::new("scripts/items/special/ap_elixir_item"));
+		_stash.add(::new(::AP.Persistence.getField("ItemPaths").Elixir));
 	}
 });
