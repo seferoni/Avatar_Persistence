@@ -3,7 +3,7 @@
 	::AP.Patcher.wrap(p, "gatherBrothers", function( _isVictory )
 	{
 		if (::AP.Persistence.isCombatInArena())
-		{
+		{	# Arena defeat logic does not require modification to achieve desired behaviour.
 			return;
 		}
 
@@ -12,16 +12,32 @@
 			return;
 		}
 
-		if (!::AP.Standard.getParameter("LoseItemsUponDefeat"))
-		{
-			return true;
-		}
-
 		if (!_isVictory)
 		{
-			::AP.Persistence.executeDefeatRoutine();
+			::AP.Persistence.setQueueDefeatRoutineState(true);
 		}
 
 		return true;
 	}, "overrideArguments");
+
+	::AP.Patcher.wrap(p, "onFinish", function()
+	{
+		if (!::AP.Persistence.getQueueDefeatRoutineState())
+		{
+			return;
+		}
+
+		if (::AP.Persistence.getPlayerInRoster(::World.getPlayerRoster()) == null)
+		{
+			return;
+		}
+
+		::logInfo("attempting to fire event");
+		::Time.scheduleEvent(::TimeUnit.Virtual, 500, function( _dummy )
+		{
+			::logInfo("firing event!");
+			::AP.Persistence.fireDefeatEvent();
+		}, null);
+		::AP.Persistence.setQueueDefeatRoutineState(false);
+	});
 });

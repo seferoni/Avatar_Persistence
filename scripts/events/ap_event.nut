@@ -21,25 +21,25 @@ this.ap_event <- ::inherit("scripts/events/event",
 
 	function constructScreen( _eventKey )
 	{
-		local newID = this.getNewScreenID();
-		local screenText = this.buildScreenText(_eventKey, newID);
-		local screenTitle = this.getScreenTitle(_eventKey, newID);
-		return
+		local screen =
 		{
-			ID = newID,
-			Text = screenText,
-			Title = screenTitle,
 			Image = "",
 			Banner = "",
 			Characters = [],
 			List = [],
 			Options = []
 		};
+		screen.ID <- this.getNewScreenID();
+		screen.Text <- this.buildScreenText(_eventKey, screen.ID);
+		screen.Title <- this.getScreenTitle(_eventKey, screen.ID);
+		return screen;
 	}
 
 	function getNewScreenID()
 	{
-		return ::AP.Standard.mapIntegerToAlphabet(this.m.Screens.len() + 1);
+		local newID = ::AP.Standard.mapIntegerToAlphabet(this.m.Screens.len() + 1);
+		::logInfo("got new screen ID as " + newID);
+		return newID;
 	}
 
 	function getScreenTitle( _eventKey, _screenID )

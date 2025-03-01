@@ -93,10 +93,8 @@
 
 	function executeDefeatRoutine()
 	{
-		::Time.scheduleEvent(::TimeUnit.Real, 500, function( _dummy )
-		{
-			::AP.Persistence.fireDefeatEvent();
-		}, null);
+		::AP.Persistence.reduceResourcesByTable(this.getCulledResources());
+		::AP.Persistence.removeItemsByArray(this.getCulledItems());
 	}
 
 	function executePersistenceRoutine( _playerObject, _permanentInjurySustained = false )
@@ -109,10 +107,12 @@
 	{
 		if (!this.canFireEvent())
 		{
+			::logInfo("cannot fire...");
 			this.executeDefeatRoutine();
 			return;
 		}
 
+		::logInfo("firing defeat event!");
 		::World.Events.fire("event.ap_defeat");
 	}
 
@@ -132,26 +132,6 @@
 
 			return true;
 		});
-	}
-
-	function getField( _fieldName )
-	{
-		return ::AP.Database.getField("Generic", _fieldName);
-	}
-
-	function getPlayerInRoster( _rosterObject )
-	{
-		local rosterArray = _rosterObject.getAll();
-
-		foreach( brother in rosterArray )
-		{
-			if (this.isActorViable(brother))
-			{
-				return brother;
-			}
-		}
-
-		return null;
 	}
 
 	function getCulledItems()
@@ -203,6 +183,31 @@
 		}
 
 		return reductionTable;
+	}
+
+	function getField( _fieldName )
+	{
+		return ::AP.Database.getField("Generic", _fieldName);
+	}
+
+	function getPlayerInRoster( _rosterObject )
+	{
+		local rosterArray = _rosterObject.getAll();
+
+		foreach( brother in rosterArray )
+		{
+			if (this.isActorViable(brother))
+			{
+				return brother;
+			}
+		}
+
+		return null;
+	}
+
+	function getQueueDefeatRoutineState()
+	{
+		return ::AP.Standard.getFlag("QueueDefeatRoutine", ::World.Statistics);
 	}
 
 	function isActorViable( _actor )
@@ -260,6 +265,11 @@
 		{
 			::World.Assets.m[resourceString] = ::Math.max(0, ::World.Assets.m[resourceString] - reducedMagnitude);
 		}
+	}
+
+	function setQueueDefeatRoutineState( _boolean )
+	{
+		::AP.Standard.setFlag("QueueDefeatRoutine", _boolean, ::World.Statistics);
 	}
 
 	function worsenMoodOnStruckDown( _playerObject, _permanentInjurySustained )
