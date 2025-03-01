@@ -50,8 +50,10 @@ this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
 	{
 		local culledResources = ::AP.Persistence.getCulledResources();
 		local culledItems = ::AP.Persistence.getCulleditems();
-		::AP.Standard.push(::AP.Persistence.createEventResourceReductionEntries(culledResources), this.List);
-		::AP.Standard.push(::AP.Persistence.createEventItemRemovalEntries(culledItems), this.List);
+		local push = @(_entry) ::AP.Standard.push(_entry, this.List);
+
+		push(::AP.Persistence.createEventResourceReductionEntries(culledResources));
+		push(::AP.Persistence.createEventItemRemovalEntries(culledItems));
 		::AP.Persistence.reduceResourcesByTable(culledResources);
 		::AP.Persistence.removeItemsByArray(culledItems);
 	}
