@@ -48,8 +48,8 @@
 		return format("[color=%s]%s[/color]", _colour, string)
 	}
 
-	function constructEntry( _icon, _text, _parentArray = null, _overrideIconPath = false )
-	{	// TODO: implement _overrideIconPath
+	function constructEntry( _icon, _text, _parentArray = null )
+	{
 		local entry = clone this.Tooltip;
 
 		if (_icon != null)

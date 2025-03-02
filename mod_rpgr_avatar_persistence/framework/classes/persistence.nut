@@ -55,15 +55,32 @@
 		{
 			local entry = ::AP.Standard.constructEntry
 			(
-
+				null,
+				format(::AP.Strings.Events.Defeat.ScreenAListEntry, "", item.getName())
 			);
+			entry.icon <- format("ui/items/%s", item.getIcon());
 			push(entry);
 		}
+
+		return entries;
 	}
 
 	function createEventResourceReductionEntries( _reductionTable )
 	{
-		return;  // TODO: placeholders
+		local entries = [];
+		local colourWrap = @(_string) ::AP.Standard.colourWrap(_string, ::Const.UI.Color.NegativeValue);
+
+		foreach( resourceKey, reducedMagnitude in _reductionTable )
+		{
+			::AP.Standard.constructEntry
+			(
+				resourceKey,
+				format(::AP.Strings.Events.Defeat.ScreenAListEntry, colourWrap(reducedMagnitude.tostring()), ::AP.Strings.Generic[resourceKey]),
+				entries
+			);
+		}
+
+		return entries;
 	}
 
 	function createTooltipEntries( _playerObject )
@@ -103,8 +120,8 @@
 
 	function executeDefeatRoutine()
 	{
-		::AP.Persistence.reduceResourcesByTable(this.getCulledResources());
-		::AP.Persistence.removeItemsByArray(this.getCulledItems());
+		::AP.Persistence.reduceResources(this.getCulledResources());
+		::AP.Persistence.removeItems(this.getCulledItems());
 	}
 
 	function executePersistenceRoutine( _playerObject, _permanentInjurySustained = false )
@@ -189,7 +206,7 @@
 
 		foreach( resourceString in this.getField("ResourceStrings") )
 		{
-			reductionTable[resourceString] = ::Math.floor(::World.Assets.m[resourceString] * getReducedProportion(resourceString));
+			reductionTable[resourceString] <- ::Math.floor(::World.Assets.m[resourceString] * getReducedProportion(resourceString));
 		}
 
 		return reductionTable;
