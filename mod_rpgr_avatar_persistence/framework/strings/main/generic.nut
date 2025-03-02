@@ -2,6 +2,6 @@
 {
 	Ammo = "Ammunition",
 	ArmorParts = "Tools",
-	Medicine = "Medicine",
-	Money  = "Money",
+	Medicine = "Medical Supplies",
+	Money  = "crowns",
 };
