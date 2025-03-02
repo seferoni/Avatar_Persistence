@@ -48,7 +48,17 @@
 
 	function createEventItemRemovalEntries( _itemsArray )
 	{
-		return;
+		local entries = [];
+		local push = @(_entry) ::AP.Standard.push(_entry, entries);
+
+		foreach( item in _itemsArray )
+		{
+			local entry = ::AP.Standard.constructEntry
+			(
+
+			);
+			push(entry);
+		}
 	}
 
 	function createEventResourceReductionEntries( _reductionTable )

@@ -19,11 +19,6 @@ this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
 		this.m.PlayerCharacter <- ::AP.Persistence.getPlayerInRoster(::World.getPlayerRoster());
 	}
 
-	function createScreens()
-	{
-		::AP.Standard.push(this.createIntroScreen(), this.m.Screens);
-	}
-
 	function createIntroScreen()
 	{
 		local screen = this.constructScreen("Defeat");
@@ -44,6 +39,11 @@ this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
 			}
 		};
 		return optionA;
+	}
+
+	function createScreens()
+	{
+		::AP.Standard.push(this.createIntroScreen(), this.m.Screens);
 	}
 
 	function onIntro( _event )
