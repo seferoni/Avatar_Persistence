@@ -68,7 +68,7 @@
 	function createEventResourceReductionEntries( _reductionTable )
 	{
 		local entries = [];
-		local colourWrap = @(_string) ::AP.Standard.colourWrap(_string, ::Const.UI.Color.NegativeValue);
+		local colourWrap = @(_string) ::AP.Standard.colourWrap(_string, ::AP.Standard.Colour.Orange);
 
 		foreach( resourceKey, reducedMagnitude in _reductionTable )
 		{

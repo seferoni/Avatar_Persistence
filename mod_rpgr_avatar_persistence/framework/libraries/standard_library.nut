@@ -9,6 +9,7 @@
 	{
 		Gold = "#574200"
 		Green = "#2a5424",
+		Orange = "#cc5500",
 		Red = "#691a1a"
 	},
 	Tooltip =
