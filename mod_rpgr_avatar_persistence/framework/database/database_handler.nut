@@ -4,6 +4,7 @@
 	{
 		this.Settings <- {};
 		this.Generic <- {};
+		this.Blueprints <- {};
 		this.Events <- {};
 	}
 
@@ -85,6 +86,7 @@
 	{
 		this.loadFolder("dictionaries/generic");
 		this.loadFolder("dictionaries/events");
+		this.loadFolder("dictionaries/blueprints");
 		this.loadFolder("settings");
 	}
 };

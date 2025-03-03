@@ -1,22 +1,41 @@
-this.ap_elixir_blueprint <- ::inherit("scripts/crafting/blueprint",
-{	// TODO: this could do with a refactor
+this.ap_elixir_blueprint <- ::inherit("scripts/crafting/ap_blueprint",
+{
 	m = {},
 	function create()
 	{
-		this.blueprint.create();
-		this.m.ID = "blueprint.ap_elixir";
-		this.m.PreviewCraftable = ::new("scripts/items/special/ap_elixir_item");
-		this.m.Cost = 500;
-		local ingredients =
-		[
-			{Script = "scripts/items/misc/unhold_heart_item", Num = 1},
-			{Script = "scripts/items/misc/ghoul_brain_item", Num = 1},
-		];
-		this.init(ingredients);
+		this.ap_blueprint.create();
+		this.assignPropertiesByName("Elixir");
 	}
 
-	function onCraft( _stash )
+	function assignGenericProperties()
 	{
-		_stash.add(::new(::AP.Persistence.getField("ItemPaths").Elixir));
+		this.ap_blueprint.assignGenericProperties();
+		this.m.Cost = 500;
+	}
+
+	function assignSpecialProperties()
+	{
+		this.ap_blueprint.assignSpecialProperties();
+		this.m.ItemPath = ::AP.Persistence.getField("ItemPaths").Elixir;
+	}
+
+	function isCraftable()
+	{
+		if (!::World.Retinue.hasFollower("follower.alchemist"))
+		{
+			return false;
+		}
+
+		return this.ap_blueprint.isCraftable();
+	}
+
+	function isQualified()
+	{
+		if (!::World.Retinue.hasFollower("follower.alchemist"))
+		{
+			return false;
+		}
+
+		return this.ap_blueprint.isQualified();
 	}
 });
