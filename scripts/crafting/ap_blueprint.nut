@@ -29,7 +29,7 @@ this.ap_blueprint <- ::inherit("scripts/crafting/blueprint",
 	function buildIngredients( _properName )
 	{
 		local key = this.formatName(_properName, "_");
-		this.init(::AP.Database.Events[key].Ingredients);
+		this.init(::AP.Database.getField("Blueprints", key).Ingredients);
 	}
 
 	function buildPreview()
