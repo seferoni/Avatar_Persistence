@@ -1,5 +1,5 @@
 this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
-{
+{	// TODO: need a setting to disable this event
 	m = {},
 	function create()
 	{
