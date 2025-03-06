@@ -18,7 +18,7 @@ this.ap_elixir_blueprint <- ::inherit("scripts/crafting/ap_blueprint",
 		this.ap_blueprint.assignSpecialProperties();
 		this.m.ItemPath = ::AP.Persistence.getField("ItemPaths").Elixir;
 	}
-
+/*	// TODO: uncomment these
 	function isCraftable()
 	{
 		if (!::World.Retinue.hasFollower("follower.alchemist"))
@@ -38,4 +38,5 @@ this.ap_elixir_blueprint <- ::inherit("scripts/crafting/ap_blueprint",
 
 		return this.ap_blueprint.isQualified();
 	}
+*/
 });
