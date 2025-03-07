@@ -22,6 +22,10 @@
 		Range = [0, 100],
 		Interval = 5
 	},
+	EnableDefeatEvent = 
+	{
+		Default = true
+	},
 	ItemRemovalCeiling =
 	{
 		Default = 6,

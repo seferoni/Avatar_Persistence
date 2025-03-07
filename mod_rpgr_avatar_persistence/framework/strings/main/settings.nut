@@ -16,6 +16,9 @@
 	ElixirMarketplaceChanceName = "Elixir Marketplace Chance",
 	ElixirMarketplaceChanceDescription = "Determines the percentage chance for elixirs to be found in marketplaces.",
 
+	EnableDefeatEventName = "Enable Defeat Event",
+	EnableDefeatEventDescription = "Determines whether an event is fired upon defeat. This event serves as a diegetic catalogue of item and resource losses.",
+
 	ItemRemovalCeilingName = "Item Removal Ceiling",
 	ItemRemovalCeilingDescription = "Determines the maximum number of items that may be removed per instance of player defeat. Does nothing if Lose Items Upon Defeat is disabled.",
 

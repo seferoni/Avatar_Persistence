@@ -18,6 +18,11 @@
 
 	function canFireEvent()
 	{
+		if (!::AP.Standard.getSetting("EnableDefeatEvent"))
+		{
+			return false;
+		}
+
 		if (::World.State.getMenuStack().hasBacksteps())
 		{
 			return false;
@@ -131,15 +136,13 @@
 	}
 
 	function fireDefeatEvent()
-	{
+	{	// TODO: this implementation will need to change to prevent staggered item and resource loss
 		if (!this.canFireEvent())
 		{
-			::logInfo("cannot fire...");
 			this.executeDefeatRoutine();
 			return;
 		}
 
-		::logInfo("firing defeat event!");
 		::World.Events.fire("event.ap_defeat");
 	}
 

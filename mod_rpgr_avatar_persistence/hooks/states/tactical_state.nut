@@ -32,10 +32,10 @@
 			return;
 		}
 
-		::logInfo("attempting to fire event");
+		// TODO: while the game is paused, the player retains access to all of their inventory items - loss is staggered. undesired behaviour!
+		// need to remove items first, flag losses, and then produce appropriate list entries
 		::Time.scheduleEvent(::TimeUnit.Virtual, 500, function( _dummy )
 		{
-			::logInfo("firing event!");
 			::AP.Persistence.fireDefeatEvent();
 		}, null);
 		::AP.Persistence.setQueueDefeatRoutineState(false);
