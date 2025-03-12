@@ -1,7 +1,8 @@
 ::AP.Persistence <-
-{
+{	// TODO: could probably do with a scaling attribute that resets upon death
 	Parameters =
 	{
+		EventAttempts = 20,
 		SkippedTimePrefactor = 1.5,
 	}
 
@@ -18,11 +19,6 @@
 
 	function canFireEvent()
 	{
-		if (!::AP.Standard.getSetting("EnableDefeatEvent"))
-		{
-			return false;
-		}
-
 		if (::World.State.getMenuStack().hasBacksteps())
 		{
 			return false;
@@ -125,8 +121,25 @@
 
 	function executeDefeatRoutine()
 	{
-		::AP.Persistence.reduceResources(this.getCulledResources());
-		::AP.Persistence.removeItems(this.getCulledItems());
+		if (!::AP.Standard.getSetting("EnableDefeatEvent"))
+		{
+			return;
+		}
+
+		local canFire = false;
+
+		for ( local i = 0; i <= this.Parameters.EventAttempts; i++ )
+		{
+			::Time.scheduleEvent(::TimeUnit.Real, 1000, function( _dummy )
+			{
+				canFire = ::AP.Persistence.fireDefeatEvent();
+			}, null);
+
+			if (canFire)
+			{
+				break;
+			}
+		}
 	}
 
 	function executePersistenceRoutine( _playerObject, _permanentInjurySustained = false )
@@ -136,14 +149,14 @@
 	}
 
 	function fireDefeatEvent()
-	{	// TODO: this implementation will need to change to prevent staggered item and resource loss
+	{
 		if (!this.canFireEvent())
 		{
-			this.executeDefeatRoutine();
-			return;
+			return false;
 		}
 
 		::World.Events.fire("event.ap_defeat");
+		return true;
 	}
 
 	function generateInjuryCandidates( _player )
@@ -276,6 +289,14 @@
 		return permanentInjuryCount <= ::AP.Standard.getParameter("PermanentInjuryThreshold");
 	}
 
+	function reduceResources( _reductionTable )
+	{
+		foreach( resourceString, reducedMagnitude in _reductionTable )
+		{
+			::World.Assets.m[resourceString] = ::Math.max(0, ::World.Assets.m[resourceString] - reducedMagnitude);
+		}
+	}
+
 	function removeItems( _itemsArray )
 	{
 		local stash = ::World.Assets.getStash().getItems();
@@ -287,14 +308,6 @@
 		}
 
 		::World.Assets.updateFood();
-	}
-
-	function reduceResources( _reductionTable )
-	{
-		foreach( resourceString, reducedMagnitude in _reductionTable )
-		{
-			::World.Assets.m[resourceString] = ::Math.max(0, ::World.Assets.m[resourceString] - reducedMagnitude);
-		}
 	}
 
 	function setQueueDefeatRoutineState( _boolean )

@@ -32,12 +32,7 @@
 			return;
 		}
 
-		// TODO: while the game is paused, the player retains access to all of their inventory items - loss is staggered. undesired behaviour!
-		// need to remove items first, flag losses, and then produce appropriate list entries
-		::Time.scheduleEvent(::TimeUnit.Virtual, 500, function( _dummy )
-		{
-			::AP.Persistence.fireDefeatEvent();
-		}, null);
+		::AP.Persistence.executeDefeatRoutine();
 		::AP.Persistence.setQueueDefeatRoutineState(false);
 	});
 });
