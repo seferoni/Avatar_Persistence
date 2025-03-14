@@ -24,6 +24,12 @@
 		return compiledString;
 	}
 
+	function getFragmentsAsCompiledString( _fragmentBase, _tableKey, _subTableKey = null, _colour = ::AP.Standard.Colour.Red )
+	{
+		local fragmentsArray = this.getFragmentsAsSortedArray(_fragmentBase, _tableKey, _subTableKey);
+		return this.compileFragments(fragmentsArray, _colour);
+	}
+
 	function getFragmentsAsSortedArray( _fragmentBase, _tableKey, _subTableKey )
 	{
 		local fragmentKeys = [];
@@ -39,12 +45,6 @@
 
 		fragmentKeys.sort();
 		return fragmentKeys.map(@(_fragmentKey) database[_fragmentKey]);
-	}
-
-	function getFragmentsAsCompiledString( _fragmentBase, _tableKey, _subTableKey = null, _colour = ::AP.Standard.Colour.Red )
-	{
-		local fragmentsArray = this.getFragmentsAsSortedArray(_fragmentBase, _tableKey, _subTableKey);
-		return this.compileFragments(fragmentsArray, _colour);
 	}
 
 	function initialise()

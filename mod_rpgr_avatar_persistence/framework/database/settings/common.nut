@@ -22,7 +22,11 @@
 		Range = [0, 100],
 		Interval = 5
 	},
-	EnableDefeatEvent = 
+	EnableDefeatEvent =
+	{
+		Default = true
+	},
+	EnableMomentum =
 	{
 		Default = true
 	},

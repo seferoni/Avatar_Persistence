@@ -1,14 +1,20 @@
 ::AP.Persistence <-
-{	// TODO: could probably do with a scaling attribute that resets upon death
+{
 	Parameters =
 	{
 		EventAttempts = 20,
+		MomentumBaseIntervalDays = 10, // TODO: this should probably be configurable
 		SkippedTimePrefactor = 1.5,
 	}
 
 	function addInjuryByScript( _injuryScript, _playerObject )
 	{
 		_playerObject.getSkills().add(::new(_injuryScript));
+	}
+
+	function addMomentum( _playerObject )
+	{
+		_playerObject.getSkills().add(::new("scripts/skills/effects/ap_momentum_effect"));
 	}
 
 	function addToSurvivorRoster( _playerObject )
