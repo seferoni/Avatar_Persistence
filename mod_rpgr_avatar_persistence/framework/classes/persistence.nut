@@ -3,7 +3,7 @@
 	Parameters =
 	{
 		EventAttempts = 20,
-		MomentumBaseIntervalDays = 10, // TODO: this should probably be configurable
+		MomentumBaseIntervalBattles = 10, // TODO: this should probably be configurable
 		SkippedTimePrefactor = 1.5,
 	}
 

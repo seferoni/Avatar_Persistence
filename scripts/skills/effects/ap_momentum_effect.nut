@@ -27,9 +27,15 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	}
 
-	function getTimeUntilNextStack()
+	function getBattlesSurvived()
 	{
+		return ::AP.Standard.getFlag("BattlesSurvived", this);
+	}
 
+	function getBattlesUntilNextStack()
+	{
+		local battlesSurvived = this.getBattlesSurvived();
+		// TODO: think about implementation here
 	}
 
 	function getTooltip()
@@ -43,12 +49,23 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function isViableForEffect()
 	{
-		if (this.getAcquisitionDay() - ::World.getTime().Days < ::AP.Persistence.Parameters.MomentumBaseIntervalDays)
+		if (this.getBattlesSurvived() < ::AP.Persistence.Parameters.MomentumBaseIntervalDays)
 		{
 			return false;
 		}
 
 		return true;
+	}
+
+	function incrementBattlesSurvived()
+	{
+		local battlesSurvived = this.getBattlesSurvived();
+		this.setBattlesSurvived(battlesSurvived + 1);
+	}
+
+	function setBattlesSurvived( _integer = 0 )
+	{
+		::AP.Standard.setFlag("BattlesSurvived", _integer, this);
 	}
 
 	function onUpdate( _properties )
