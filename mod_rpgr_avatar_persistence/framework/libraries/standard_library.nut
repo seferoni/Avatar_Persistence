@@ -135,6 +135,18 @@
 		return returnArray;
 	}
 
+	function getNearestTen( _integer, _roundUp = false )
+	{
+		local naiveValue = ::Math.round(_integer / 10) * 10;
+
+		if (_roundUp && naiveValue <= _integer)
+		{
+			return naiveValue + 10;
+		}
+
+		return naiveValue;
+	}
+
 	function getParameter( _parameterID )
 	{
 		if (::AP.Manager.isMSUInstalled())
@@ -309,18 +321,6 @@
 				_array.remove(index);
 			}
 		}
-	}
-
-	function getNearestTen( _integer, _roundUp = false )
-	{
-		local naiveValue = ::Math.round(_integer / 10) * 10;
-
-		if (_roundUp && naiveValue < _integer)
-		{
-			return naiveValue + 10;
-		}
-
-		return naiveValue;
 	}
 
 	function shuffleArray( _array )

@@ -19,11 +19,9 @@
 
 		if (skills.hasSkill("effects.ap_momentum"))
 		{
-			::logInfo("player already has momentum")
 			return;
 		}
 
-		::logInfo("adding momentum")
 		skills.add(::new(this.getField("SkillPaths").Momentum));
 	}
 

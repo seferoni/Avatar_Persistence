@@ -9,8 +9,18 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function assignGenericProperties()
 	{
-		this.ap_skill.create();
-		this.m.IsHidden = !::AP.Standard.getParameter("EnableMomentum") && !this.isViableForEffect();
+		this.ap_skill.assignGenericProperties();
+		this.m.IsHidden = false;
+	}
+
+	function assignSpecialProperties()
+	{
+		this.ap_skill.assignSpecialProperties();
+
+		if (this.getBattlesSurvived() == false)
+		{
+			this.setBattlesSurvived(0);
+		}
 	}
 
 	function createIntervalEntry()
@@ -67,11 +77,12 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function getTooltip()
 	{
 		local tooltipArray = this.ap_skill.getTooltip();
-		local push = @(_entry) ::AP.Standard.push(_entry, entries);
+		local push = @(_entry) ::AP.Standard.push(_entry, tooltipArray);
 
 		push(this.createStacksEntry());
 		push(this.createStaminaEntry());
 		push(this.createIntervalEntry());
+		return tooltipArray;
 	}
 
 	function isViableForEffect()
@@ -90,6 +101,11 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		this.setBattlesSurvived(battlesSurvived + 1);
 	}
 
+	function refreshStateByConfiguration()
+	{
+		this.m.IsHidden = !::AP.Standard.getParameter("EnableMomentum");
+	}
+
 	function setBattlesSurvived( _integer = 0 )
 	{
 		::AP.Standard.setFlag("BattlesSurvived", _integer, this);
@@ -98,6 +114,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function onUpdate( _properties )
 	{
 		this.ap_skill.onUpdate(_properties);
+		this.refreshStateByConfiguration();
 
 		if (this.m.IsHidden)
 		{
