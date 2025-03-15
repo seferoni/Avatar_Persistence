@@ -2,6 +2,7 @@
 {
 	Title = "After the battle...",
 	ScreenAListEntry = "You lose %s %s",
+	ScreenAMomentumLoss = "You have lost all Momentum",
 	ScreenAOptionA = "Ever onward.",
 
 	ScreenATextFragmentA = "The company is beaten, broken, slaughtered to the last - by rights, you should not be alive, and still you remain. Clutching onto your side with a pained grimace, you manage to struggle to your feet, and keep yourself upright after the fact - here is something to be grateful for.",

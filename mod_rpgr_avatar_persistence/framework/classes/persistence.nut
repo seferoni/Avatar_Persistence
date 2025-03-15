@@ -3,6 +3,7 @@
 	Parameters =
 	{
 		EventAttempts = 20,
+		MomentumBaseStaminaBonus = 3,
 		MomentumBaseIntervalBattles = 10, // TODO: this should probably be configurable
 		SkippedTimePrefactor = 1.5,
 	}
@@ -14,7 +15,16 @@
 
 	function addMomentum( _playerObject )
 	{
-		_playerObject.getSkills().add(::new("scripts/skills/effects/ap_momentum_effect"));
+		local skills = _playerObject.getSkills();
+
+		if (skills.hasSkill("effects.ap_momentum"))
+		{
+			::logInfo("player already has momentum")
+			return;
+		}
+
+		::logInfo("adding momentum")
+		skills.add(::new(this.getField("SkillPaths").Momentum));
 	}
 
 	function addToSurvivorRoster( _playerObject )
@@ -90,6 +100,20 @@
 		return entries;
 	}
 
+	function createMomentumResetEntry()
+	{
+		if (!::AP.Standard.getParameter("EnableMomentum"))
+		{
+			return null;
+		}
+
+		return ::AP.Standard.constructEntry
+		(
+			"Momentum",
+			::AP.Strings.Events.Defeat.ScreenAMomentumLoss
+		);
+	}
+
 	function createTooltipEntries( _playerObject )
 	{
 		local entries = [];
@@ -127,7 +151,7 @@
 
 	function executeDefeatRoutine()
 	{
-		if (!::AP.Standard.getSetting("EnableDefeatEvent"))
+		if (!::AP.Standard.getParameter("EnableDefeatEvent"))
 		{
 			return;
 		}
@@ -145,6 +169,12 @@
 			{
 				break;
 			}
+		}
+
+		if (!canFire)
+		{
+			this.removeItems(this.getCulledItems());
+			this.reduceResources(this.getCulledResources());
 		}
 	}
 

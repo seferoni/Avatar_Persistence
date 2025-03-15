@@ -4,4 +4,5 @@
 	ArmorParts = "Tools",
 	Medicine = "Medical Supplies",
 	Money  = "crowns",
+	Stamina = "Maximum Fatigue"
 };

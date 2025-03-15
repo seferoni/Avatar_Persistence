@@ -311,6 +311,18 @@
 		}
 	}
 
+	function getNearestTen( _integer, _roundUp = false )
+	{
+		local naiveValue = ::Math.round(_integer / 10) * 10;
+
+		if (_roundUp && naiveValue < _integer)
+		{
+			return naiveValue + 10;
+		}
+
+		return naiveValue;
+	}
+
 	function shuffleArray( _array )
 	{	# This method uses the Fisher-Yates shuffle algorithm.
 		local sequenceLength = _array.len();

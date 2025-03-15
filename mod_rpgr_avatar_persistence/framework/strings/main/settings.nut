@@ -8,7 +8,7 @@
 	AmmoLossPercentageDescription = "Determines the percentage of ammo lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.",
 
 	ArmorPartsLossPercentageName = "Tools Loss Percentage",
-	ArmorPartsLossPercentageDescription = "Determines the percentage of tools lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled."
+	ArmorPartsLossPercentageDescription = "Determines the percentage of tools lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.",
 
 	ElixirConfersAvatarStatusName = "Elixir Confers Avatar Status",
 	ElixirConfersAvatarStatusDescription = "Determines whether or not the elixir has the ability to confer player character status to selected non-player characters on consumption.",
@@ -18,6 +18,9 @@
 
 	EnableDefeatEventName = "Enable Defeat Event",
 	EnableDefeatEventDescription = "Determines whether an event is fired upon defeat. This event serves as a diegetic catalogue of item and resource losses.",
+
+	EnableMomentumName = "Enable Momentum",
+	EnableMomentumDescription = "Determines whether the Momentum effect is added to and active for player characters.",
 
 	ItemRemovalCeilingName = "Item Removal Ceiling",
 	ItemRemovalCeilingDescription = "Determines the maximum number of items that may be removed per instance of player defeat. Does nothing if Lose Items Upon Defeat is disabled.",

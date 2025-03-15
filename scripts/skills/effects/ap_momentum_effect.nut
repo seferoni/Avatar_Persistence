@@ -10,7 +10,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function assignGenericProperties()
 	{
 		this.ap_skill.create();
-		this.m.IsHidden = ::AP.Standard.getSetting("EnableMomentum") && this.isViableForEffect();
+		this.m.IsHidden = !::AP.Standard.getParameter("EnableMomentum") && !this.isViableForEffect();
 	}
 
 	function createIntervalEntry()
@@ -18,13 +18,28 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		return ::AP.Standard.constructEntry
 		(
 			"Time",
-			format()::AP.Strings.Skills.MomentumIntervalText
+			format(::AP.Strings.Skills.MomentumIntervalText, ::AP.Standard.colourWrap(this.getBattlesUntilNextStack(), ::AP.Standard.Colour.Red))
 		);
 	}
 
-	function createSkillEntry()
+	function createStacksEntry()
 	{
+		local stacks = this.getCurrentStacks();
+		return ::AP.Standard.constructEntry
+		(
+			"Special",
+			format("%s %s", ::AP.Strings.Skills.MomentumValue, ::AP.Standard.colourWrap(stacks, ::AP.Standard.Colour.Green))
+		);
+	}
 
+	function createStaminaEntry()
+	{
+		local staminaBonus = this.getStaminaBonus();
+		return ::AP.Standard.constructEntry
+		(
+			"Stamina",
+			format("%s %s", ::AP.Standard.colourWrap(format("+%i", staminaBonus), ::AP.Standard.Colour.Green), ::AP.Strings.Generic.Stamina)
+		);
 	}
 
 	function getBattlesSurvived()
@@ -35,7 +50,18 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function getBattlesUntilNextStack()
 	{
 		local battlesSurvived = this.getBattlesSurvived();
-		// TODO: think about implementation here
+		return ::AP.Standard.getNearestTen(battlesSurvived, true) - battlesSurvived;
+	}
+
+	function getCurrentStacks()
+	{
+		local battlesSurvived = this.getBattlesSurvived();
+		return ::AP.Standard.getNearestTen(battlesSurvived) / 10;
+	}
+
+	function getStaminaBonus()
+	{
+		return this.getCurrentStacks() * ::AP.Persistence.Parameters.MomentumBaseStaminaBonus;
 	}
 
 	function getTooltip()
@@ -43,7 +69,8 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		local tooltipArray = this.ap_skill.getTooltip();
 		local push = @(_entry) ::AP.Standard.push(_entry, entries);
 
-		push(this.createSkillEntry());
+		push(this.createStacksEntry());
+		push(this.createStaminaEntry());
 		push(this.createIntervalEntry());
 	}
 
@@ -70,6 +97,13 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function onUpdate( _properties )
 	{
+		this.ap_skill.onUpdate(_properties);
 
+		if (this.m.IsHidden)
+		{
+			return;
+		}
+
+		_properties.Stamina += this.getStaminaBonus();
 	}
 });

@@ -45,9 +45,10 @@ this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
 			::AP.Standard.push(playerCharacter.getImagePath(), this.Characters);
 		}
 
-		::AP.Standard.push(::AP.Persistence.createEventResourceReductionEntries(culledResources), this.List);
+		::AP.Standard.push(::AP.Persistence.createMomentumResetEntry(), this.List);
 		::AP.Standard.push(::AP.Persistence.createEventItemRemovalEntries(culledItems), this.List);
-		::AP.Persistence.reduceResources(culledResources);
+		::AP.Standard.push(::AP.Persistence.createEventResourceReductionEntries(culledResources), this.List);
 		::AP.Persistence.removeItems(culledItems);
+		::AP.Persistence.reduceResources(culledResources);
 	}
 });

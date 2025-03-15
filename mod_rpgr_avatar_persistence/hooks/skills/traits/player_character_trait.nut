@@ -10,4 +10,9 @@
 		_tooltipArray.extend(::AP.Persistence.createTooltipEntries(this.getContainer().getActor()));
 		return _tooltipArray;
 	});
+
+	::AP.Patcher.wrap(p, "onAdded", function()
+	{
+		::AP.Persistence.addMomentum(this.getContainer().getActor());
+	});
 });
