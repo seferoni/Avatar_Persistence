@@ -4,7 +4,7 @@
 	{
 		EventAttempts = 20,
 		MomentumStaminaInterval = 3,
-		MomentumBaseIntervalBattles = 10, // TODO: this should probably be configurable
+		MomentumBaseIntervalBattles = 10
 	}
 
 	function addInjuryByScript( _injuryScript, _playerObject )
