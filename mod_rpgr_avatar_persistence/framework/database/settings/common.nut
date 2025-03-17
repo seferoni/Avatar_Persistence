@@ -44,6 +44,12 @@
 	{
 		Default = true,
 	},
+	MomentumStaminaInterval =
+	{
+		Default = 3,
+		Range = [1, 10],
+		Interval = 1
+	},
 	MoneyLossPercentage =
 	{
 		Default = 100,

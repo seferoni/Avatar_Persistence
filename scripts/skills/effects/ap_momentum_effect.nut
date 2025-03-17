@@ -71,7 +71,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function getStaminaBonus()
 	{
-		return this.getCurrentStacks() * ::AP.Persistence.Parameters.MomentumBaseStaminaBonus;
+		return this.getCurrentStacks() * ::AP.Standard.getParameter("MomentumStaminaInterval");
 	}
 
 	function getTooltip()

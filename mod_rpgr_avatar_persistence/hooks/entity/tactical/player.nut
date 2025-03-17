@@ -7,7 +7,7 @@
 			return;
 		}
 
-		if (!::AP.Persistence.isWithinInjuryThreshold(this))
+		if (::AP.Persistence.getPermanentInjuryThresholdDifferential(this) > 0)
 		{
 			return;
 		}

@@ -3,9 +3,8 @@
 	Parameters =
 	{
 		EventAttempts = 20,
-		MomentumBaseStaminaBonus = 3,
+		MomentumStaminaInterval = 3,
 		MomentumBaseIntervalBattles = 10, // TODO: this should probably be configurable
-		SkippedTimePrefactor = 1.5,
 	}
 
 	function addInjuryByScript( _injuryScript, _playerObject )
@@ -124,17 +123,16 @@
 	function createTutorialEntry( _playerObject )
 	{
 		local threshold = ::AP.Standard.getParameter("PermanentInjuryThreshold");
-		local tutorialText = ::AP.Strings.getFragmentsAsCompiledString("InjuryThresholdTooltipBaselineFragment", "Generic");
-
-		if (threshold != 0)
-		{
-			tutorialText = format(::AP.Strings.Persistence.InjuryThresholdTooltip, ::AP.Standard.colourWrap(threshold, ::AP.Standard.Colour.Red));
-		}
+		local thresholdDifferential = this.getPermanentInjuryThresholdDifferential(_playerObject);
 
 		local iconKey = "Warning";
-		local exceedsThreshold = !this.isWithinInjuryThreshold(_playerObject);
+		local tutorialText = format(::AP.Strings.Persistence.InjuryThresholdTooltip, ::AP.Standard.colourWrap(threshold, ::AP.Standard.Colour.Red));
 
-		if (exceedsThreshold)
+		if (thresholdDifferential == 0)
+		{
+			tutorialText = ::AP.Strings.getFragmentsAsCompiledString("InjuryThresholdTooltipBaselineFragment", "Generic");
+		}
+		else if (thresholdDifferential > 0)
 		{
 			iconKey = "Skull";
 			tutorialText = ::AP.Standard.colourWrap(::AP.Strings.Persistence.InjuryThresholdExceededTooltip, ::AP.Standard.Colour.Red);
@@ -173,6 +171,7 @@
 		{
 			this.removeItems(this.getCulledItems());
 			this.reduceResources(this.getCulledResources());
+			::AP.Standard.log(".");
 		}
 	}
 
@@ -267,6 +266,11 @@
 		return ::AP.Database.getField("Generic", _fieldName);
 	}
 
+	function getPermanentInjuryCount( _playerObject )
+	{
+		return _playerObject.getSkills().getAllSkillsOfType(::Const.SkillType.PermanentInjury).len();
+	}
+
 	function getPlayerInRoster( _rosterObject )
 	{
 		local rosterArray = _rosterObject.getAll();
@@ -285,6 +289,13 @@
 	function getQueueDefeatRoutineState()
 	{
 		return ::AP.Standard.getFlag("QueueDefeatRoutine", ::World.Statistics);
+	}
+
+	function getPermanentInjuryThresholdDifferential( _playerObject )
+	{
+		// TODO:
+		local permanentInjuries = this.getPermanentInjuryCount(_playerObject);
+		return permanentInjuries - ::AP.Standard.getParameter("PermanentInjuryThreshold");
 	}
 
 	function isActorViable( _actor )
@@ -315,12 +326,6 @@
 		}
 
 		return true;
-	}
-
-	function isWithinInjuryThreshold( _playerObject )
-	{
-		local permanentInjuryCount = _playerObject.getSkills().getAllSkillsOfType(::Const.SkillType.PermanentInjury).len();
-		return permanentInjuryCount <= ::AP.Standard.getParameter("PermanentInjuryThreshold");
 	}
 
 	function reduceResources( _reductionTable )
