@@ -130,7 +130,7 @@
 
 		if (thresholdDifferential == 0)
 		{
-			tutorialText = ::AP.Strings.getFragmentsAsCompiledString("InjuryThresholdTooltipBaselineFragment", "Generic");
+			tutorialText = ::AP.Strings.getFragmentsAsCompiledString("InjuryThresholdTooltipBaselineFragment", "Persistence");
 		}
 		else if (thresholdDifferential > 0)
 		{
@@ -165,13 +165,14 @@
 			{
 				break;
 			}
+			::logInfo("onto loop " + i)
 		}
 
 		if (!canFire)
 		{
 			this.removeItems(this.getCulledItems());
 			this.reduceResources(this.getCulledResources());
-			::AP.Standard.log(".");
+			::logInfo("could not fire event!")
 		}
 	}
 
@@ -189,6 +190,7 @@
 		}
 
 		::World.Events.fire("event.ap_defeat");
+		::logInfo("firing event")
 		return true;
 	}
 
@@ -293,7 +295,6 @@
 
 	function getPermanentInjuryThresholdDifferential( _playerObject )
 	{
-		// TODO:
 		local permanentInjuries = this.getPermanentInjuryCount(_playerObject);
 		return permanentInjuries - ::AP.Standard.getParameter("PermanentInjuryThreshold");
 	}
