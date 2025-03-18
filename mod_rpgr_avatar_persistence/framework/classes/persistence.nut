@@ -152,27 +152,21 @@
 			return;
 		}
 
-		local canFire = false;
+		local attemptPossible = this.Parameters.EventAttempts > 0;
 
-		for ( local i = 0; i <= this.Parameters.EventAttempts; i++ )
+		if (attemptPossible)
 		{
 			::Time.scheduleEvent(::TimeUnit.Real, 1000, function( _dummy )
 			{
-				canFire = ::AP.Persistence.fireDefeatEvent();
+				::AP.Persistence.fireDefeatEvent();
 			}, null);
-
-			if (canFire)
-			{
-				break;
-			}
-			::logInfo("onto loop " + i)
 		}
-
-		if (!canFire)
+		else
 		{
 			this.removeItems(this.getCulledItems());
 			this.reduceResources(this.getCulledResources());
 			::logInfo("could not fire event!")
+			this.Parameters.EventAttempts = 20;
 		}
 	}
 
@@ -186,12 +180,15 @@
 	{
 		if (!this.canFireEvent())
 		{
-			return false;
+			this.executeDefeatRoutine();
+			this.Parameters.EventAttempts--;
+			::logInfo("attempt " + 21 - this.Parameters.EventAttempts)
+			return;
 		}
 
 		::World.Events.fire("event.ap_defeat");
 		::logInfo("firing event")
-		return true;
+		this.Parameters.EventAttempts = 20;
 	}
 
 	function generateInjuryCandidates( _player )
