@@ -32,6 +32,7 @@
 			return;
 		}
 
+		::AP.Persistence.resetEventAttempts();
 		::AP.Persistence.executeDefeatRoutine();
 		::AP.Persistence.setQueueDefeatRoutineState(false);
 	});

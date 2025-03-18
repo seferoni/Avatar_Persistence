@@ -2,7 +2,8 @@
 {
 	Parameters =
 	{
-		EventAttempts = 20,
+		EventAttempts = 0,
+		EventAttemptsNominal = 20,
 		MomentumStaminaInterval = 3,
 		MomentumBaseIntervalBattles = 10
 	}
@@ -152,22 +153,18 @@
 			return;
 		}
 
-		local attemptPossible = this.Parameters.EventAttempts > 0;
-
-		if (attemptPossible)
+		if (this.Parameters.EventAttempts > 0)
 		{
 			::Time.scheduleEvent(::TimeUnit.Real, 1000, function( _dummy )
 			{
 				::AP.Persistence.fireDefeatEvent();
 			}, null);
+			return;
 		}
-		else
-		{
-			this.removeItems(this.getCulledItems());
-			this.reduceResources(this.getCulledResources());
-			::logInfo("could not fire event!")
-			this.Parameters.EventAttempts = 20;
-		}
+
+		this.removeItems(this.getCulledItems());
+		this.reduceResources(this.getCulledResources());
+		::logInfo("could not fire event!")
 	}
 
 	function executePersistenceRoutine( _playerObject, _permanentInjurySustained = false )
@@ -180,15 +177,14 @@
 	{
 		if (!this.canFireEvent())
 		{
-			this.executeDefeatRoutine();
+			::logInfo("attempt " + 22 - this.Parameters.EventAttempts)
 			this.Parameters.EventAttempts--;
-			::logInfo("attempt " + 21 - this.Parameters.EventAttempts)
+			this.executeDefeatRoutine();
 			return;
 		}
 
-		::World.Events.fire("event.ap_defeat");
 		::logInfo("firing event")
-		this.Parameters.EventAttempts = 20;
+		::World.Events.fire("event.ap_defeat");
 	}
 
 	function generateInjuryCandidates( _player )
@@ -345,6 +341,11 @@
 		}
 
 		::World.Assets.updateFood();
+	}
+
+	function resetEventAttempts()
+	{
+		this.Parameters.EventAttempts = this.Parameters.EventAttemptsNominal;
 	}
 
 	function setQueueDefeatRoutineState( _boolean )
