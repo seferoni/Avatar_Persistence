@@ -1,8 +1,8 @@
 ::AP.Strings.Generic <-
 {
 	Ammo = "Ammunition",
-	ArmorParts = "Tools",
+	ArmorParts = "Tools and Supplies",
 	Medicine = "Medical Supplies",
-	Money  = "crowns",
+	Money  = "Crowns",
 	Stamina = "Maximum Fatigue"
 };
