@@ -16,62 +16,43 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function assignSpecialProperties()
 	{
 		this.ap_skill.assignSpecialProperties();
+		this.initialiseAttributeBonuses();
+	}
 
-		if (this.getBattlesSurvived() == false)
+	function applySkillBonuses( _currentProperties )
+	{
+		local viableAttributes = this.getViableAttributes();
+
+		foreach( attribute in viableAttributes )
 		{
-			this.setBattlesSurvived(0);
+			local bonus = this.getAttributeBonus(attribute);
+			_currentProperties[attribute] += bonus;
 		}
 	}
 
-	function createIntervalEntry()
+	function createAttributeEntries()
 	{
-		return ::AP.Standard.constructEntry
-		(
-			"Time",
-			format(::AP.Strings.Skills.MomentumIntervalText, ::AP.Standard.colourWrap(this.getBattlesUntilNextStack(), ::AP.Standard.Colour.Red))
-		);
-	}
+		local entries = [];
+		local viableAttributes = this.getViableAttributes();
 
-	function createStacksEntry()
-	{
-		local stacks = this.getCurrentStacks();
-		return ::AP.Standard.constructEntry
-		(
-			"Special",
-			format("%s %s", ::AP.Strings.Skills.MomentumValue, ::AP.Standard.colourWrap(stacks, ::AP.Standard.Colour.Green))
-		);
-	}
+		foreach( attribute in viableAttributes )
+		{
+			local bonus = this.getAttributeBonus(attribute);
 
-	function createStaminaEntry()
-	{
-		local staminaBonus = this.getStaminaBonus();
-		return ::AP.Standard.constructEntry
-		(
-			"Stamina",
-			format("%s %s", ::AP.Standard.colourWrap(format("+%i", staminaBonus), ::AP.Standard.Colour.Green), ::AP.Strings.Generic.Stamina)
-		);
-	}
+			if (bonus == 0)
+			{
+				continue;
+			}
 
-	function getBattlesSurvived()
-	{
-		return ::AP.Standard.getFlag("BattlesSurvived", this);
-	}
+			::AP.Standard.constructEntry
+			(
+				attribute,
+				format("%s %s", ::AP.Standard.colourWrap(format("+%i", bonus), ::AP.Standard.Colour.Green), ::AP.Strings.Generic[attribute]),
+				entries
+			);
+		}
 
-	function getBattlesUntilNextStack()
-	{
-		local battlesSurvived = this.getBattlesSurvived();
-		return ::AP.Standard.getNearestTen(battlesSurvived, true) - battlesSurvived;
-	}
-
-	function getCurrentStacks()
-	{
-		local battlesSurvived = this.getBattlesSurvived();
-		return ::AP.Standard.getNearestTen(battlesSurvived) / 10;
-	}
-
-	function getStaminaBonus()
-	{
-		return this.getCurrentStacks() * ::AP.Standard.getParameter("MomentumStaminaInterval");
+		return entries;
 	}
 
 	function getTooltip()
@@ -79,26 +60,76 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		local tooltipArray = this.ap_skill.getTooltip();
 		local push = @(_entry) ::AP.Standard.push(_entry, tooltipArray);
 
-		push(this.createStacksEntry());
-		push(this.createStaminaEntry());
-		push(this.createIntervalEntry());
+		push(this.createAttributeEntries());
 		return tooltipArray;
 	}
 
-	function isViableForEffect()
+	function getViableAttributes()
 	{
-		if (this.getBattlesSurvived() < ::AP.Persistence.Parameters.MomentumBaseIntervalDays)
-		{
-			return false;
-		}
-
-		return true;
+		return ::AP.Persistence.getField("MomentumAttributes");
 	}
 
-	function incrementBattlesSurvived()
+	function getEligibleAttributeByEntity( _targetEntity )
 	{
-		local battlesSurvived = this.getBattlesSurvived();
-		this.setBattlesSurvived(battlesSurvived + 1);
+		local eligibleAttributes = [];
+		local viableAttributes = this.getViableAttributes();
+		local playerProperties = this.getContainer().getActor().getBaseProperties();
+		local targetProperties = _targetEntity.getBaseProperties();
+
+		foreach( attribute in viableAttributes )
+		{
+			if (targetProperties[attribute] <= playerProperties[attribute] + this.getAttributeBonus(attribute))
+			{
+				continue;
+			}
+
+			eligibleAttributes.push(attribute);
+		}
+
+		if (eligibleAttributes.len() == 0)
+		{
+			return null;
+		}
+
+		return eligibleAttributes[::Math.rand(0, eligibleAttributes)];
+	}
+
+	function getAttributeBonus( _attributeKey )
+	{
+		return ::AP.Standard.getFlag(_attributeKey, this);
+	}
+
+	function getAttributeBonusOffset()
+	{
+		local nominalOffset = ::AP.Persistence.getPermanentInjuryCount(this.getContainer().getActor());
+
+		if (nominalOffset == 0)
+		{
+			nominalOffset++;
+		}
+
+		return nominalOffset;
+	}
+
+	function incrementAttributeBonus( _attributeKey )
+	{
+		local currentBonus = this.getAttributeBonus(_attributeKey);
+		this.setAttributeBonus(_attributeKey, currentBonus + this.getAttributeBonusOffset());
+	}
+
+	function initialiseAttributeBonuses()
+	{
+		local viableAttributes = this.getViableAttributes();
+
+		foreach( attribute in viableAttributes )
+		{
+			if (this.getAttributeBonus(attribute) != false)
+			{
+				continue;
+			}
+
+			this.setAttributeBonus(0, attribute);
+		}
 	}
 
 	function refreshStateByConfiguration()
@@ -106,9 +137,36 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		this.m.IsHidden = !::AP.Standard.getParameter("EnableMomentum");
 	}
 
+	function resetMomentum()
+	{
+		local viableAttributes = this.getViableAttributes();
+
+		foreach( attribute in viableAttributes )
+		{
+			this.setAttributeBonus(0, attribute);
+		}
+	}
+
+	function setAttributeBonus( _attributeKey, _attributeBonus )
+	{
+		::AP.Standard.setFlag(_attributeKey, _attributeBonus, this);
+	}
+
 	function setBattlesSurvived( _integer = 0 )
 	{
 		::AP.Standard.setFlag("BattlesSurvived", _integer, this);
+	}
+
+	function onTargetKilled( _targetEntity, _skill )
+	{
+		local eligibleAttribute = this.getEligibleAttributeByEntity(_targetEntity);
+
+		if (eligibleAttribute == null)
+		{
+			return;
+		}
+
+		this.incrementAttributeBonus(eligibleAttribute);
 	}
 
 	function onUpdate( _properties )
@@ -116,11 +174,11 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		this.ap_skill.onUpdate(_properties);
 		this.refreshStateByConfiguration();
 
-		if (this.m.IsHidden)
+		if (!::AP.Standard.getParameter("EnableMomentum"))
 		{
 			return;
 		}
 
-		_properties.Stamina += this.getStaminaBonus();
+		this.applySkillBonuses(_properties);
 	}
 });

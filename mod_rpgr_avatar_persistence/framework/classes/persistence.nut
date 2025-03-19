@@ -169,6 +169,7 @@
 
 		this.removeItems(this.getCulledItems());
 		this.reduceResources(this.getCulledResources());
+		this.resetMomentum(this.getPlayerInRoster(::World.getPlayerRoster()));
 		::logInfo("could not fire event!")
 	}
 
@@ -351,6 +352,16 @@
 	function resetEventAttempts()
 	{
 		this.Parameters.EventAttempts = this.Parameters.EventAttemptsNominal;
+	}
+
+	function resetMomentum( _playerObject )
+	{
+		if (!::AP.Standard.getParameter("EnableMomentum"))
+		{
+			return;
+		}
+
+		_playerObject.getSkills().getSkillByID("effect.ap_momentum").resetMomentum();
 	}
 
 	function setQueueDefeatRoutineState( _boolean )

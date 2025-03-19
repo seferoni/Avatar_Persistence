@@ -16,6 +16,16 @@
 	{
 		Elixir = "scripts/items/special/ap_elixir_item"
 	},
+	MomentumAttributes =
+	[
+		"MeleeSkill",
+		"RangedSkill",
+		"MeleeDefense",
+		"RangedDefense",
+		"Bravery",
+		"Initiative",
+		"Stamina"
+	],
 	MoodChanges =
 	{
 		PermanentInjury = 1.35,

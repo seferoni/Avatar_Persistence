@@ -34,9 +34,6 @@
 	ModifyTooltipName = "Modify Tooltip",
 	ModifyTooltipDescription = "Determines whether the player character trait tooltip reflects changes brought about by Avatar Persistence."
 
-	MomentumStaminaIntervalName = "Momentum Maximum Fatigue Bonus",
-	MomentumStaminaIntervalDescription = "Determines how much Maximum Fatigue each additional stack of Momentum provides.",
-
 	MoneyLossPercentageName = "Money Loss Percentage",
 	MoneyLossPercentageDescription = "Determines the percentage of money lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.",
 
