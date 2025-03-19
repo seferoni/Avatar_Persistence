@@ -52,6 +52,16 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 			);
 		}
 
+		if (entries.len() == 0)
+		{
+			::AP.Standard.constructEntry
+			(
+				"Warning",
+				::AP.Standard.colourWrap(::AP.Strings.Skills.MomentumNoBonusesText, ::AP.Standard.Colour.Red),
+				entries
+			);
+		}
+
 		return entries;
 	}
 
