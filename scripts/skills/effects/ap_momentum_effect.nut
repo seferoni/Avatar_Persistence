@@ -8,7 +8,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	}
 
 	function assignGenericProperties()
-	{
+	{	// TODO: this needs to be ordered higher, amongst traits
 		this.ap_skill.assignGenericProperties();
 		this.m.IsHidden = false;
 	}
@@ -138,7 +138,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 				continue;
 			}
 
-			this.setAttributeBonus(0, attribute);
+			this.setAttributeBonus(attribute, 0);
 		}
 	}
 
@@ -153,18 +153,13 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 		foreach( attribute in viableAttributes )
 		{
-			this.setAttributeBonus(0, attribute);
+			this.setAttributeBonus(attribute, 0);
 		}
 	}
 
 	function setAttributeBonus( _attributeKey, _attributeBonus )
 	{
 		::AP.Standard.setFlag(_attributeKey, _attributeBonus, this);
-	}
-
-	function setBattlesSurvived( _integer = 0 )
-	{
-		::AP.Standard.setFlag("BattlesSurvived", _integer, this);
 	}
 
 	function onTargetKilled( _targetEntity, _skill )

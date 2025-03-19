@@ -212,7 +212,7 @@
 	}
 
 	function getCulledItems()
-	{
+	{	// TODO: do something for player-equipped items
 		local removedItems = [];
 		local stash = ::World.Assets.getStash().getItems();
 
