@@ -7,7 +7,7 @@
 	},
 	Colour =
 	{
-		Cyan = "#00FFFF",
+		Cyan = "#1ac6ff",
 		Gold = "#574200"
 		Green = "#2a5424",
 		Orange = "#cc5500",

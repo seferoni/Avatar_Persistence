@@ -87,6 +87,11 @@
 
 		foreach( resourceKey, reducedMagnitude in _reductionTable )
 		{
+			if (reducedMagnitude == 0)
+			{
+				continue;
+			}
+
 			::AP.Standard.constructEntry
 			(
 				resourceKey,
@@ -108,7 +113,7 @@
 		return ::AP.Standard.constructEntry
 		(
 			"Momentum",
-			::AP.Strings.Events.Defeat.ScreenAMomentumLoss
+			::AP.Strings.getFragmentsAsCompiledString("ScreenAMomentumLossFragment", "Events", "Defeat", ::AP.Standard.Colour.Cyan)
 		);
 	}
 
