@@ -1,7 +1,10 @@
 ::AP.Strings.Generic <-
 {
+	ActionPoints = "Action Points per turn",
 	Ammo = "Ammunition",
 	ArmorParts = "Tools and Supplies",
+	FatigueRecoveryRate = "Fatigue Recovery per turn",
+	Hitpoints = "Hitpoints",
 	Medicine = "Medical Supplies",
 	Money  = "Crowns",
 	MeleeSkill = "Melee Skill",

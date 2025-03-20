@@ -1,8 +1,12 @@
 ::AP.Database.Generic.Icons <-
 {
+	ActionPoints = "ui/icons/action_points.png",
 	Ammo = "ui/icons/asset_ammo.png",
 	ArmorParts = "ui/icons/asset_supplies.png",
 	Bravery = "ui/icons/bravery.png",
+	Brother = "ui/icons/asset_brothers.png",
+	FatigueRecoveryRate = "ui/icons/fatigue.png",
+	Hitpoints = "ui/icons/health.png",
 	Initiative = "ui/icons/initiative.png",
 	Medicine = "ui/icons/asset_medicine.png",
 	MeleeDefense = "ui/icons/melee_defense.png",

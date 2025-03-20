@@ -13,7 +13,7 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 		this.m.IsActive = false;
 		this.m.IsHidden = false;
 		this.m.Type = ::Const.SkillType.StatusEffect;
-		this.m.Order = ::Const.SkillOrder.VeryLast;
+		this.m.Order = ::Const.SkillOrder.Trait + 1;
 	}
 
 	function assignPropertiesByName( _properName )
@@ -49,6 +49,11 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 	function getLastUpdateTime()
 	{
 		return ::AP.Standard.getFlag("LastUpdateTime", this);
+	}
+
+	function getField( _fieldName )
+	{
+		return ::AP.Database.getField("Skills", _fieldName);
 	}
 
 	function getFlags()

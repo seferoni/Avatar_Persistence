@@ -8,7 +8,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	}
 
 	function assignGenericProperties()
-	{	// TODO: this needs to be ordered higher, amongst traits
+	{
 		this.ap_skill.assignGenericProperties();
 		this.m.IsHidden = false;
 	}
@@ -16,7 +16,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function assignSpecialProperties()
 	{
 		this.ap_skill.assignSpecialProperties();
-		this.initialiseAttributeBonuses();
+		this.initialiseFlags();
 	}
 
 	function applySkillBonuses( _currentProperties )
@@ -27,6 +27,21 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		{
 			local bonus = this.getAttributeBonus(attribute);
 			_currentProperties[attribute] += bonus;
+		}
+	}
+
+	function applySpecialEffects( _currentProperties )
+	{
+		if (!this.isWithinRosterThreshold())
+		{
+			return;
+		}
+
+		local activeEffects = this.getActiveEffects();
+
+		foreach( effectTable in activeEffects )
+		{
+			_currentProperties[effectTable.Property] += effectTable.Offset;
 		}
 	}
 
@@ -65,18 +80,91 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		return entries;
 	}
 
+	function createMomentumStateEntry()
+	{
+		local colour = ::AP.Standard.Colour.Green;
+		local suffix = ::AP.Strings.Skills.MomentumBelowRosterThreshold;
+
+		if (!this.isWithinRosterThreshold())
+		{
+			colour = ::AP.Standard.Colour.Red;
+			suffix = ::AP.Strings.Skills.MomentumRosterThresholdExceeded;
+		}
+
+		return ::AP.Standard.constructEntry
+		(
+			"Special",
+			format("%s %s", ::AP.Strings.Skills.MomentumStatePrefix, ::AP.Standard.colourWrap(suffix, colour))
+		);
+	}
+
+	function createSpecialEffectEntries()
+	{
+		local entries = [];
+
+		if (!this.isWithinRosterThreshold())
+		{
+			return entries;
+		}
+
+		local activeEffects = this.getActiveEffects();
+
+		if (activeEffects.len() == 0)
+		{
+			return entries;
+		}
+
+		foreach( effectTable in activeEffects )
+		{
+			::AP.Standard.constructEntry
+			(
+				Property,
+				format("%s %s", ::AP.Standard.colourWrap(format("+%i", effectTable.Offset), ::AP.Standard.Colour.Green), ::AP.Strings.Generic[Property]),
+				entries
+			);
+		}
+
+		return entries;
+	}
+
+	function getActiveEffects()
+	{
+		local activeEffects = [];
+		local specialEffects = this.getSpecialEffectTables();
+		local enemiesKilled = this.getEnemiesSlain();
+
+		foreach( effectTable in specialEffects )
+		{
+			if (effectTable.EnemiesSlain > enemiesKilled)
+			{
+				continue;
+			}
+
+			activeEffects.push(effectTable);
+		}
+
+		return activeEffects;
+	}
+
+	function getSpecialEffectTables()
+	{
+		return this.getField("MomentumSpecialEffects");
+	}
+
 	function getTooltip()
 	{
 		local tooltipArray = this.ap_skill.getTooltip();
 		local push = @(_entry) ::AP.Standard.push(_entry, tooltipArray);
 
+		push(this.createMomentumStateEntry());
+		push(this.createSpecialEffectEntries());
 		push(this.createAttributeEntries());
 		return tooltipArray;
 	}
 
 	function getViableAttributes()
 	{
-		return ::AP.Persistence.getField("MomentumAttributes");
+		return this.getField("MomentumAttributes");
 	}
 
 	function getEligibleAttributeByEntity( _targetEntity )
@@ -121,14 +209,30 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		return nominalOffset;
 	}
 
+	function getEnemiesSlain()
+	{
+		return ::AP.Standard.getFlag("EnemiesSlain", this);
+	}
+
 	function incrementAttributeBonus( _attributeKey )
 	{
 		local currentBonus = this.getAttributeBonus(_attributeKey);
 		this.setAttributeBonus(_attributeKey, currentBonus + this.getAttributeBonusOffset());
 	}
 
-	function initialiseAttributeBonuses()
+	function incrementEnemiesSlain()
 	{
+		local currentValue = this.getEnemiesSlain();
+		this.setEnemiesSlain(currentValue + 1);
+	}
+
+	function initialiseFlags()
+	{
+		if (this.getEnemiesSlain() == false)
+		{
+			this.setEnemiesSlain(0);
+		}
+
 		local viableAttributes = this.getViableAttributes();
 
 		foreach( attribute in viableAttributes )
@@ -140,6 +244,38 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 			this.setAttributeBonus(attribute, 0);
 		}
+	}
+
+	function isWithinRosterThreshold()
+	{
+		return ::World.getPlayerRoster().getAll().len() <= ::AP.Standard.getParameter("MomentumRosterThreshold");
+	}
+
+	function onTargetKilled( _targetEntity, _skill )
+	{
+		local eligibleAttribute = this.getEligibleAttributeByEntity(_targetEntity);
+
+		if (eligibleAttribute == null)
+		{
+			return;
+		}
+
+		this.incrementAttributeBonus(eligibleAttribute);
+		this.incrementEnemiesSlain();
+	}
+
+	function onUpdate( _properties )
+	{
+		this.ap_skill.onUpdate(_properties);
+		this.refreshStateByConfiguration();
+
+		if (!::AP.Standard.getParameter("EnableMomentum"))
+		{
+			return;
+		}
+
+		this.applySkillBonuses(_properties);
+		this.applySpecialEffects(_properties);
 	}
 
 	function refreshStateByConfiguration()
@@ -162,28 +298,8 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		::AP.Standard.setFlag(_attributeKey, _attributeBonus, this);
 	}
 
-	function onTargetKilled( _targetEntity, _skill )
+	function setEnemiesSlain( _newValue )
 	{
-		local eligibleAttribute = this.getEligibleAttributeByEntity(_targetEntity);
-
-		if (eligibleAttribute == null)
-		{
-			return;
-		}
-
-		this.incrementAttributeBonus(eligibleAttribute);
-	}
-
-	function onUpdate( _properties )
-	{
-		this.ap_skill.onUpdate(_properties);
-		this.refreshStateByConfiguration();
-
-		if (!::AP.Standard.getParameter("EnableMomentum"))
-		{
-			return;
-		}
-
-		this.applySkillBonuses(_properties);
+		::AP.Standard.setFlag("EnemiesSlain", _newValue, this);
 	}
 });

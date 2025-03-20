@@ -32,7 +32,10 @@
 	MedicineLossPercentageDescription = "Determines the percentage of medicine lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.",
 
 	ModifyTooltipName = "Modify Tooltip",
-	ModifyTooltipDescription = "Determines whether the player character trait tooltip reflects changes brought about by Avatar Persistence."
+	ModifyTooltipDescription = "Determines whether the player character trait tooltip reflects changes brought about by Avatar Persistence.",
+
+	MomentumRosterThresholdName = "Momentum Roster Threshold",
+	MomentumRosterThresholdDescription = "Determines the roster size at and below which Momentum is Fortified, escalating in power more swiftly and providing unique bonuses to the player character.",
 
 	MoneyLossPercentageName = "Money Loss Percentage",
 	MoneyLossPercentageDescription = "Determines the percentage of money lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.",
