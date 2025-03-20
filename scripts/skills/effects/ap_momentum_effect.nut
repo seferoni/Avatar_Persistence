@@ -146,25 +146,26 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		return activeEffects;
 	}
 
-	function getSpecialEffectTables()
+	function getAttributeBonus( _attributeKey )
 	{
-		return this.getField("MomentumSpecialEffects");
+		return ::AP.Standard.getFlag(_attributeKey, this);
 	}
 
-	function getTooltip()
+	function getAttributeBonusOffset()
 	{
-		local tooltipArray = this.ap_skill.getTooltip();
-		local push = @(_entry) ::AP.Standard.push(_entry, tooltipArray);
+		local nominalOffset = ::AP.Persistence.getPermanentInjuryCount(this.getContainer().getActor());
 
-		push(this.createMomentumStateEntry());
-		push(this.createSpecialEffectEntries());
-		push(this.createAttributeEntries());
-		return tooltipArray;
-	}
+		if (nominalOffset == 0)
+		{
+			nominalOffset++;
+		}
 
-	function getViableAttributes()
-	{
-		return this.getField("MomentumAttributes");
+		if (this.isWithinRosterThreshold())
+		{
+			nominalOffset *= 2;
+		}
+
+		return nominalOffset;
 	}
 
 	function getEligibleAttributeByEntity( _targetEntity )
@@ -192,26 +193,30 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		return eligibleAttributes[::Math.rand(0, eligibleAttributes)];
 	}
 
-	function getAttributeBonus( _attributeKey )
-	{
-		return ::AP.Standard.getFlag(_attributeKey, this);
-	}
-
-	function getAttributeBonusOffset()
-	{
-		local nominalOffset = ::AP.Persistence.getPermanentInjuryCount(this.getContainer().getActor());
-
-		if (nominalOffset == 0)
-		{
-			nominalOffset++;
-		}
-
-		return nominalOffset;
-	}
-
 	function getEnemiesSlain()
 	{
 		return ::AP.Standard.getFlag("EnemiesSlain", this);
+	}
+
+	function getSpecialEffectTables()
+	{
+		return this.getField("MomentumSpecialEffects");
+	}
+
+	function getTooltip()
+	{
+		local tooltipArray = this.ap_skill.getTooltip();
+		local push = @(_entry) ::AP.Standard.push(_entry, tooltipArray);
+
+		push(this.createMomentumStateEntry());
+		push(this.createSpecialEffectEntries());
+		push(this.createAttributeEntries());
+		return tooltipArray;
+	}
+
+	function getViableAttributes()
+	{
+		return this.getField("MomentumAttributes");
 	}
 
 	function incrementAttributeBonus( _attributeKey )
