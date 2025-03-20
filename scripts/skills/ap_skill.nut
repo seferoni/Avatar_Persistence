@@ -53,7 +53,7 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 
 	function getField( _fieldName )
 	{
-		return ::AP.Database.getField("Skills", _fieldName);
+		return ::AP.Persistence.getField(_fieldName);
 	}
 
 	function getFlags()

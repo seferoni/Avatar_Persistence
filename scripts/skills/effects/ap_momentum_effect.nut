@@ -83,17 +83,17 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function createMomentumStateEntry()
 	{
 		local colour = ::AP.Standard.Colour.Green;
-		local suffix = ::AP.Strings.Skills.MomentumBelowRosterThreshold;
+		local suffix = ::AP.Strings.Skills.MomentumStateBelowRosterThreshold;
 
 		if (!this.isWithinRosterThreshold())
 		{
 			colour = ::AP.Standard.Colour.Red;
-			suffix = ::AP.Strings.Skills.MomentumRosterThresholdExceeded;
+			suffix = ::AP.Strings.Skills.MomentumStateRosterThresholdExceeded;
 		}
 
 		return ::AP.Standard.constructEntry
 		(
-			"Special",
+			"Momentum",
 			format("%s %s", ::AP.Strings.Skills.MomentumStatePrefix, ::AP.Standard.colourWrap(suffix, colour))
 		);
 	}

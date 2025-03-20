@@ -31,6 +31,8 @@
 
 			return this[_tableName][subtableName][_fieldName];
 		}
+
+		return null;
 	}
 
 	function getTopLevelField( _tableName, _fieldName )
