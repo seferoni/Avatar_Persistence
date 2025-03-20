@@ -167,10 +167,18 @@
 			return;
 		}
 
-		this.removeItems(this.getCulledItems());
-		this.reduceResources(this.getCulledResources());
-		this.resetMomentum(this.getPlayerInRoster(::World.getPlayerRoster()));
+		this.executeFallbackRoutine();
 		::logInfo("could not fire event!")
+	}
+
+	function executeFallbackRoutine()
+	{
+		local player = this.getPlayerInRoster(::World.getPlayerRoster());
+		local culledItems = this.getCulledItems(player);
+		local culledResources = this.getCulledResources();
+		this.resetMomentum(player);
+		this.removeItems(player, culledItems);
+		this.reduceResources(culledResources);
 	}
 
 	function executePersistenceRoutine( _playerObject, _permanentInjurySustained = false )
@@ -211,31 +219,35 @@
 		});
 	}
 
-	function getCulledItems()
-	{	// TODO: do something for player-equipped items
+	function getCulledItems( _playerObject )
+	{
 		local removedItems = [];
-		local stash = ::World.Assets.getStash().getItems();
-
-		foreach( item in stash )
+		local removalCount = ::Math.rand(0, ::AP.Standard.getParameter("ItemRemovalCeiling"));
+		local collate = function( _itemsArray )
 		{
-			if (removedItems.len() == ::AP.Standard.getParameter("ItemRemovalCeiling"))
+			foreach( item in _itemsArray )
 			{
-				break;
+				if (removedItems.len() == removalCount)
+				{
+					return;
+				}
+
+				if (item == null)
+				{
+					continue;
+				}
+
+				if (!::AP.Persistence.isItemViableForRemoval(item))
+				{
+					continue;
+				}
+
+				removedItems.push(item);
 			}
+		};
 
-			if (item == null)
-			{
-				continue;
-			}
-
-			if (!this.isItemViableForRemoval(item))
-			{
-				continue;
-			}
-
-			removedItems.push(item);
-		}
-
+		collate(_playerObject.getItems().getAllItems());
+		collate(::World.Assets.getStash().getItems());
 		return removedItems;
 	}
 
@@ -336,14 +348,33 @@
 		}
 	}
 
-	function removeItems( _itemsArray )
+	function removeItems( _playerObject, _itemsArray )
 	{
+		local excess = [];
+		local playerContainer = _playerObject.getItems();
 		local stash = ::World.Assets.getStash().getItems();
 
 		foreach( item in _itemsArray )
 		{
 			local index = stash.find(item);
+
+			if (index == null)
+			{
+				excess.push(item);
+				continue;
+			}
+
 			stash.remove(index);
+		}
+
+		foreach( item in excess )
+		{
+			local index = playerContainer.getAllItems().find(item);
+
+			if (index != null)
+			{
+				playerContainer.unequip(item);
+			}
 		}
 
 		::World.Assets.updateFood();
@@ -361,7 +392,7 @@
 			return;
 		}
 
-		_playerObject.getSkills().getSkillByID("effect.ap_momentum").resetMomentum();
+		_playerObject.getSkills().getSkillByID("effects.ap_momentum").resetMomentum();
 	}
 
 	function setQueueDefeatRoutineState( _boolean )

@@ -36,20 +36,16 @@ this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
 
 	function onIntro( _event )
 	{
-		local culledResources = ::AP.Persistence.getCulledResources();
-		local culledItems = ::AP.Persistence.getCulledItems();
 		local playerCharacter = ::AP.Persistence.getPlayerInRoster(::World.getPlayerRoster());
+		local culledResources = ::AP.Persistence.getCulledResources();
+		local culledItems = ::AP.Persistence.getCulledItems(playerCharacter);
 
-		if (playerCharacter != null)
-		{
-			::AP.Standard.push(playerCharacter.getImagePath(), this.Characters);
-		}
-
+		::AP.Standard.push(playerCharacter.getImagePath(), this.Characters);
 		::AP.Standard.push(::AP.Persistence.createMomentumResetEntry(), this.List);
 		::AP.Standard.push(::AP.Persistence.createEventItemRemovalEntries(culledItems), this.List);
 		::AP.Standard.push(::AP.Persistence.createEventResourceReductionEntries(culledResources), this.List);
 		::AP.Persistence.resetMomentum(playerCharacter);
-		::AP.Persistence.removeItems(culledItems);
+		::AP.Persistence.removeItems(playerCharacter, culledItems);
 		::AP.Persistence.reduceResources(culledResources);
 	}
 });
