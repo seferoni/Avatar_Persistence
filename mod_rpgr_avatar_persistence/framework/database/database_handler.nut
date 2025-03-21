@@ -62,7 +62,7 @@
 
 		foreach( parameterType, parameterTable in this.Settings )
 		{
-			::AP.Standard.extendTable(parameterDictionary, agglomeratedParameters);
+			::AP.Standard.extendTable(parameterTable, agglomeratedParameters);
 		}
 
 		return agglomeratedParameters;

@@ -5,6 +5,9 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	{
 		this.ap_skill.create();
 		this.assignPropertiesByName("Momentum");
+		this.setEnemiesSlain(50); // TODO: DEBUG
+		::logInfo("got enemies slain of " + this.getEnemiesSlain()) // TODO: DEBUG
+		// TODO: enemiesSlain is somehow being reset to 0 after this
 	}
 
 	function assignGenericProperties()
@@ -118,8 +121,8 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		{
 			::AP.Standard.constructEntry
 			(
-				Property,
-				format("%s %s", ::AP.Standard.colourWrap(format("+%i", effectTable.Offset), ::AP.Standard.Colour.Green), ::AP.Strings.Generic[Property]),
+				effectTable.Property,
+				format("%s %s", ::AP.Standard.colourWrap(format("+%i", effectTable.Offset), ::AP.Standard.Colour.Green), ::AP.Strings.Generic[effectTable.Property]),
 				entries
 			);
 		}
@@ -131,18 +134,23 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	{
 		local activeEffects = [];
 		local specialEffects = this.getSpecialEffectTables();
-		local enemiesKilled = this.getEnemiesSlain();
+		local enemiesSlain = this.getEnemiesSlain();
 
 		foreach( effectTable in specialEffects )
 		{
-			if (effectTable.EnemiesSlain > enemiesKilled)
+			::logInfo("got enemies slain of " + effectTable.EnemiesSlain)
+			::logInfo("comparing " + effectTable.EnemiesSlain + " with " + enemiesSlain + " - expect " + (effectTable.EnemiesSlain > enemiesSlain))
+			if (effectTable.EnemiesSlain > enemiesSlain)
 			{
+				::logInfo("too high, aborting")
 				continue;
 			}
 
+			::logInfo("got " + effectTable.Property)
 			activeEffects.push(effectTable);
 		}
 
+		::logInfo("got active effects of count " + activeEffects.len())
 		return activeEffects;
 	}
 
@@ -233,8 +241,10 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function initialiseFlags()
 	{
+		::logInfo("initialising flags")
 		if (this.getEnemiesSlain() == false)
 		{
+			::logInfo("got EnemiesSlain == false, resetting value")
 			this.setEnemiesSlain(0);
 		}
 
@@ -305,6 +315,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function setEnemiesSlain( _newValue )
 	{
+		::logInfo("setting enemies slain to " + _newValue)
 		::AP.Standard.setFlag("EnemiesSlain", _newValue, this);
 	}
 });
