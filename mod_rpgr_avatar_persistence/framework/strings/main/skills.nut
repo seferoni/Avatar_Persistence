@@ -5,6 +5,6 @@
 	MomentumNoBonusesText = "This character remains untested still.",
 
 	MomentumStatePrefix = "Momentum: ",
-	MomentumStateBelowRosterThreshold = "Fortified",
+	MomentumStateBelowRosterThreshold = "Hastened",
 	MomentumStateRosterThresholdExceeded = "Weakened",
 };

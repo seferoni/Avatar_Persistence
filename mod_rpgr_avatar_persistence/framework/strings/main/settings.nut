@@ -35,7 +35,7 @@
 	ModifyTooltipDescription = "Determines whether the player character trait tooltip reflects changes brought about by Avatar Persistence.",
 
 	MomentumRosterThresholdName = "Momentum Roster Threshold",
-	MomentumRosterThresholdDescription = "Determines the roster size at and below which Momentum is Fortified. In this state, Momentum's effects escalate in power more swiftly, and provides additional unique bonuses to the player character.",
+	MomentumRosterThresholdDescription = "Determines the roster size at and below which Momentum is Hastened. In this state, further attribute gains via Momentum are doubled.",
 
 	MoneyLossPercentageName = "Money Loss Percentage",
 	MoneyLossPercentageDescription = "Determines the percentage of money lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.",

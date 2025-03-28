@@ -5,9 +5,6 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	{
 		this.ap_skill.create();
 		this.assignPropertiesByName("Momentum");
-		this.setEnemiesSlain(50); // TODO: DEBUG
-		::logInfo("got enemies slain of " + this.getEnemiesSlain()) // TODO: DEBUG
-		// TODO: enemiesSlain is somehow being reset to 0 after this
 	}
 
 	function assignGenericProperties()
@@ -30,21 +27,6 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		{
 			local bonus = this.getAttributeBonus(attribute);
 			_currentProperties[attribute] += bonus;
-		}
-	}
-
-	function applySpecialEffects( _currentProperties )
-	{
-		if (!this.isWithinRosterThreshold())
-		{
-			return;
-		}
-
-		local activeEffects = this.getActiveEffects();
-
-		foreach( effectTable in activeEffects )
-		{
-			_currentProperties[effectTable.Property] += effectTable.Offset;
 		}
 	}
 
@@ -101,59 +83,6 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		);
 	}
 
-	function createSpecialEffectEntries()
-	{
-		local entries = [];
-
-		if (!this.isWithinRosterThreshold())
-		{
-			return entries;
-		}
-
-		local activeEffects = this.getActiveEffects();
-
-		if (activeEffects.len() == 0)
-		{
-			return entries;
-		}
-
-		foreach( effectTable in activeEffects )
-		{
-			::AP.Standard.constructEntry
-			(
-				effectTable.Property,
-				format("%s %s", ::AP.Standard.colourWrap(format("+%i", effectTable.Offset), ::AP.Standard.Colour.Green), ::AP.Strings.Generic[effectTable.Property]),
-				entries
-			);
-		}
-
-		return entries;
-	}
-
-	function getActiveEffects()
-	{
-		local activeEffects = [];
-		local specialEffects = this.getSpecialEffectTables();
-		local enemiesSlain = this.getEnemiesSlain();
-
-		foreach( effectTable in specialEffects )
-		{
-			::logInfo("got enemies slain of " + effectTable.EnemiesSlain)
-			::logInfo("comparing " + effectTable.EnemiesSlain + " with " + enemiesSlain + " - expect " + (effectTable.EnemiesSlain > enemiesSlain))
-			if (effectTable.EnemiesSlain > enemiesSlain)
-			{
-				::logInfo("too high, aborting")
-				continue;
-			}
-
-			::logInfo("got " + effectTable.Property)
-			activeEffects.push(effectTable);
-		}
-
-		::logInfo("got active effects of count " + activeEffects.len())
-		return activeEffects;
-	}
-
 	function getAttributeBonus( _attributeKey )
 	{
 		return ::AP.Standard.getFlag(_attributeKey, this);
@@ -177,7 +106,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	}
 
 	function getEligibleAttributeByEntity( _targetEntity )
-	{
+	{	// TODO: try and account for hp here
 		local eligibleAttributes = [];
 		local viableAttributes = this.getViableAttributes();
 		local playerProperties = this.getContainer().getActor().getBaseProperties();
@@ -201,23 +130,12 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		return eligibleAttributes[::Math.rand(0, eligibleAttributes)];
 	}
 
-	function getEnemiesSlain()
-	{
-		return ::AP.Standard.getFlag("EnemiesSlain", this);
-	}
-
-	function getSpecialEffectTables()
-	{
-		return this.getField("MomentumSpecialEffects");
-	}
-
 	function getTooltip()
 	{
 		local tooltipArray = this.ap_skill.getTooltip();
 		local push = @(_entry) ::AP.Standard.push(_entry, tooltipArray);
 
 		push(this.createMomentumStateEntry());
-		push(this.createSpecialEffectEntries());
 		push(this.createAttributeEntries());
 		return tooltipArray;
 	}
@@ -233,21 +151,8 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		this.setAttributeBonus(_attributeKey, currentBonus + this.getAttributeBonusOffset());
 	}
 
-	function incrementEnemiesSlain()
-	{
-		local currentValue = this.getEnemiesSlain();
-		this.setEnemiesSlain(currentValue + 1);
-	}
-
 	function initialiseFlags()
 	{
-		::logInfo("initialising flags")
-		if (this.getEnemiesSlain() == false)
-		{
-			::logInfo("got EnemiesSlain == false, resetting value")
-			this.setEnemiesSlain(0);
-		}
-
 		local viableAttributes = this.getViableAttributes();
 
 		foreach( attribute in viableAttributes )
@@ -276,7 +181,6 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		}
 
 		this.incrementAttributeBonus(eligibleAttribute);
-		this.incrementEnemiesSlain();
 	}
 
 	function onUpdate( _properties )
@@ -290,7 +194,6 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		}
 
 		this.applySkillBonuses(_properties);
-		this.applySpecialEffects(_properties);
 	}
 
 	function refreshStateByConfiguration()
@@ -311,11 +214,5 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function setAttributeBonus( _attributeKey, _attributeBonus )
 	{
 		::AP.Standard.setFlag(_attributeKey, _attributeBonus, this);
-	}
-
-	function setEnemiesSlain( _newValue )
-	{
-		::logInfo("setting enemies slain to " + _newValue)
-		::AP.Standard.setFlag("EnemiesSlain", _newValue, this);
 	}
 });
