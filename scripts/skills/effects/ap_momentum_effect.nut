@@ -7,12 +7,6 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		this.assignPropertiesByName("Momentum");
 	}
 
-	function assignGenericProperties()
-	{
-		this.ap_skill.assignGenericProperties();
-		this.m.IsHidden = false;
-	}
-
 	function assignSpecialProperties()
 	{
 		this.ap_skill.assignSpecialProperties();
