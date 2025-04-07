@@ -90,7 +90,7 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 	}
 
 	function setIconByName( _properName )
-	{
+	{	// TODO: standardise this with wfr_skill conventions
 		local formattedName = this.formatName(_properName, "_");
 		this.m.Icon = format("%s/ap_%s_effect.png", this.m.GFXPathPrefix, formattedName.tolower());
 	}

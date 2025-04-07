@@ -2,10 +2,7 @@
 {
 	Parameters =
 	{
-		EventAttempts = 0,
-		EventAttemptsNominal = 20,
-		MomentumStaminaInterval = 3,
-		MomentumBaseIntervalBattles = 10
+		EventTimingMilliseconds = 1250
 	}
 
 	function addInjuryByScript( _injuryScript, _playerObject )
@@ -158,17 +155,10 @@
 			return;
 		}
 
-		if (this.Parameters.EventAttempts > 0)
+		::Time.scheduleEvent(::TimeUnit.Real, this.Parameters.EventTimingMilliseconds, function( _dummy )
 		{
-			::Time.scheduleEvent(::TimeUnit.Real, 1000, function( _dummy )
-			{
-				::AP.Persistence.fireDefeatEvent();
-			}, null);
-			return;
-		}
-
-		this.executeFallbackRoutine();
-		::logInfo("could not fire event!")
+			::AP.Persistence.fireDefeatEvent();
+		}, null);
 	}
 
 	function executeFallbackRoutine()
@@ -191,13 +181,11 @@
 	{
 		if (!this.canFireEvent())
 		{
-			::logInfo("attempt " + 22 - this.Parameters.EventAttempts)
-			this.Parameters.EventAttempts--;
-			this.executeDefeatRoutine();
+			::logInfo("could not fire event!") // TODO: get rid of this
+			this.executeFallbackRoutine();
 			return;
 		}
 
-		::logInfo("firing event")
 		::World.Events.fire("event.ap_defeat");
 	}
 
@@ -378,11 +366,6 @@
 		}
 
 		::World.Assets.updateFood();
-	}
-
-	function resetEventAttempts()
-	{
-		this.Parameters.EventAttempts = this.Parameters.EventAttemptsNominal;
 	}
 
 	function resetMomentum( _playerObject )
