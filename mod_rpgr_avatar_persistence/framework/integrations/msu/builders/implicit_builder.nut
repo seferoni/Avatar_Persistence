@@ -78,11 +78,24 @@
 
 	function createBooleanSetting( _settingID, _settingValues )
 	{
-		return ::MSU.Class.BooleanSetting(_settingID, _settingValues.Default, ::AP.Integrations.MSU.getElementName(_settingID));
+		return ::MSU.Class.BooleanSetting
+		(
+			_settingID,
+			_settingValues.Default,
+			::Parameters.Integrations.MSU.getElementName(_settingID)
+		);
 	}
 
 	function createNumericalSetting( _settingID, _settingValues )
 	{
-		return ::MSU.Class.RangeSetting(_settingID, _settingValues.Default, _settingValues.Range[0], _settingValues.Range[1], _settingValues.Interval, ::AP.Integrations.MSU.getElementName(_settingID));
+		return ::MSU.Class.RangeSetting
+		(
+			_settingID,
+			_settingValues.Default,
+			_settingValues.Range[0],
+			_settingValues.Range[1],
+			_settingValues.Interval,
+			::Parameters.Integrations.MSU.getElementName(_settingID)
+		);
 	}
 };

@@ -163,7 +163,7 @@
 
 	function executeFallbackRoutine()
 	{
-		local player = this.getPlayerInRoster(::World.getPlayerRoster());
+		local playerCharacter = this.getPlayerInRoster(::World.getPlayerRoster());
 		local culledItems = this.getCulledItems(player);
 		local culledResources = this.getCulledResources();
 		this.resetMomentum(player);
