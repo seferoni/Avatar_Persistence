@@ -191,7 +191,7 @@
 
 	function generateInjuryCandidates( _player )
 	{
-		return ::Const.Injury.Permanent.filter(function(_injuryIndex, _injuryTable)
+		return ::Const.Injury.Permanent.filter(function(_injuryIndex, _injuryTable )
 		{
 			if (::AP.Persistence.getField("ExcludedInjuries").find(_injuryTable.ID) != null)
 			{
@@ -309,7 +309,7 @@
 	}
 
 	function isItemViableForRemoval( _item )
-	{
+	{	// TODO: find congruence in impl with Parameters' own
 		if (_item.isItemType(::Const.Items.ItemType.Legendary))
 		{
 			return false;

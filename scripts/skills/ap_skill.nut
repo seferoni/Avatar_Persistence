@@ -1,5 +1,5 @@
 this.ap_skill <- ::inherit("scripts/skills/skill",
-{
+{	// TODO: standardise this with wfr_skill conventions
 	m = {},
 	function create()
 	{
