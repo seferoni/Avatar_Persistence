@@ -41,7 +41,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 			::AP.Standard.constructEntry
 			(
 				attribute,
-				format("%s %s", ::AP.Standard.colourWrap(format("+%i", bonus), ::AP.Standard.Colour.Green), ::AP.Strings.Generic[attribute]),
+				format("%s %s", ::AP.Standard.colourWrap(format("+%i", bonus), ::AP.Standard.Colour.Green), ::AP.Strings.Generic.Common[attribute]),
 				entries
 			);
 		}
@@ -51,7 +51,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 			::AP.Standard.constructEntry
 			(
 				"Warning",
-				::AP.Standard.colourWrap(::AP.Strings.Skills.MomentumNoBonusesText, ::AP.Standard.Colour.Red),
+				::AP.Standard.colourWrap(::AP.Strings.Skills.Common.MomentumNoBonusesText, ::AP.Standard.Colour.Red),
 				entries
 			);
 		}
@@ -62,18 +62,18 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function createMomentumStateEntry()
 	{
 		local colour = ::AP.Standard.Colour.Green;
-		local suffix = ::AP.Strings.Skills.MomentumStateBelowRosterThreshold;
+		local suffix = ::AP.Strings.Skills.Common.MomentumStateBelowRosterThreshold;
 
 		if (!this.isWithinRosterThreshold())
 		{
 			colour = ::AP.Standard.Colour.Red;
-			suffix = ::AP.Strings.Skills.MomentumStateRosterThresholdExceeded;
+			suffix = ::AP.Strings.Skills.Common.MomentumStateRosterThresholdExceeded;
 		}
 
 		return ::AP.Standard.constructEntry
 		(
 			"Momentum",
-			format("%s %s", ::AP.Strings.Skills.MomentumStatePrefix, ::AP.Standard.colourWrap(suffix, colour))
+			format("%s %s", ::AP.Strings.Skills.Common.MomentumStatePrefix, ::AP.Standard.colourWrap(suffix, colour))
 		);
 	}
 

@@ -76,7 +76,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 		return ::AP.Standard.constructEntry
 		(
 			null,
-			::AP.Strings.Items.ElixirInstructionText
+			::AP.Strings.Items.Common.ElixirInstructionText
 		);
 	}
 

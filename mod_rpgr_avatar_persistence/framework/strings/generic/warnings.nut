@@ -1,4 +1,4 @@
-::AP.Strings.Warnings <-
+::AP.Strings.Generic.Warnings <-
 {
 	AvatarAlreadyPresent = "A player character is already present in your roster.",
 	ActorIsSick = "This character is currently sick.",

@@ -61,7 +61,7 @@ this.ap_item <- ::inherit("scripts/items/item",
 			::AP.Standard.constructEntry
 			(
 				"Warning",
-				::AP.Standard.colourWrap(::AP.Strings.Warnings[warning], ::AP.Standard.Colour.Red),
+				::AP.Standard.colourWrap(::AP.Strings.Generic.Warnings[warning], ::AP.Standard.Colour.Red),
 				entries
 			);
 		}
@@ -156,7 +156,7 @@ this.ap_item <- ::inherit("scripts/items/item",
 	function setDescription( _properName )
 	{
 		local key = format("%sDescription", this.formatName(_properName));
-		this.m.Description = ::AP.Strings.Items[key];
+		this.m.Description = ::AP.Strings.Items.Common[key];
 	}
 
 	function setIDByName( _properName )
@@ -174,7 +174,7 @@ this.ap_item <- ::inherit("scripts/items/item",
 	function setName( _properName )
 	{
 		local key = format("%sName", this.formatName(_properName));
-		this.m.Name = ::AP.Strings.Items[key];
+		this.m.Name = ::AP.Strings.Items.Common[key];
 	}
 
 	function setWarning( _warning, _boolean = true )

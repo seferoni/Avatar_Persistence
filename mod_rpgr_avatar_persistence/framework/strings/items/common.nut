@@ -1,5 +1,5 @@
-::AP.Strings.Items <-
-{
+::AP.Strings.Items.Common <-
+{	// TODO: rename namespace to Items.Elixir
 	ElixirName = "Elixir",
 	ElixirDescription = "A caustic and volatile concoction, coveted throughout the realms for its curative powers.",
 

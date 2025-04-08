@@ -1,4 +1,4 @@
-::AP.Strings.Settings <-
+::AP.Strings.Settings.Common <-
 {
 	PageCommonName = "Common",
 	PageItemLossName = "Item Loss",

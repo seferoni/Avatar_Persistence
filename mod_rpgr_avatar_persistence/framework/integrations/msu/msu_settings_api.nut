@@ -43,12 +43,12 @@
 
 	function getElementDescription( _elementKey )
 	{
-		return ::AP.Strings.Settings[format("%sDescription", _elementKey)];
+		return ::AP.Strings.Settings.Common[format("%sDescription", _elementKey)];
 	}
 
 	function getElementName( _elementKey )
 	{
-		return ::AP.Strings.Settings[format("%sName", _elementKey)];
+		return ::AP.Strings.Settings.Common[format("%sName", _elementKey)];
 	}
 
 	function initialise()

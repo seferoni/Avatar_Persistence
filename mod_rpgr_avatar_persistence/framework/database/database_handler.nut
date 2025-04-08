@@ -8,31 +8,21 @@
 		this.Events <- {};
 	}
 
+	function getExactField( _tableName, _subTableName, _fieldName )
+	{
+		return this[_tableName][_subTableName][_fieldName];
+	}
+
 	function getField( _tableName, _fieldName )
 	{
 		local field = this.getTopLevelField(_tableName, _fieldName);
 
 		if (field == null)
 		{
-			field = this.getSubLevelField(_tableName, _fieldName);
+			::AP.Standard.log(format("Could not find %s in the specified database %s.", _fieldName, _tableName), true);
 		}
 
 		return field;
-	}
-
-	function getSubLevelField( _tableName, _fieldName )
-	{
-		foreach( subtableName, nestedTable in this[_tableName] )
-		{
-			if (!(_fieldName in nestedTable))
-			{
-				continue;
-			}
-
-			return this[_tableName][subtableName][_fieldName];
-		}
-
-		return null;
 	}
 
 	function getTopLevelField( _tableName, _fieldName )
@@ -49,7 +39,7 @@
 	{
 		if (!_iconKey in this.Generic.Icons)
 		{
-			::AP.Standard.log(format(::AP.Strings.Debug.InvalidIconPath, _iconKey), true);
+			::AP.Standard.log(format("Could not find image path corresponding to icon key %s.", _iconKey), true);
 			return null;
 		}
 

@@ -1,4 +1,4 @@
-::AP.Strings.Persistence <-
+::AP.Strings.Generic.PersistenceTooltips <-
 {
 	InjuryThresholdTooltip = "This character is shielded from death until more than %s permanent injuries are sustained at a time.",
 

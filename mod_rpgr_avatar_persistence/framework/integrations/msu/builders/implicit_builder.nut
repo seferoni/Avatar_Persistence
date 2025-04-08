@@ -50,7 +50,7 @@
 		foreach( category in pageCategories )
 		{
 			local pageID = format("Page%s", category);
-			local pageName = ::AP.Strings.Settings[format("%sName", pageID)];
+			local pageName = ::AP.Strings.Settings.Common[format("%sName", pageID)];
 			::AP.Integrations.MSU.addPage(pageID, pageName);
 		}
 	}

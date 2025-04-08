@@ -92,7 +92,7 @@
 			::AP.Standard.constructEntry
 			(
 				resourceKey,
-				format(::AP.Strings.Events.Defeat.ScreenAListEntry, colourWrap(reducedMagnitude.tostring()), ::AP.Strings.Generic[resourceKey]),
+				format(::AP.Strings.Events.Defeat.ScreenAListEntry, colourWrap(reducedMagnitude.tostring()), ::AP.Strings.Generic.Common[resourceKey]),
 				entries
 			);
 		}
@@ -129,7 +129,7 @@
 		local thresholdDifferential = this.getPermanentInjuryThresholdDifferential(_playerObject);
 
 		local iconKey = "Warning";
-		local tutorialText = format(::AP.Strings.Persistence.InjuryThresholdTooltip, ::AP.Standard.colourWrap(threshold, ::AP.Standard.Colour.Red));
+		local tutorialText = format(::AP.Strings.Generic.PersistenceTooltips.InjuryThresholdTooltip, ::AP.Standard.colourWrap(threshold, ::AP.Standard.Colour.Red));
 
 		if (thresholdDifferential == 0)
 		{
@@ -138,7 +138,7 @@
 		else if (thresholdDifferential > 0)
 		{
 			iconKey = "Skull";
-			tutorialText = ::AP.Standard.colourWrap(::AP.Strings.Persistence.InjuryThresholdExceededTooltip, ::AP.Standard.Colour.Red);
+			tutorialText = ::AP.Standard.colourWrap(::AP.Strings.Generic.PersistenceTooltips.InjuryThresholdExceededTooltip, ::AP.Standard.Colour.Red);
 		}
 
 		return ::AP.Standard.constructEntry
@@ -385,12 +385,12 @@
 
 	function worsenMoodOnStruckDown( _playerObject, _permanentInjurySustained )
 	{
-		local flavourText = ::AP.Strings.Persistence.MoodStruckDownTooltip;
+		local flavourText = ::AP.Strings.Generic.PersistenceTooltips.MoodStruckDownTooltip;
 		local moodMagnitude = this.getField("MoodChanges").StruckDown;
 
 		if (_permanentInjurySustained)
 		{
-			flavourText = ::AP.Strings.Persistence.MoodPermanentInjuryTooltip;
+			flavourText = ::AP.Strings.Generic.PersistenceTooltips.MoodPermanentInjuryTooltip;
 			moodMagnitude = this.getField("MoodChanges").PermanentInjury;
 		}
 

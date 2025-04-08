@@ -80,7 +80,7 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 	function setDescription( _properName )
 	{
 		local key = format("%sDescription", this.formatName(_properName));
-		this.m.Description = ::AP.Strings.Skills[key];
+		this.m.Description = ::AP.Strings.Skills.Common[key];
 	}
 
 	function setIDByName( _properName )
@@ -98,7 +98,7 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 	function setName( _properName )
 	{
 		local key = format("%sName", this.formatName(_properName));
-		this.m.Name = ::AP.Strings.Skills[key];
+		this.m.Name = ::AP.Strings.Skills.Common[key];
 	}
 
 	function onAdded()

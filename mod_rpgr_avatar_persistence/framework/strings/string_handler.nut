@@ -1,7 +1,11 @@
 ::AP.Strings <-
-{
+{	// TODO: standardise as per the new WFR convention.
 	function createTables()
 	{
+		this.Generic <- {};
+		this.Items <- {};
+		this.Skills <- {};
+		this.Settings <- {};
 		this.Events <- {};
 	}
 
@@ -55,8 +59,11 @@
 
 	function loadFiles()
 	{
-		this.loadFolder("main");
+		this.loadFolder("generic");
+		this.loadFolder("settings");
 		this.loadFolder("events");
+		this.loadFolder("items");
+		this.loadFolder("skills");
 	}
 
 	function loadFolder( _path )

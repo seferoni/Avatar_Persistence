@@ -1,4 +1,4 @@
-::AP.Strings.Generic <-
+::AP.Strings.Generic.Common <-
 {
 	ActionPoints = "Action Points per turn",
 	Ammo = "Ammunition",
