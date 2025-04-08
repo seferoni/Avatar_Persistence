@@ -82,7 +82,7 @@
 		(
 			_settingID,
 			_settingValues.Default,
-			::Parameters.Integrations.MSU.getElementName(_settingID)
+			::AP.Integrations.MSU.getElementName(_settingID)
 		);
 	}
 
@@ -95,7 +95,7 @@
 			_settingValues.Range[0],
 			_settingValues.Range[1],
 			_settingValues.Interval,
-			::Parameters.Integrations.MSU.getElementName(_settingID)
+			::AP.Integrations.MSU.getElementName(_settingID)
 		);
 	}
 };
