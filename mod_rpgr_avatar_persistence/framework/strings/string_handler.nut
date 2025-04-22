@@ -1,5 +1,5 @@
 ::AP.Strings <-
-{	// TODO: standardise as per the new WFR convention.
+{
 	function createTables()
 	{
 		this.Generic <- {};
@@ -12,7 +12,6 @@
 	function compileFragments( _fragmentsArray, _colour )
 	{
 		local compiledString = "";
-		local colourWrap = @(_string) _colour == null ? _string : ::AP.Standard.colourWrap(_string, _colour);
 
 		if (_fragmentsArray.len() % 2 != 0)
 		{
@@ -21,14 +20,14 @@
 
 		for( local i = 0; i < _fragmentsArray.len(); i++ )
 		{
-			local fragment = i % 2 == 0 ? _fragmentsArray[i] : colourWrap(_fragmentsArray[i]);
-			compiledString = ::AP.Standard.appendToStringList(fragment, compiledString, "");
+			local fragment = (_colour != null && i % 2 != 0) ? ::PRM.Standard.colourWrap(_fragmentsArray[i], _colour) : _fragmentsArray[i];
+			compiledString = ::PRM.Standard.appendToStringList(fragment, compiledString, " ");
 		}
 
 		return compiledString;
 	}
 
-	function getFragmentsAsCompiledString( _fragmentBase, _tableKey, _subTableKey = null, _colour = ::AP.Standard.Colour.Red )
+	function getFragmentsAsCompiledString( _fragmentBase, _tableKey, _subTableKey = null, _colour = ::PRM.Standard.Colour.Red )
 	{
 		local fragmentsArray = this.getFragmentsAsSortedArray(_fragmentBase, _tableKey, _subTableKey);
 		return this.compileFragments(fragmentsArray, _colour);
@@ -49,6 +48,28 @@
 
 		fragmentKeys.sort();
 		return fragmentKeys.map(@(_fragmentKey) database[_fragmentKey]);
+	}
+
+	function getField( _tableName, _fieldName )
+	{
+		local field = this.getTopLevelField(_tableName, _fieldName);
+
+		if (field == null)
+		{
+			::PRM.Standard.log(format("Could not find %s in the specified string database %s.", _fieldName, _tableName), true);
+		}
+
+		return field;
+	}
+
+	function getTopLevelField( _tableName, _fieldName )
+	{
+		if (!(_fieldName in this[_tableName]))
+		{
+			return null;
+		}
+
+		return this[_tableName][_fieldName];
 	}
 
 	function initialise()

@@ -1,5 +1,5 @@
 this.ap_skill <- ::inherit("scripts/skills/skill",
-{	// TODO: standardise this with wfr_skill conventions
+{
 	m = {},
 	function create()
 	{
@@ -13,22 +13,47 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 		this.m.IsActive = false;
 		this.m.IsHidden = false;
 		this.m.Type = ::Const.SkillType.StatusEffect;
-		this.m.Order = ::Const.SkillOrder.Trait + 1;
+		this.m.Order = ::Const.SkillOrder.Trait;
 	}
 
 	function assignPropertiesByName( _properName )
 	{
-		this.setIDByName(_properName);
-		this.setDescription(_properName);
-		this.setIconByName(_properName);
-		this.setName(_properName);
+		this.assignIDByName(_properName);
+		this.setSkillKey(_properName);
+		this.assignDescription();
+		this.assignIcons();
+		this.assignName();
 	}
 
 	function assignSpecialProperties()
 	{
+		this.m.SkillKey <- "";
 		this.m.DescriptionPrefix <- "";
 		this.m.GFXPathPrefix <- "skills/";
-		this.m.LifetimeDays <- 0;
+	}
+
+	function assignDescription()
+	{
+		this.m.Description = ::AP.Utilities.getSkillString("Description");
+	}
+
+	function assignIDByName( _properName )
+	{
+		local formattedName = this.formatName(_properName, "_");
+		this.m.ID = format("effects.ap_%s", formattedName.tolower());
+	}
+
+	function assignIcons()
+	{
+		local iconHandle = format("ap_%s_effect", this.m.SkillKey.lower());
+		this.m.Overlay = iconHandle;
+		this.m.Icon = format("%s/%s.png", this.m.GFXPathPrefix, iconHandle);
+		this.m.IconMini = format("%s_mini", iconHandle);
+	}
+
+	function assignName()
+	{
+		this.m.Name = ::AP.Utilities.getSkillString("Name");
 	}
 
 	function createFlags()
@@ -41,19 +66,9 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 		return ::AP.Standard.replaceSubstring(" ", _replacementSubstring, _properName);
 	}
 
-	function getAcquisitionDay()
-	{
-		return ::AP.Standard.getFlag("AcquisitionDay", this);
-	}
-
-	function getLastUpdateTime()
-	{
-		return ::AP.Standard.getFlag("LastUpdateTime", this);
-	}
-
 	function getField( _fieldName )
 	{
-		return ::AP.Persistence.getField(_fieldName);
+		return ::AP.Persistence.getField(_fieldName); // TODO: bad impl i suspect. look at wfr_skill
 	}
 
 	function getFlags()
@@ -61,10 +76,9 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 		return this.m.Flags;
 	}
 
-	function getRemainingLifetime()
+	function getString( _fieldName )
 	{
-		local timeSinceAcquisition =  ::World.getTime().Days - this.getAcquisitionDay();
-		return this.m.LifetimeDays - timeSinceAcquisition;
+		return ::AP.Utilities.getSkillString(format("%s%s", this.m.SkillKey, _fieldName));
 	}
 
 	function getTooltip()
@@ -75,37 +89,6 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 		push({id = 1, type = "title", text = this.getName()});
 		push({id = 2, type = "description", text = this.getDescription()});
 		return tooltipArray;
-	}
-
-	function setDescription( _properName )
-	{
-		local key = format("%sDescription", this.formatName(_properName));
-		this.m.Description = ::AP.Strings.Skills.Common[key];
-	}
-
-	function setIDByName( _properName )
-	{
-		local formattedName = this.formatName(_properName, "_");
-		this.m.ID = format("effects.ap_%s", formattedName.tolower());
-	}
-
-	function setIconByName( _properName )
-	{	// TODO: standardise this with wfr_skill conventions
-		local formattedName = this.formatName(_properName, "_");
-		this.m.Icon = format("%s/ap_%s_effect.png", this.m.GFXPathPrefix, formattedName.tolower());
-	}
-
-	function setName( _properName )
-	{
-		local key = format("%sName", this.formatName(_properName));
-		this.m.Name = ::AP.Strings.Skills.Common[key];
-	}
-
-	function onAdded()
-	{
-		this.skill.onAdded();
-		this.setAcquisitionDayToNow();
-		this.setLastUpdateTimeToNow();
 	}
 
 	function onSerialize( _out )
@@ -120,13 +103,8 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 		this.m.Flags.onDeserialize(_in);
 	}
 
-	function setLastUpdateTimeToNow()
+	function setSkillKey( _properName )
 	{
-		::AP.Standard.setFlag("LastUpdateTime", ::World.getTime().Days, this);
-	}
-
-	function setAcquisitionDayToNow()
-	{
-		::AP.Standard.setFlag("AcquisitionDay", ::World.getTime().Days, this);
+		this.m.SkillKey = this.formatName(_properName);
 	}
 });

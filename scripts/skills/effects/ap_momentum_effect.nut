@@ -41,7 +41,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 			::AP.Standard.constructEntry
 			(
 				attribute,
-				format("%s %s", ::AP.Standard.colourWrap(format("+%i", bonus), ::AP.Standard.Colour.Green), ::AP.Strings.Generic.Common[attribute]),
+				format("%s %s", ::AP.Standard.colourWrap(format("+%i", bonus), ::AP.Standard.Colour.Green), ::AP.Utilities.getString(attribute)),
 				entries
 			);
 		}
