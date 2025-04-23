@@ -1,5 +1,5 @@
-::AP.Strings.Generic.PersistenceTooltips <-
-{
+::AP.Strings.Generic.Tooltips <-
+{	// TODO: new string namespace will break references - correct this
 	InjuryThresholdTooltip = "This character is shielded from death until more than %s permanent injuries are sustained at a time.",
 
 	InjuryThresholdTooltipBaselineFragmentA = "This character is shielded from death until",
