@@ -12,7 +12,7 @@
 			return;
 		}
 
-		this.m.Stash.add(::new(::AP.Persistence.getField("ItemPaths").Elixir));
+		this.m.Stash.add(::new(::AP.Utilities.getField("ItemPaths").Elixir));
 		this.m.Stash.sort();
 	});
 });

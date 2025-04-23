@@ -6,6 +6,7 @@
 		this.Generic <- {};
 		this.Blueprints <- {};
 		this.Events <- {};
+		this.Skills <- {};
 	}
 
 	function getExactField( _tableName, _subTableName, _fieldName )
@@ -76,9 +77,7 @@
 
 	function loadFiles()
 	{
-		this.loadFolder("dictionaries/generic");
-		this.loadFolder("dictionaries/events");
-		this.loadFolder("dictionaries/blueprints");
+		this.loadFolder("dictionaries");
 		this.loadFolder("settings");
 	}
 };

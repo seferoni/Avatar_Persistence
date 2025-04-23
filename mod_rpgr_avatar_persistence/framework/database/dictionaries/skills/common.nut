@@ -1,4 +1,4 @@
-::AP.Database.Generic.Skills <-
+::AP.Database.Skills.Common <-
 {
 	MomentumAttributes =
 	[

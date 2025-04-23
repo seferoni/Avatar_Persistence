@@ -16,7 +16,7 @@ this.ap_elixir_blueprint <- ::inherit("scripts/crafting/ap_blueprint",
 	function assignSpecialProperties()
 	{
 		this.ap_blueprint.assignSpecialProperties();
-		this.m.ItemPath = ::AP.Persistence.getField("ItemPaths").Elixir;
+		this.m.ItemPath = ::AP.Utilities.getField("ItemPaths").Elixir;
 	}
 
 	function isCraftable()

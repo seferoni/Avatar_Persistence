@@ -7,11 +7,6 @@
 		"injury.missing_ear",
 		"injury.missing_finger"
 	],
-	ExcludedItems =
-	[
-		"special.ap_elixir_item",
-		"weapon.player_banner"
-	],
 	ItemPaths =
 	{
 		Elixir = "scripts/items/special/ap_elixir_item"
@@ -28,7 +23,7 @@
 		"permanent_injury_3",
 		"permanent_injury_4"
 	],
-	ResourceStrings =
+	ResourceKeys =
 	[
 		"Ammo",
 		"ArmorParts",

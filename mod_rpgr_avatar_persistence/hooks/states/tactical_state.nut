@@ -2,12 +2,12 @@
 {
 	::AP.Patcher.wrap(p, "gatherBrothers", function( _isVictory )
 	{
-		if (::AP.Persistence.isCombatInArena())
+		if (::AP.Utilities.isCombatInArena())
 		{	# Arena defeat logic does not require modification to achieve desired behaviour.
 			return;
 		}
 
-		if (::AP.Persistence.getPlayerInRoster(::Tactical.getSurvivorRoster()) == null)
+		if (::AP.Utilities.getPlayerInRoster(::Tactical.getSurvivorRoster()) == null)
 		{
 			return;
 		}
@@ -27,12 +27,11 @@
 			return;
 		}
 
-		if (::AP.Persistence.getPlayerInRoster(::World.getPlayerRoster()) == null)
+		if (::AP.Utilities.getPlayerInRoster(::World.getPlayerRoster()) == null)
 		{
 			return;
 		}
 
-		::AP.Persistence.resetEventAttempts();
 		::AP.Persistence.executeDefeatRoutine();
 		::AP.Persistence.setQueueDefeatRoutineState(false);
 	});

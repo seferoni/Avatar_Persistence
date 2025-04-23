@@ -2,12 +2,12 @@
 {
 	::AP.Patcher.wrap(p, "kill", function( _killer = null, _skill = null, _fatalityType = ::Const.FatalityType.None, _silent = true )
 	{
-		if (!::AP.Persistence.isActorViable(this))
+		if (!::AP.Utilities.isActorPlayerCharacter(this))
 		{
 			return;
 		}
 
-		if (::AP.Persistence.getPermanentInjuryThresholdDifferential(this) > 0)
+		if (::AP.Skills.getPermanentInjuryThresholdDifferential(this) > 0)
 		{
 			return;
 		}

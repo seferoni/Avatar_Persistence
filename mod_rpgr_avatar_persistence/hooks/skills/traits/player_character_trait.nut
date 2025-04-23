@@ -7,12 +7,12 @@
 			return;
 		}
 
-		_tooltipArray.extend(::AP.Persistence.createTooltipEntries(this.getContainer().getActor()));
+		_tooltipArray.extend(::AP.Skills.createPlayerCharacterTraitTooltipEntries(this.getContainer().getActor()));
 		return _tooltipArray;
 	});
 
 	::AP.Patcher.wrap(p, "onAdded", function()
 	{
-		::AP.Persistence.addMomentum(this.getContainer().getActor());
+		::AP.Skills.addMomentum(this.getContainer().getActor());
 	});
 });

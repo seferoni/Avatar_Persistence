@@ -15,7 +15,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function applySkillBonuses( _currentProperties )
 	{
-		local viableAttributes = this.getViableAttributes();
+		local viableAttributes = this.getViableAttributesForScaling();
 
 		foreach( attribute in viableAttributes )
 		{
@@ -27,7 +27,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function createAttributeEntries()
 	{
 		local entries = [];
-		local viableAttributes = this.getViableAttributes();
+		local viableAttributes = this.getViableAttributesForScaling();
 
 		foreach( attribute in viableAttributes )
 		{
@@ -41,7 +41,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 			::AP.Standard.constructEntry
 			(
 				attribute,
-				format("%s %s", ::AP.Standard.colourWrap(format("+%i", bonus), ::AP.Standard.Colour.Green), ::AP.Utilities.getString(attribute)),
+				format("%s %s", ::AP.Standard.colourWrap(format("+%i", bonus), ::AP.Standard.Colour.Green), ::AP.Utilities.getAttributeString(attribute)),
 				entries
 			);
 		}
@@ -84,7 +84,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function getAttributeBonusOffset()
 	{
-		local nominalOffset = ::AP.Persistence.getPermanentInjuryCount(this.getContainer().getActor());
+		local nominalOffset = ::AP.Skills.getPermanentInjuryCount(this.getContainer().getActor());
 
 		if (nominalOffset == 0)
 		{
@@ -102,9 +102,9 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function getEligibleAttributeByEntity( _targetEntity )
 	{	// TODO: try and account for hp here
 		local eligibleAttributes = [];
-		local viableAttributes = this.getViableAttributes();
-		local playerProperties = this.getContainer().getActor().getBaseProperties();
+		local viableAttributes = this.getViableAttributesForScaling();
 		local targetProperties = _targetEntity.getBaseProperties();
+		local playerProperties = this.getContainer().getActor().getBaseProperties();
 
 		foreach( attribute in viableAttributes )
 		{
@@ -134,9 +134,9 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		return tooltipArray;
 	}
 
-	function getViableAttributes()
+	function getViableAttributesForScaling()
 	{
-		return this.getField("MomentumAttributes");
+		return ::AP.Skills.getSkillField("MomentumAttributes");
 	}
 
 	function incrementAttributeBonus( _attributeKey )
@@ -147,7 +147,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function initialiseFlags()
 	{
-		local viableAttributes = this.getViableAttributes();
+		local viableAttributes = this.getViableAttributesForScaling();
 
 		foreach( attribute in viableAttributes )
 		{
@@ -197,7 +197,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function resetMomentum()
 	{
-		local viableAttributes = this.getViableAttributes();
+		local viableAttributes = this.getViableAttributesForScaling();
 
 		foreach( attribute in viableAttributes )
 		{

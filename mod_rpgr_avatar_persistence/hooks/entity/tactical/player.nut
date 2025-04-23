@@ -2,12 +2,12 @@
 {
 	::AP.Patcher.wrap(p, "isReallyKilled", function( _fatalityType )
 	{
-		if (!::AP.Persistence.isActorViable(this))
+		if (!::AP.Utilities.isActorPlayerCharacter(this))
 		{
 			return;
 		}
 
-		if (::AP.Persistence.getPermanentInjuryThresholdDifferential(this) > 0)
+		if (::AP.Skills.getPermanentInjuryThresholdDifferential(this) > 0)
 		{
 			return;
 		}
@@ -18,7 +18,7 @@
 			return false;
 		}
 
-		local injuryCandidates = ::AP.Persistence.generateInjuryCandidates(this);
+		local injuryCandidates = ::AP.Skills.generateInjuryCandidates(this);
 
 		if (injuryCandidates.len() == 0)
 		{
@@ -27,7 +27,7 @@
 			return false;
 		}
 
-		::AP.Persistence.addInjuryByScript(format("scripts/skills/%s", injuryCandidates[::Math.rand(0, injuryCandidates.len() - 1)].Script), this);
+		::AP.Skills.addInjuryByScript(format("scripts/skills/%s", injuryCandidates[::Math.rand(0, injuryCandidates.len() - 1)].Script), this);
 		::AP.Persistence.executePersistenceRoutine(this, true);
 		return false;
 	}, "overrideMethod");

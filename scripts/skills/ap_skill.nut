@@ -28,13 +28,12 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 	function assignSpecialProperties()
 	{
 		this.m.SkillKey <- "";
-		this.m.DescriptionPrefix <- "";
 		this.m.GFXPathPrefix <- "skills/";
 	}
 
 	function assignDescription()
 	{
-		this.m.Description = ::AP.Utilities.getSkillString("Description");
+		this.m.Description = this.getString("Description");
 	}
 
 	function assignIDByName( _properName )
@@ -53,7 +52,7 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 
 	function assignName()
 	{
-		this.m.Name = ::AP.Utilities.getSkillString("Name");
+		this.m.Name = this.getString("Name");
 	}
 
 	function createFlags()
@@ -66,11 +65,6 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 		return ::AP.Standard.replaceSubstring(" ", _replacementSubstring, _properName);
 	}
 
-	function getField( _fieldName )
-	{
-		return ::AP.Persistence.getField(_fieldName); // TODO: bad impl i suspect. look at wfr_skill
-	}
-
 	function getFlags()
 	{
 		return this.m.Flags;
@@ -78,7 +72,7 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 
 	function getString( _fieldName )
 	{
-		return ::AP.Utilities.getSkillString(format("%s%s", this.m.SkillKey, _fieldName));
+		return ::AP.Skills.getSkillString(format("%s%s", this.m.SkillKey, _fieldName));
 	}
 
 	function getTooltip()
@@ -106,5 +100,10 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 	function setSkillKey( _properName )
 	{
 		this.m.SkillKey = this.formatName(_properName);
+	}
+
+	function spawnOverlayOnCurrentTile()
+	{
+		this.spawnIcon(this.m.Overlay, this.getContainer().getActor().getTile());
 	}
 });

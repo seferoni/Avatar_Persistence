@@ -34,7 +34,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 
 	function conferAvatarStatus( _playerObject )
 	{
-		_playerObject.getSkills().add(::new(::AP.Persistence.getField("SkillPaths").Avatar));
+		_playerObject.getSkills().add(::new(::AP.Utilities.getField("SkillPaths").Avatar));
 		::AP.Standard.setFlag("IsPlayerCharacter", true, _playerObject, true);
 		::AP.Standard.setFlag("AvatarStatusConferred", true, ::World.Statistics);
 	}
@@ -106,7 +106,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 			return this.handleInvalidUse("CharacterNotEligible");
 		}
 
-		if (::AP.Persistence.getPlayerInRoster(::World.getPlayerRoster()) != null)
+		if (::AP.Utilities.getPlayerInRoster(::World.getPlayerRoster()) != null)
 		{
 			return this.handleInvalidUse("AvatarAlreadyPresent");
 		}
@@ -160,7 +160,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 			return false;
 		}
 
-		if (::AP.Persistence.getPlayerInRoster(::World.getPlayerRoster()) != null)
+		if (::AP.Utilities.getPlayerInRoster(::World.getPlayerRoster()) != null)
 		{
 			this.setWarning("AvatarAlreadyPresent");
 			return false;
@@ -171,7 +171,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 
 	function onUse( _playerObject, _item = null )
 	{
-		if (::AP.Persistence.isActorViable(_playerObject))
+		if (::AP.Utilities.isActorPlayerCharacter(_playerObject))
 		{
 			return this.handleUseForPlayer(_playerObject);
 		}
@@ -182,13 +182,13 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 	function updateActor( _playerObject )
 	{
 		_playerObject.getSkills().removeByType(::Const.SkillType.Injury);
-		_playerObject.getSkills().add(::new(::AP.Persistence.getField("SkillPaths").Sickness));
+		_playerObject.getSkills().add(::new(::AP.Utilities.getField("SkillPaths").Sickness));
 		_playerObject.setHitpoints(_playerObject.getHitpointsMax());
 	}
 
 	function updateSprites( _playerObject )
 	{
-		local sprites = ::AP.Persistence.getField("PermanentInjurySprites");
+		local sprites = ::AP.Utilities.getField("PermanentInjurySprites");
 
 		foreach( sprite in sprites )
 		{
