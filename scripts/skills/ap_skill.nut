@@ -19,9 +19,9 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 	function assignPropertiesByName( _properName )
 	{
 		this.assignIDByName(_properName);
+		this.assignIconsByName(_properName);
 		this.setSkillKey(_properName);
 		this.assignDescription();
-		this.assignIcons();
 		this.assignName();
 	}
 
@@ -42,9 +42,9 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 		this.m.ID = format("effects.ap_%s", formattedName.tolower());
 	}
 
-	function assignIcons()
+	function assignIconsByName( _properName )
 	{
-		local iconHandle = format("ap_%s_effect", this.m.SkillKey.lower());
+		local iconHandle = format("ap_%s_effect", this.formatName(_properName, "_").lower());
 		this.m.Overlay = iconHandle;
 		this.m.Icon = format("%s/%s.png", this.m.GFXPathPrefix, iconHandle);
 		this.m.IconMini = format("%s_mini", iconHandle);
@@ -72,7 +72,7 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 
 	function getString( _fieldName )
 	{
-		return ::AP.Skills.getSkillString(format("%s%s", this.m.SkillKey, _fieldName));
+		return ::AP.Skills.getSkillStringField(this.m.SkillKey)[_fieldName];
 	}
 
 	function getTooltip()

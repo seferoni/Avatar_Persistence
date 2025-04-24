@@ -1,5 +1,10 @@
-::AP.StashHandler <-
+::AP.Items <-
 {
+	function getItemStringField( _fieldName )
+	{
+		return ::AP.Strings.getField("Items", _fieldName);
+	}
+
 	function isItemViableForRemoval( _itemObject )
 	{
 		local removalParameters = ::AP.Utilities.getField("ItemRemovalParameters");
@@ -31,7 +36,7 @@
 		return true;
 	}
 
-	function removeItems( _playerObject, _itemsArray )
+	function removeItemsFromStashAndPlayerCharacter( _playerObject, _itemsArray )
 	{
 		local excess = [];
 		local playerContainer = _playerObject.getItems();

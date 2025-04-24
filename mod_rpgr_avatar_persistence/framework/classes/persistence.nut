@@ -28,7 +28,7 @@
 	{
 		local playerCharacter = this.getPlayerInRoster(::World.getPlayerRoster());
 		::AP.Skills.resetMomentum(playerCharacter);
-		::AP.StashHandler.removeItems(playerCharacter, this.getCulledItems(playerCharacter));
+		::AP.Items.removeItemsFromStashAndPlayerCharacter(playerCharacter, this.getCulledItems(playerCharacter));
 		::AP.Utilities.reduceResources(this.getCulledResources());
 	}
 
@@ -56,7 +56,7 @@
 					continue;
 				}
 
-				if (!::AP.StashHandler.isItemViableForRemoval(item))
+				if (!::AP.Items.isItemViableForRemoval(item))
 				{
 					continue;
 				}
@@ -105,12 +105,12 @@
 
 	function worsenMoodOnStruckDown( _playerObject, _permanentInjurySustained )
 	{
-		local flavourText = ::AP.Strings.Generic.PersistenceTooltips.MoodStruckDownTooltip;
+		local flavourText = ::AP.Utilities.getTooltipString("MoodStruckDownTooltip");
 		local moodMagnitude = ::AP.Utilities.getField("MoodChanges").StruckDown;
 
 		if (_permanentInjurySustained)
 		{
-			flavourText = ::AP.Strings.Generic.PersistenceTooltips.MoodPermanentInjuryTooltip;
+			flavourText = ::AP.Utilities.getTooltipString("MoodPermanentInjuryTooltip");
 			moodMagnitude = ::AP.Utilities.getField("MoodChanges").PermanentInjury;
 		}
 

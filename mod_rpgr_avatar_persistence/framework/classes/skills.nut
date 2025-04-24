@@ -32,7 +32,7 @@
 		local thresholdDifferential = this.getPermanentInjuryThresholdDifferential(_playerObject);
 
 		local iconKey = "Warning";
-		local tutorialText = format(::AP.Strings.Generic.PersistenceTooltips.InjuryThresholdTooltip, ::AP.Standard.colourWrap(threshold, ::AP.Standard.Colour.Red));
+		local tutorialText = format(::AP.Utilities.getTooltipString("InjuryThresholdTooltip"), ::AP.Standard.colourWrap(threshold, ::AP.Standard.Colour.Red));
 
 		if (thresholdDifferential == 0)
 		{
@@ -41,7 +41,7 @@
 		else if (thresholdDifferential > 0)
 		{
 			iconKey = "Skull";
-			tutorialText = ::AP.Standard.colourWrap(::AP.Strings.Generic.PersistenceTooltips.InjuryThresholdExceededTooltip, ::AP.Standard.Colour.Red);
+			tutorialText = ::AP.Standard.colourWrap(::AP.Utilities.getTooltipString("InjuryThresholdExceededTooltip"), ::AP.Standard.Colour.Red);
 		}
 
 		return ::AP.Standard.constructEntry
@@ -83,11 +83,6 @@
 	function getSkillField( _fieldName )
 	{
 		return ::AP.Database.getField("Skills", _fieldName);
-	}
-
-	function getSkillString( _fieldName )
-	{
-		return this.getSkillStringField("Common")[_fieldName];
 	}
 
 	function getSkillStringField( _fieldName )

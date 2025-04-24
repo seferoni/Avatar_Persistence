@@ -21,10 +21,11 @@ this.ap_item <- ::inherit("scripts/items/item",
 
 	function assignPropertiesByName( _properName )
 	{
-		this.setIDByName(_properName);
-		this.setIconByName(_properName);
-		this.setDescription(_properName);
-		this.setName(_properName);
+		this.assignIDByName(_properName);
+		this.assignIconByName(_properName);
+		this.setItemKey(_properName);
+		this.assignDescription();
+		this.assignName();
 	}
 
 	function assignSoundProperties()
@@ -36,9 +37,31 @@ this.ap_item <- ::inherit("scripts/items/item",
 
 	function assignSpecialProperties()
 	{
-		this.m.DescriptionPrefix <- "";
+		this.m.ItemKey <- "";
 		this.m.GFXPathPrefix <- "special/";
 		this.m.Warnings <- {};
+	}
+
+	function assignDescription()
+	{
+		this.m.Description = this.getString("Description");
+	}
+
+	function assignIconByName( _properName )
+	{
+		local formattedName = this.formatName(_properName, "_");
+		this.m.Icon = format("%s/ap_%s_item.png", this.m.GFXPathPrefix, formattedName.tolower());
+	}
+
+	function assignIDByName( _properName )
+	{
+		local formattedName = this.formatName(_properName, "_");
+		this.m.ID = format("special.ap_%s_item", formattedName.tolower());
+	}
+
+	function assignName()
+	{
+		this.m.Name = this.getString("Name");
 	}
 
 	function createFlags()
@@ -93,6 +116,11 @@ this.ap_item <- ::inherit("scripts/items/item",
 	function getFlags()
 	{
 		return this.m.Flags;
+	}
+
+	function getString( _fieldName )
+	{
+		return ::AP.Items.getItemStringField(this.m.ItemKey)[_fieldName];
 	}
 
 	function getTooltip()
@@ -153,28 +181,9 @@ this.ap_item <- ::inherit("scripts/items/item",
 		}
 	}
 
-	function setDescription( _properName )
+	function setItemKey( _properName )
 	{
-		local key = format("%sDescription", this.formatName(_properName));
-		this.m.Description = ::AP.Strings.Items.Common[key];
-	}
-
-	function setIDByName( _properName )
-	{
-		local formattedName = this.formatName(_properName, "_");
-		this.m.ID = format("special.ap_%s_item", formattedName.tolower());
-	}
-
-	function setIconByName( _properName )
-	{
-		local formattedName = this.formatName(_properName, "_");
-		this.m.Icon = format("%s/ap_%s_item.png", this.m.GFXPathPrefix, formattedName.tolower());
-	}
-
-	function setName( _properName )
-	{
-		local key = format("%sName", this.formatName(_properName));
-		this.m.Name = ::AP.Strings.Items.Common[key];
+		this.m.ItemKey = this.formatName(_properName);
 	}
 
 	function setWarning( _warning, _boolean = true )

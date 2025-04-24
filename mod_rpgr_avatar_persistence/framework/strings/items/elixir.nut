@@ -1,5 +1,5 @@
 ::AP.Strings.Items.Elixir <-
-{	// TODO: new string structure needs impl
+{
 	Name = "Elixir",
 	Description = "A caustic and volatile concoction, coveted throughout the realms for its curative powers.",
 

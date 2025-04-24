@@ -43,7 +43,7 @@ this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
 		::AP.Standard.push(playerCharacter.getImagePath(), this.Characters);
 		::AP.Standard.push(::AP.Events.createEventEntries(culledItems, culledResources), this.List);
 		::AP.Skills.resetMomentum(playerCharacter);
-		::AP.StashHandler.removeItems(playerCharacter, culledItems);
+		::AP.Items.removeItemsFromStashAndPlayerCharacter(playerCharacter, culledItems);
 		::AP.Utilities.reduceResources(culledResources);
 	}
 });

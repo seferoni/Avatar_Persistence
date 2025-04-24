@@ -35,6 +35,11 @@
 		return ::AP.Strings.getField("Generic", _fieldName);
 	}
 
+	function getTooltipString( _fieldName )
+	{
+		return this.getStringField("Tooltips")[_fieldName];
+	}
+
 	function isActorPlayerCharacter( _actorObject )
 	{
 		if (!_actorObject.getSkills().hasSkill("trait.player"))
