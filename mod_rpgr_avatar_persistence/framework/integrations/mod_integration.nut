@@ -28,7 +28,7 @@
 
 	function loadAPI()
 	{
-		this.loadFile("msu/msu_settings_api.nut");
+		this.loadFile("MSU/msu_settings_api.nut");
 		this.loadFile("modern_hooks/modern_hooks_api.nut");
 		this.loadFile("modding_script_hooks/modding_script_hooks_api.nut");
 	}

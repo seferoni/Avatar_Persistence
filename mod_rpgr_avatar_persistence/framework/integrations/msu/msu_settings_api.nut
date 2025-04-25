@@ -43,12 +43,17 @@
 
 	function getElementDescription( _elementKey )
 	{
-		return ::AP.Strings.Settings.Common[format("%sDescription", _elementKey)];
+		return this.getSettingString(format("%sDescription", _elementKey));
 	}
 
 	function getElementName( _elementKey )
 	{
-		return ::AP.Strings.Settings.Common[format("%sName", _elementKey)];
+		return this.getSettingString(format("%sName", _elementKey));
+	}
+
+	function getSettingString( _fieldName )
+	{
+		return ::AP.Strings.getField("Settings", "Common")[_fieldName];
 	}
 
 	function initialise()
@@ -60,6 +65,6 @@
 
 	function loadBuilders()
 	{
-		::AP.Manager.includeFiles("mod_rpgr_avatar_persistence/framework/integrations/msu/builders");
+		::AP.Manager.includeFiles("mod_rpgr_avatar_persistence/framework/integrations/MSU/builders");
 	}
 };

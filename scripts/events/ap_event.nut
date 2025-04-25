@@ -61,7 +61,7 @@ this.ap_event <- ::inherit("scripts/events/event",
 	}
 
 	function setTitleByName( _properName )
-	{
+	{	// TODO: revise, revise
 		local key = this.formatName(_properName, "_");
 		this.m.Title = ::AP.Strings.Events[key].Title;
 	}

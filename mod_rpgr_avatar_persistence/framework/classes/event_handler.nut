@@ -1,5 +1,5 @@
 ::AP.EventHandler <-
-{
+{	// TODO: lots of nasty string key indexing here
 	function canFireEvent()
 	{
 		if (::World.State.getMenuStack().hasBacksteps())
@@ -74,7 +74,7 @@
 
 			::AP.Standard.constructEntry
 			(
-				resourceKey,
+				resourceKey,	// TODO: use getField here!
 				format(::AP.Strings.Events.Defeat.ScreenAListEntry, colourWrap(reducedMagnitude.tostring()), ::AP.Strings.Generic.Common[resourceKey]),
 				entries
 			);

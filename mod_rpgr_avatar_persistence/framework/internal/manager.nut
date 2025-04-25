@@ -110,11 +110,11 @@
 
 		if (this.isModernHooksInstalled())
 		{
-			::AP.Interfaces.ModernHooks.queue(">mod_msu", ">mod_rpgr_avatar_resistances", queued);
+			::AP.Interfaces.ModernHooks.queue(">mod_msu", ">mod_rpgr_avatar_resistances", ">mod_legends", ">mod_reforged", queued);
 			return;
 		}
 
-		::mods_queue(::AP.ID, ">mod_msu, >mod_rpgr_avatar_resistances", queued);
+		::mods_queue(::AP.ID, ">mod_msu, >mod_rpgr_avatar_resistances, >mod_legends, >mod_reforged", queued);
 	}
 
 	function register()

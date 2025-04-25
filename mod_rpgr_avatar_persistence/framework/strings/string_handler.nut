@@ -20,14 +20,14 @@
 
 		for( local i = 0; i < _fragmentsArray.len(); i++ )
 		{
-			local fragment = (_colour != null && i % 2 != 0) ? ::PRM.Standard.colourWrap(_fragmentsArray[i], _colour) : _fragmentsArray[i];
-			compiledString = ::PRM.Standard.appendToStringList(fragment, compiledString, " ");
+			local fragment = (_colour != null && i % 2 != 0) ? ::AP.Standard.colourWrap(_fragmentsArray[i], _colour) : _fragmentsArray[i];
+			compiledString = ::AP.Standard.appendToStringList(fragment, compiledString, " ");
 		}
 
 		return compiledString;
 	}
 
-	function getFragmentsAsCompiledString( _fragmentBase, _tableKey, _subTableKey = null, _colour = ::PRM.Standard.Colour.Red )
+	function getFragmentsAsCompiledString( _fragmentBase, _tableKey, _subTableKey = null, _colour = ::AP.Standard.Colour.Red )
 	{
 		local fragmentsArray = this.getFragmentsAsSortedArray(_fragmentBase, _tableKey, _subTableKey);
 		return this.compileFragments(fragmentsArray, _colour);
@@ -56,7 +56,7 @@
 
 		if (field == null)
 		{
-			::PRM.Standard.log(format("Could not find %s in the specified string database %s.", _fieldName, _tableName), true);
+			::AP.Standard.log(format("Could not find %s in the specified string database %s.", _fieldName, _tableName), true);
 		}
 
 		return field;
