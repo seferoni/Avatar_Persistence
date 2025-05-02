@@ -51,7 +51,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 			::AP.Standard.constructEntry
 			(
 				"Warning",
-				::AP.Standard.colourWrap(::AP.Strings.Skills.Common.MomentumNoBonusesText, ::AP.Standard.Colour.Red),
+				::AP.Standard.colourWrap(this.getString("NoBonusesText"), ::AP.Standard.Colour.Red),
 				entries
 			);
 		}
@@ -62,18 +62,18 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function createMomentumStateEntry()
 	{
 		local colour = ::AP.Standard.Colour.Green;
-		local suffix = ::AP.Strings.Skills.Common.MomentumStateBelowRosterThreshold;
+		local suffix = this.getString("StateBelowRosterThreshold");
 
 		if (!this.isWithinRosterThreshold())
 		{
 			colour = ::AP.Standard.Colour.Red;
-			suffix = ::AP.Strings.Skills.Common.MomentumStateRosterThresholdExceeded;
+			suffix = this.getString("StateRosterThresholdExceeded");
 		}
 
 		return ::AP.Standard.constructEntry
 		(
 			"Momentum",
-			format("%s %s", ::AP.Strings.Skills.Common.MomentumStatePrefix, ::AP.Standard.colourWrap(suffix, colour))
+			format("%s %s", this.getString("StatePrefix"), ::AP.Standard.colourWrap(suffix, colour))
 		);
 	}
 
@@ -100,7 +100,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	}
 
 	function getEligibleAttributeByEntity( _targetEntity )
-	{	// TODO: try and account for hp here
+	{
 		local eligibleAttributes = [];
 		local viableAttributes = this.getViableAttributesForScaling();
 		local targetProperties = _targetEntity.getBaseProperties();

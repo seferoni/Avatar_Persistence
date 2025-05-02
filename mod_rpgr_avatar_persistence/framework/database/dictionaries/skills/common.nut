@@ -2,6 +2,7 @@
 {
 	MomentumAttributes =
 	[
+		"Hitpoints",
 		"MeleeSkill",
 		"RangedSkill",
 		"MeleeDefense",

@@ -13,8 +13,20 @@ this.ap_event <- ::inherit("scripts/events/event",
 
 	function assignPropertiesByName( _properName )
 	{
-		this.setIDByName(_properName);
-		this.setTitleByName(_properName);
+		this.setEventKey(_properName);
+		this.assignIDByName(_properName);
+		this.assignTitle();
+	}
+
+	function assignIDByName( _properName )
+	{
+		local formattedName = this.formatName(_properName, "_");
+		this.m.ID = format("event.ap_%s", formattedName.tolower());
+	}
+
+	function assignTitle()
+	{
+		this.m.Title = this.getString("Title");
 	}
 
 	function buildScreenText( _eventKey, _screenID )
@@ -49,20 +61,18 @@ this.ap_event <- ::inherit("scripts/events/event",
 		return ::AP.Standard.mapIntegerToAlphabet(this.m.Screens.len() + 1);
 	}
 
+	function getString( _fieldName )
+	{
+		return ::AP.Events.getEventStringField(this.m.EventKey)[_fieldName];
+	}
+
 	function onUpdateScore()
 	{
 		return;
 	}
 
-	function setIDByName( _properName )
+	function setEventKey( _properName )
 	{
-		local formattedName = this.formatName(_properName, "_");
-		this.m.ID = format("event.ap_%s", formattedName.tolower());
-	}
-
-	function setTitleByName( _properName )
-	{	// TODO: revise, revise
-		local key = this.formatName(_properName, "_");
-		this.m.Title = ::AP.Strings.Events[key].Title;
+		this.m.EventKey = this.formatName(_properName);
 	}
 });
