@@ -5,11 +5,6 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	{
 		this.ap_skill.create();
 		this.assignPropertiesByName("Momentum");
-	}
-
-	function assignSpecialProperties()
-	{
-		this.ap_skill.assignSpecialProperties();
 		this.initialiseFlags();
 	}
 
@@ -136,7 +131,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function getViableAttributesForScaling()
 	{
-		return ::AP.Skills.getSkillField("MomentumAttributes");
+		return this.getSkillData().ScalableAttributes;
 	}
 
 	function incrementAttributeBonus( _attributeKey )

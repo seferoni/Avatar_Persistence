@@ -5,6 +5,11 @@
 		return this.getStringField("Attributes")[_fieldName];
 	}
 
+	function getCommonField( _fieldName )
+	{
+		return this.getField("Common")[_fieldName];
+	}
+
 	function getField( _fieldName )
 	{
 		return ::AP.Database.getField("Generic", _fieldName);

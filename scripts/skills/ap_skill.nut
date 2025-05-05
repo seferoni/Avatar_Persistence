@@ -44,7 +44,7 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 
 	function assignIconsByName( _properName )
 	{
-		local iconHandle = format("ap_%s_effect", this.formatName(_properName, "_").lower());
+		local iconHandle = format("ap_%s_effect", this.formatName(_properName, "_").tolower());
 		this.m.Overlay = iconHandle;
 		this.m.Icon = format("%s/%s.png", this.m.GFXPathPrefix, iconHandle);
 		this.m.IconMini = format("%s_mini", iconHandle);
@@ -68,6 +68,11 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 	function getFlags()
 	{
 		return this.m.Flags;
+	}
+
+	function getSkillData()
+	{
+		return ::AP.Skills.getSkillData(this.m.SkillKey);
 	}
 
 	function getString( _fieldName )

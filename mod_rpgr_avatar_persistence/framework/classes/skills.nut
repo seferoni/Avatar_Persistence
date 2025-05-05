@@ -14,7 +14,7 @@
 			return;
 		}
 
-		skills.add(::new(::AP.Utilities.getField("SkillPaths").Momentum));
+		skills.add(::new(::AP.Utilities.getCommonField("SkillPaths").Momentum));
 	}
 
 	function createPlayerCharacterTraitTooltipEntries( _playerObject )
@@ -55,7 +55,7 @@
 	{
 		return ::Const.Injury.Permanent.filter(function(_injuryIndex, _injuryTable )
 		{
-			if (::AP.Utilities.getField("ExcludedInjuries").find(_injuryTable.ID) != null)
+			if (::AP.Utilities.getCommonField("ExcludedInjuries").find(_injuryTable.ID) != null)
 			{
 				return false;
 			}
@@ -78,6 +78,11 @@
 	{
 		local permanentInjuries = this.getPermanentInjuryCount(_playerObject);
 		return permanentInjuries - ::AP.Standard.getParameter("PermanentInjuryThreshold");
+	}
+
+	function getSkillData( _key )
+	{
+		return this.getSkillField("SkillData")[_key];
 	}
 
 	function getSkillField( _fieldName )

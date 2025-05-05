@@ -34,7 +34,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 
 	function conferAvatarStatus( _playerObject )
 	{
-		_playerObject.getSkills().add(::new(::AP.Utilities.getField("SkillPaths").Avatar));
+		_playerObject.getSkills().add(::new(::AP.Utilities.getCommonField("SkillPaths").Avatar));
 		::AP.Standard.setFlag("IsPlayerCharacter", true, _playerObject, true);
 		::AP.Standard.setFlag("AvatarStatusConferred", true, ::World.Statistics);
 	}
@@ -182,13 +182,13 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 	function updateActor( _playerObject )
 	{
 		_playerObject.getSkills().removeByType(::Const.SkillType.Injury);
-		_playerObject.getSkills().add(::new(::AP.Utilities.getField("SkillPaths").Sickness));
+		_playerObject.getSkills().add(::new(::AP.Utilities.getCommonField("SkillPaths").Sickness));
 		_playerObject.setHitpoints(_playerObject.getHitpointsMax());
 	}
 
 	function updateSprites( _playerObject )
 	{
-		local sprites = ::AP.Utilities.getField("PermanentInjurySprites");
+		local sprites = ::AP.Utilities.getCommonField("PermanentInjurySprites");
 
 		foreach( sprite in sprites )
 		{

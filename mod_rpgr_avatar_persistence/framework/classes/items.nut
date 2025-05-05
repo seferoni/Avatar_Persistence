@@ -7,7 +7,7 @@
 
 	function isItemViableForRemoval( _itemObject )
 	{
-		local removalParameters = ::AP.Utilities.getField("ItemRemovalParameters");
+		local removalParameters = ::AP.Utilities.getCommonField("ItemRemovalParameters");
 
 		foreach( itemType in removalParameters.ForbiddenTypesInclusive )
 		{

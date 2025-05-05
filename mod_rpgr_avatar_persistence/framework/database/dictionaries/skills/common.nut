@@ -1,14 +1,17 @@
-::AP.Database.Skills.Common <-
+::AP.Database.Skills.SkillData <-
 {
-	MomentumAttributes =
-	[
-		"Hitpoints",
-		"MeleeSkill",
-		"RangedSkill",
-		"MeleeDefense",
-		"RangedDefense",
-		"Bravery",
-		"Initiative",
-		"Stamina"
-	]
+	Momentum =
+	{
+		ScalableAttributes =
+		[
+			"Hitpoints",
+			"MeleeSkill",
+			"RangedSkill",
+			"MeleeDefense",
+			"RangedDefense",
+			"Bravery",
+			"Initiative",
+			"Stamina"
+		]
+	}
 };

@@ -4,11 +4,17 @@ this.ap_event <- ::inherit("scripts/events/event",
 	function create()
 	{
 		this.assignGenericProperties();
+		this.assignSpecialProperties();
 	}
 
 	function assignGenericProperties()
 	{
 		this.m.IsSpecial = true;
+	}
+
+	function assignSpecialProperties()
+	{
+		this.m.EventKey <- "";
 	}
 
 	function assignPropertiesByName( _properName )
@@ -63,7 +69,7 @@ this.ap_event <- ::inherit("scripts/events/event",
 
 	function getString( _fieldName )
 	{
-		return ::AP.Events.getEventStringField(this.m.EventKey)[_fieldName];
+		return ::AP.EventHandler.getEventStringField(this.m.EventKey)[_fieldName];
 	}
 
 	function onUpdateScore()

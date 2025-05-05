@@ -1,5 +1,5 @@
 ::AP.Persistence <-
-{
+{	// TODO: check if all references to this class are valid
 	Parameters =
 	{
 		EventTimingMilliseconds = 1250
@@ -85,7 +85,7 @@
 			return prefactor;
 		};
 
-		foreach( resourceKey in ::AP.Utilities.getField("ResourceKeys") )
+		foreach( resourceKey in ::AP.Utilities.getCommonField("ResourceKeys") )
 		{
 			reductionTable[resourceKey] <- ::Math.floor(::World.Assets.m[resourceKey] * getReducedProportion(resourceKey));
 		}
@@ -106,12 +106,12 @@
 	function worsenMoodOnStruckDown( _playerObject, _permanentInjurySustained )
 	{
 		local flavourText = ::AP.Utilities.getTooltipString("MoodStruckDownTooltip");
-		local moodMagnitude = ::AP.Utilities.getField("MoodChanges").StruckDown;
+		local moodMagnitude = ::AP.Utilities.getCommonField("MoodChanges").StruckDown;
 
 		if (_permanentInjurySustained)
 		{
 			flavourText = ::AP.Utilities.getTooltipString("MoodPermanentInjuryTooltip");
-			moodMagnitude = ::AP.Utilities.getField("MoodChanges").PermanentInjury;
+			moodMagnitude = ::AP.Utilities.getCommonField("MoodChanges").PermanentInjury;
 		}
 
 		_playerObject.worsenMood(moodMagnitude, flavourText);
