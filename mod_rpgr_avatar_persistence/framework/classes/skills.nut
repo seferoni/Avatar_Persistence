@@ -28,26 +28,12 @@
 
 	function createPlayerCharacterTraitTutorialEntry( _playerObject )
 	{
-		local threshold = ::AP.Standard.getParameter("PermanentInjuryThreshold");
 		local thresholdDifferential = this.getPermanentInjuryThresholdDifferential(_playerObject);
-
-		local iconKey = "Warning";
-		local tutorialText = format(::AP.Utilities.getTooltipString("InjuryThresholdTooltip"), ::AP.Standard.colourWrap(threshold, ::AP.Standard.Colour.Red));
-
-		if (thresholdDifferential == 0)
-		{
-			tutorialText = ::AP.Strings.getFragmentsAsCompiledString("InjuryThresholdTooltipBaselineFragment", "Persistence");
-		}
-		else if (thresholdDifferential > 0)
-		{
-			iconKey = "Skull";
-			tutorialText = ::AP.Standard.colourWrap(::AP.Utilities.getTooltipString("InjuryThresholdExceededTooltip"), ::AP.Standard.Colour.Red);
-		}
-
+		local tooltipData = this.getTooltipDataByInjuryDifferential(thresholdDifferential);
 		return ::AP.Standard.constructEntry
 		(
-			iconKey,
-			tutorialText
+			tooltipData.IconKey,
+			tooltipData.Text
 		);
 	}
 
@@ -93,6 +79,28 @@
 	function getSkillStringField( _fieldName )
 	{
 		return ::AP.Strings.getField("Skills", _fieldName);
+	}
+
+	function getTooltipDataByInjuryDifferential( _injuryDifferential )
+	{
+		local colour = @(_string) ::AP.Standard.colourWrap(_string, ::AP.Standard.Colour.Red);
+		local tooltipData =
+		{
+			IconKey = "Warning",
+			Text = format(::AP.Utilities.getTooltipString("InjuryThresholdTooltip"), colour(threshold))
+		};
+
+		if (_injuryDifferential > 0)
+		{
+			tooltipData.IconKey = "Skull";
+			tooltipData.Text = colour(::AP.Utilities.getTooltipString("InjuryThresholdExceededTooltip"));
+		}
+		else if (_injuryDifferential == 0)
+		{
+			tooltipData.Text = ::AP.Utilities.compileTooltipFragments("InjuryThresholdTooltipBaselineFragment");
+		}
+
+		return tooltipData;
 	}
 
 	function resetMomentum( _playerObject )

@@ -1,5 +1,10 @@
 ::AP.Utilities <-
 {
+	function compileTooltipFragments( _fragmentBase, _colour = null )
+	{
+		return ::AP.Strings.getFragmentsAsCompiledString(_fragmentBase, "Generic", "Tooltips", _colour);
+	}
+
 	function getAttributeString( _fieldName )
 	{
 		return this.getStringField("Attributes")[_fieldName];

@@ -78,7 +78,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	}
 
 	function getAttributeBonusOffset()
-	{
+	{	// TODO: best to cap the effect that injuries have
 		local nominalOffset = ::AP.Skills.getPermanentInjuryCount(this.getContainer().getActor());
 
 		if (nominalOffset == 0)
@@ -135,7 +135,8 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	}
 
 	function incrementAttributeBonus( _attributeKey )
-	{
+	{	// TODO: rather than using attribute bonuses to change how much you gain at any given point
+		// it should be that attribute bonuses multiply or offset actual bonuses.
 		local currentBonus = this.getAttributeBonus(_attributeKey);
 		this.setAttributeBonus(_attributeKey, currentBonus + this.getAttributeBonusOffset());
 	}
