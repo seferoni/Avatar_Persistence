@@ -29,7 +29,7 @@ this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
 			local entry = ::AP.Standard.constructEntry
 			(
 				null,
-				format(this.getString("ScreenAListEntry"), "", item.getName())
+				format(this.getString("IntroListEntry"), "", item.getName())
 			);
 			entry.icon <- format("ui/items/%s", item.getIcon());
 			push(entry);
@@ -53,7 +53,7 @@ this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
 			::AP.Standard.constructEntry
 			(
 				resourceKey,
-				format(this.getString("ScreenAListEntry"), colourWrap(reducedMagnitude.tostring()), ::AP.Utilities.getString(resourceKey)),
+				format(this.getString("IntroListEntry"), colourWrap(reducedMagnitude.tostring()), ::AP.Utilities.getString(resourceKey)),
 				entries
 			);
 		}
@@ -71,14 +71,24 @@ this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
 		return ::AP.Standard.constructEntry
 		(
 			"Momentum",
-			::AP.Strings.getFragmentsAsCompiledString("ScreenAMomentumLossFragment", "Events", "Defeat", ::AP.Standard.Colour.Cyan)
+			this.compileStringFragments("IntroMomentumLossFragment", ::AP.Standard.Colour.Cyan)
 		);
 	}
 
 	function createIntroScreen()
 	{
-		local screen = this.constructScreen("Defeat");
-		screen.start <- this.onIntro;
+		local screen = this.constructScreen("Intro");
+		screen.start = function( _event )
+		{
+			local playerCharacter = ::AP.Utilities.getPlayerInRoster(::World.getPlayerRoster());
+			local culledResources = ::AP.Persistence.getCulledResources();
+			local culledItems = ::AP.Persistence.getCulledItems(playerCharacter);
+			::AP.Standard.push(playerCharacter.getImagePath(), this.Characters);
+			::AP.Standard.push(this.createEventEntries(culledItems, culledResources), this.List);
+			::AP.Skills.resetMomentum(playerCharacter);
+			::AP.Items.removeItemsFromStashAndPlayerCharacter(playerCharacter, culledItems);
+			::AP.Utilities.reduceResources(culledResources);
+		};
 		screen.Options.push(this.createIntroOptionA());
 		return screen;
 	}
@@ -87,7 +97,7 @@ this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
 	{
 		local optionA =
 		{
-			Text = this.getString("ScreenAOptionA"),
+			Text = this.getString("IntroOptionA"),
 			function getResult( _event )
 			{	# This convention is borrowed verbatim from the vanilla codebase.
 				return 0;
@@ -99,18 +109,5 @@ this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
 	function createScreens()
 	{
 		::AP.Standard.push(this.createIntroScreen(), this.m.Screens);
-	}
-
-	function onIntro( _event )
-	{
-		local playerCharacter = ::AP.Utilities.getPlayerInRoster(::World.getPlayerRoster());
-		local culledResources = ::AP.Persistence.getCulledResources();
-		local culledItems = ::AP.Persistence.getCulledItems(playerCharacter);
-
-		::AP.Standard.push(playerCharacter.getImagePath(), this.Characters);
-		::AP.Standard.push(this.createEventEntries(culledItems, culledResources), this.List);
-		::AP.Skills.resetMomentum(playerCharacter);
-		::AP.Items.removeItemsFromStashAndPlayerCharacter(playerCharacter, culledItems);
-		::AP.Utilities.reduceResources(culledResources);
 	}
 });

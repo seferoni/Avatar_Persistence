@@ -14,8 +14,10 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 		foreach( attribute in viableAttributes )
 		{
-			local bonus = this.getAttributeBonus(attribute);
-			_currentProperties[attribute] += bonus;
+			local nominalBonus = this.getAttributeBonus(attribute);
+			local multiplier = this.getAttributeBonusMultiplier();
+			local actualBonus = ::Math.floor(nominalBonus * multiplier);
+			_currentProperties[attribute] += actualBonus;
 		}
 	}
 
@@ -77,21 +79,22 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		return ::AP.Standard.getFlag(_attributeKey, this);
 	}
 
-	function getAttributeBonusOffset()
-	{	// TODO: best to cap the effect that injuries have
-		local nominalOffset = ::AP.Skills.getPermanentInjuryCount(this.getContainer().getActor());
+	function getAttributeBonusMultiplier()
+	{
+		local nominalMultiplier = 1;
+		local injuryCount = ::AP.Skills.getPermanentInjuryCount(this.getContainer().getActor()) > 0;
 
-		if (nominalOffset == 0)
+		if (injuryCount > 0)
 		{
-			nominalOffset++;
+			nominalMultiplier++;
 		}
 
 		if (this.isWithinRosterThreshold())
 		{
-			nominalOffset *= 2;
+			nominalMultiplier++;
 		}
 
-		return nominalOffset;
+		return nominalMultiplier;
 	}
 
 	function getEligibleAttributeByEntity( _targetEntity )
@@ -99,11 +102,11 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		local eligibleAttributes = [];
 		local viableAttributes = this.getViableAttributesForScaling();
 		local targetProperties = _targetEntity.getBaseProperties();
-		local playerProperties = this.getContainer().getActor().getBaseProperties();
+		local playerProperties = this.getContainer().getActor().getCurrentProperties();
 
 		foreach( attribute in viableAttributes )
 		{
-			if (targetProperties[attribute] <= playerProperties[attribute] + this.getAttributeBonus(attribute))
+			if (targetProperties[attribute] <= playerProperties[attribute])
 			{
 				continue;
 			}
@@ -117,6 +120,11 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		}
 
 		return eligibleAttributes[::Math.rand(0, eligibleAttributes)];
+	}
+
+	function getNaiveAttributeBonus( _attributeKey )
+	{
+		return ::AP.Standard.getFlag(_attributeKey, this);
 	}
 
 	function getTooltip()
@@ -135,10 +143,8 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	}
 
 	function incrementAttributeBonus( _attributeKey )
-	{	// TODO: rather than using attribute bonuses to change how much you gain at any given point
-		// it should be that attribute bonuses multiply or offset actual bonuses.
-		local currentBonus = this.getAttributeBonus(_attributeKey);
-		this.setAttributeBonus(_attributeKey, currentBonus + this.getAttributeBonusOffset());
+	{
+		this.setAttributeBonus(_attributeKey, this.getAttributeBonus(_attributeKey) + 1);
 	}
 
 	function initialiseFlags()

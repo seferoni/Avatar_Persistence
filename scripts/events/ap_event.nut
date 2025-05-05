@@ -35,14 +35,12 @@ this.ap_event <- ::inherit("scripts/events/event",
 		this.m.Title = this.getString("Title");
 	}
 
-	function buildScreenText( _eventKey, _screenID )
+	function compileStringFragments( _stringKey )
 	{
-		local imagePath = ::AP.Database.getField("Events", _eventKey)[format("Screen%sImagePath", _screenID)];
-		local screenText = ::AP.Strings.getFragmentsAsCompiledString(format("Screen%sTextFragment", _screenID), "Events", _eventKey, null);
-		return format("[img]%s[/img]%s", imagePath, screenText);
+		return ::AP.Strings.getFragmentsAsCompiledString(_stringKey, "Events", this.m.EventKey, null);
 	}
 
-	function constructScreen( _eventKey )
+	function constructScreen( _screenKey )
 	{
 		local screen =
 		{
@@ -53,7 +51,7 @@ this.ap_event <- ::inherit("scripts/events/event",
 			Options = []
 		};
 		screen.ID <- this.getNewScreenID();
-		screen.Text <- this.buildScreenText(_eventKey, screen.ID);
+		screen.Text <- this.getScreenTextWithImage(_screenKey);
 		return screen;
 	}
 
@@ -62,9 +60,34 @@ this.ap_event <- ::inherit("scripts/events/event",
 		return ::AP.Standard.replaceSubstring(" ", _replacementSubstring, _properName);
 	}
 
-	function getNewScreenID()
+	function getEventData()
 	{
-		return ::AP.Standard.mapIntegerToAlphabet(this.m.Screens.len() + 1);
+		return ::AP.EventHandler.getEventData(this.m.EventKey);
+	}
+
+	function getNewScreenID( _offset = 0 )
+	{
+		return ::AP.Standard.mapIntegerToAlphabet(this.m.Screens.len() + 1 + _offset);
+	}
+
+	function getScreenTextByID( _screenKey )
+	{	# NB: all screen text strings are stored as 'fragments'.
+		local stringKey = format("%sTextFragment", _screenKey);
+		return this.compileStringFragments(stringKey);
+	}
+
+	function getScreenTextWithImage( _screenKey )
+	{
+		local imagePath = "";
+		local imagePaths = this.getEventData().ImagePaths;
+		local screenText = this.getScreenTextByID(_screenKey);
+
+		if (_screenKey in imagePaths)
+		{
+			imagePath = format("[img]%s[/img]", imagePaths[_screenKey]);
+		}
+
+		return format("%s%s", imagePath, screenText);
 	}
 
 	function getString( _fieldName )

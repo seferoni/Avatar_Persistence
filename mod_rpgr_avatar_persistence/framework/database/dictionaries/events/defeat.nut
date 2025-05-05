@@ -1,4 +1,10 @@
-::AP.Database.Events.Defeat <-
+::AP.Database.Events.EventData <-
 {
-	ScreenAImagePath = "gfx/ui/events/event_21.png",
+	Defeat =
+	{
+		ImagePaths =
+		{
+			Intro = "gfx/ui/events/event_21.png"
+		}
+	}
 };

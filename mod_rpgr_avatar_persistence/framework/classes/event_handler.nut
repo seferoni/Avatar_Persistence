@@ -41,8 +41,18 @@
 		::World.Events.fire("event.ap_defeat");
 	}
 
+	function getEventData( _fieldName )
+	{
+		return this.getField("EventData")[_fieldName];
+	}
+
 	function getEventStringField( _fieldName )
 	{
 		return ::AP.Strings.getField("Events", _fieldName);
+	}
+
+	function getField( _fieldName )
+	{
+		return ::AP.Database.getField("Events", _fieldName);
 	}
 };
