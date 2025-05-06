@@ -82,7 +82,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function getAttributeBonusMultiplier()
 	{
 		local nominalMultiplier = 1;
-		local injuryCount = ::AP.Skills.getPermanentInjuryCount(this.getContainer().getActor()) > 0;
+		local injuryCount = ::AP.Skills.getPermanentInjuryCount(this.getContainer().getActor());
 
 		if (injuryCount > 0)
 		{

@@ -83,6 +83,7 @@
 
 	function getTooltipDataByInjuryDifferential( _injuryDifferential )
 	{
+		local threshold = ::AP.Standard.getParameter("PermanentInjuryThreshold");
 		local colour = @(_string) ::AP.Standard.colourWrap(_string, ::AP.Standard.Colour.Red);
 		local tooltipData =
 		{

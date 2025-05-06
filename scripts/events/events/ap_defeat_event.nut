@@ -80,6 +80,7 @@ this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
 		local screen = this.constructScreen("Intro");
 		screen.start = function( _event )
 		{
+			_event.assignTitle("Intro");
 			local playerCharacter = ::AP.Utilities.getPlayerInRoster(::World.getPlayerRoster());
 			local culledResources = ::AP.Persistence.getCulledResources();
 			local culledItems = ::AP.Persistence.getCulledItems(playerCharacter);

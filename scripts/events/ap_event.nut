@@ -21,7 +21,6 @@ this.ap_event <- ::inherit("scripts/events/event",
 	{
 		this.setEventKey(_properName);
 		this.assignIDByName(_properName);
-		this.assignTitle();
 	}
 
 	function assignIDByName( _properName )
@@ -30,9 +29,9 @@ this.ap_event <- ::inherit("scripts/events/event",
 		this.m.ID = format("event.ap_%s", formattedName.tolower());
 	}
 
-	function assignTitle()
+	function assignTitle( _key )
 	{
-		this.m.Title = this.getString("Title");
+		this.m.Title = this.getString(format("%sTitle", _key));
 	}
 
 	function compileStringFragments( _stringKey )
@@ -52,6 +51,7 @@ this.ap_event <- ::inherit("scripts/events/event",
 		};
 		screen.ID <- this.getNewScreenID();
 		screen.Text <- this.getScreenTextWithImage(_screenKey);
+		screen.start <- function( _event ) return;
 		return screen;
 	}
 
