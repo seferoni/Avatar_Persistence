@@ -1,5 +1,5 @@
 ::AP.Persistence <-
-{	// TODO: check if all references to this class are valid
+{
 	Parameters =
 	{
 		EventTimingMilliseconds = 1250

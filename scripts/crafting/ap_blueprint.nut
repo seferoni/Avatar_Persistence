@@ -16,20 +16,32 @@ this.ap_blueprint <- ::inherit("scripts/crafting/blueprint",
 
 	function assignPropertiesByName( _properName )
 	{
+		this.assignBlueprintKey(_properName);
 		this.setIDByName(_properName);
+		this.assignItemPath();
 		this.buildIngredients(_properName);
 	}
 
 	function assignSpecialProperties()
 	{
+		this.m.BlueprintKey <- "";
 		this.m.ItemPath <- null;
 		this.m.Ingredients <- [];
 	}
 
-	function buildIngredients( _properName )
+	function assignBlueprintKey( _properName )
 	{
-		local key = this.formatName(_properName, "_");
-		this.init(::AP.Database.getField("Blueprints", key).Ingredients);
+		this.m.BlueprintKey <- this.formatName(_properName, "_");
+	}
+
+	function assignItemPath()
+	{
+		this.m.ItemPath = ::AP.Utilities.getCommonField("ItemPaths")[this.m.BlueprintKey];
+	}
+
+	function buildIngredients( _properName )
+	{	// TODO: don't typically like naively accessing the database handler's getField
+		this.init(::AP.Database.getField("Blueprints", this.m.BlueprintKey).Ingredients);
 	}
 
 	function buildPreview()
