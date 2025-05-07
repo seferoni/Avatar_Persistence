@@ -10,7 +10,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 	function assignGenericProperties()
 	{
 		this.ap_item.assignGenericProperties();
-		this.m.Value = 800;
+		this.m.Value = 750;
 	}
 
 	function assignSoundProperties()
@@ -52,8 +52,8 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 		{
 			return null;
 		}
-		// TODO: these access paths that don't exist
-		local confermentText = ::AP.Strings.getFragmentsAsCompiledString("ElixirConfermentFragment", "Items", null, ::AP.Standard.Colour.Green);
+
+		local confermentText = ::AP.Strings.getFragmentsAsCompiledString("ConfermentFragment", "Items", "Elixir", ::AP.Standard.Colour.Green);
 		return ::AP.Standard.constructEntry
 		(
 			"Special",
@@ -63,7 +63,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 
 	function createTutorialEntry()
 	{
-		local tutorialText = ::AP.Strings.getFragmentsAsCompiledString("ElixirTutorialFragment", "Items", null, ::AP.Standard.Colour.Green);
+		local tutorialText = ::AP.Strings.getFragmentsAsCompiledString("TutorialFragment", "Items", "Elixir", ::AP.Standard.Colour.Green);
 		return ::AP.Standard.constructEntry
 		(
 			"Special",
