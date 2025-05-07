@@ -52,7 +52,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 		{
 			return null;
 		}
-
+		// TODO: these access paths that don't exist
 		local confermentText = ::AP.Strings.getFragmentsAsCompiledString("ElixirConfermentFragment", "Items", null, ::AP.Standard.Colour.Green);
 		return ::AP.Standard.constructEntry
 		(
@@ -76,7 +76,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 		return ::AP.Standard.constructEntry
 		(
 			null,
-			::AP.Strings.Items.Common.ElixirInstructionText
+			this.getString("InstructionText")
 		);
 	}
 
