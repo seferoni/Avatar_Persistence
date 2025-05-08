@@ -19,20 +19,4 @@
 
 		return true;
 	}, "overrideArguments");
-
-	::AP.Patcher.wrap(p, "onFinish", function()
-	{
-		if (!::AP.Persistence.getQueueDefeatRoutineState())
-		{
-			return;
-		}
-
-		if (::AP.Utilities.getPlayerInRoster(::World.getPlayerRoster()) == null)
-		{
-			return;
-		}
-
-		::AP.Persistence.executeDefeatRoutine();
-		::AP.Persistence.setQueueDefeatRoutineState(false);
-	});
 });

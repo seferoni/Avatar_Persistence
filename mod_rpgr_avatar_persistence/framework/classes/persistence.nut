@@ -2,7 +2,11 @@
 {
 	Parameters =
 	{
-		EventTimingMilliseconds = 500
+		EventMaxAttempts = 3
+	},
+	RuntimeVariables =
+	{
+		EventAttempts = 0
 	}
 
 	function addToSurvivorRoster( _playerObject )
@@ -12,17 +16,16 @@
 	}
 
 	function executeDefeatRoutine()
-	{
-		if (!::AP.Standard.getParameter("EnableDefeatEvent"))
+	{	// TODO: needs testing
+		if (!::AP.Standard.getParameter("EnableDefeatEvent") || this.RuntimeVariables.EventAttempts >= this.Parameters.EventMaxAttempts)
 		{
+			this.executeFallbackRoutine();
+			this.setQueueDefeatRoutineState(false);
 			return;
 		}
 
-		// TODO: testing virtual instead of real
-		::Time.scheduleEvent(::TimeUnit.Real, this.Parameters.EventTimingMilliseconds, function( _dummy )
-		{
-			::AP.EventHandler.fireDefeatEvent();
-		}, null);
+		this.RuntimeVariables.EventAttempts++;
+		::AP.EventHandler.fireDefeatEvent();
 	}
 
 	function executeFallbackRoutine()

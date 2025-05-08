@@ -18,7 +18,7 @@
 	},
 	ElixirMarketplaceChance =
 	{
-		Default = 30,
+		Default = 50,
 		Range = [0, 100],
 		Interval = 5
 	},

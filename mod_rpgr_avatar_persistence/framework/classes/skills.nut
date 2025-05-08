@@ -27,7 +27,7 @@
 	}
 
 	function createPlayerCharacterTraitTutorialEntry( _playerObject )
-	{	// TODO: the text interred in this entry could be improved, ie, instead of using 'more than 1', say '2'
+	{
 		local thresholdDifferential = this.getPermanentInjuryThresholdDifferential(_playerObject);
 		local tooltipData = this.getTooltipDataByInjuryDifferential(thresholdDifferential);
 		return ::AP.Standard.constructEntry
@@ -88,7 +88,7 @@
 		local tooltipData =
 		{
 			IconKey = "Warning",
-			Text = format(::AP.Utilities.getTooltipString("InjuryThresholdTooltip"), colour(threshold))
+			Text = format(::AP.Utilities.getTooltipString("InjuryThresholdTooltip"), colour(threshold + 1))
 		};
 
 		if (_injuryDifferential > 0)
@@ -98,7 +98,7 @@
 		}
 		else if (_injuryDifferential == 0)
 		{
-			tooltipData.Text = ::AP.Utilities.compileTooltipFragments("InjuryThresholdTooltipBaselineFragment");
+			tooltipData.Text = ::AP.Utilities.compileTooltipFragments("InjuryThresholdTooltipBaselineFragment", ::AP.Standard.Colour.Red);
 		}
 
 		return tooltipData;

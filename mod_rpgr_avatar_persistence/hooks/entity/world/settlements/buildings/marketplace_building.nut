@@ -1,7 +1,7 @@
 ::AP.Patcher.hook("scripts/entity/world/settlements/buildings/marketplace_building", function( p )
 {
 	::AP.Patcher.wrap(p, "fillStash", function( _list, _stash, _priceMult, _allowDamagedEquipment = false )
-	{	// TODO: might be best to evaluate such conditions within the appropriate class
+	{
 		if (!this.m.Settlement.hasBuilding("building.temple"))
 		{
 			return;

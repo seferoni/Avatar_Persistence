@@ -34,11 +34,11 @@
 	{
 		if (!this.canFireEvent())
 		{
-			::AP.Persistence.executeFallbackRoutine();
 			return;
 		}
 
 		::World.Events.fire("event.ap_defeat");
+		::AP.Persistence.setQueueDefeatRoutineState(false);
 	}
 
 	function getEventData( _fieldName )
