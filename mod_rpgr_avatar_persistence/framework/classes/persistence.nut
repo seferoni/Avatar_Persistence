@@ -2,7 +2,7 @@
 {
 	Parameters =
 	{
-		EventTimingMilliseconds = 1250
+		EventTimingMilliseconds = 500
 	}
 
 	function addToSurvivorRoster( _playerObject )
@@ -18,6 +18,7 @@
 			return;
 		}
 
+		// TODO: testing virtual instead of real
 		::Time.scheduleEvent(::TimeUnit.Real, this.Parameters.EventTimingMilliseconds, function( _dummy )
 		{
 			::AP.EventHandler.fireDefeatEvent();
@@ -26,7 +27,7 @@
 
 	function executeFallbackRoutine()
 	{
-		local playerCharacter = this.getPlayerInRoster(::World.getPlayerRoster());
+		local playerCharacter = ::AP.Utilities.getPlayerInRoster(::World.getPlayerRoster());
 		::AP.Skills.resetMomentum(playerCharacter);
 		::AP.Items.removeItemsFromStashAndPlayerCharacter(playerCharacter, this.getCulledItems(playerCharacter));
 		::AP.Utilities.reduceResources(this.getCulledResources());

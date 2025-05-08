@@ -1,5 +1,5 @@
 this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
-{
+{	// TODO: does fire, but has no text. has image, options. is janky, and awkwardly delayed
 	m = {},
 	function create()
 	{
