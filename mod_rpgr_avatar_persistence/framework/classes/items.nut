@@ -7,7 +7,7 @@
 
 	function isItemViableForRemoval( _itemObject )
 	{
-		local removalParameters = ::AP.Utilities.getCommonField("ItemRemovalParameters");
+		local removalParameters = ::AP.Utilities.getCommonField("ItemRemovalParameters"); // TODO: invalid accessor
 
 		foreach( itemType in removalParameters.ForbiddenTypesInclusive )
 		{

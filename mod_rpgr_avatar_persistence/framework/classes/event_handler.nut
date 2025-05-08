@@ -34,7 +34,7 @@
 	{
 		if (!this.canFireEvent())
 		{
-			this.executeFallbackRoutine();
+			::AP.Persistence.executeFallbackRoutine();
 			return;
 		}
 
