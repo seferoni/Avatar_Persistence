@@ -2,7 +2,7 @@
 {
 	Parameters =
 	{
-		EventMaxAttempts = 3
+		EventMaxAttempts = 1000
 	},
 	RuntimeVariables =
 	{
@@ -16,9 +16,10 @@
 	}
 
 	function executeDefeatRoutine()
-	{	// TODO: needs testing
+	{
 		if (!::AP.Standard.getParameter("EnableDefeatEvent") || this.RuntimeVariables.EventAttempts >= this.Parameters.EventMaxAttempts)
 		{
+			::logInfo("executing fallback")
 			this.executeFallbackRoutine();
 			this.setQueueDefeatRoutineState(false);
 			return;

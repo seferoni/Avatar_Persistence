@@ -37,8 +37,8 @@
 			return;
 		}
 
-		::World.Events.fire("event.ap_defeat");
 		::AP.Persistence.setQueueDefeatRoutineState(false);
+		::World.Events.fire("event.ap_defeat");
 	}
 
 	function getEventData( _fieldName )

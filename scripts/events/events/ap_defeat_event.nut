@@ -1,5 +1,5 @@
 this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
-{	// TODO: does fire, but has no text. has image, options. is janky, and awkwardly delayed
+{
 	m = {},
 	function create()
 	{
@@ -85,7 +85,7 @@ this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
 			local culledResources = ::AP.Persistence.getCulledResources();
 			local culledItems = ::AP.Persistence.getCulledItems(playerCharacter);
 			::AP.Standard.push(playerCharacter.getImagePath(), this.Characters);
-			::AP.Standard.push(this.createEventEntries(culledItems, culledResources), this.List);
+			::AP.Standard.push(_event.createEventEntries(culledItems, culledResources), this.List);
 			::AP.Skills.resetMomentum(playerCharacter);
 			::AP.Items.removeItemsFromStashAndPlayerCharacter(playerCharacter, culledItems);
 			::AP.Utilities.reduceResources(culledResources);

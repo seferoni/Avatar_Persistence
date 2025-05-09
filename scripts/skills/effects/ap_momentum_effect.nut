@@ -119,7 +119,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 			return null;
 		}
 
-		return eligibleAttributes[::Math.rand(0, eligibleAttributes)];
+		return eligibleAttributes[::Math.rand(0, eligibleAttributes.len() - 1)];
 	}
 
 	function getNaiveAttributeBonus( _attributeKey )

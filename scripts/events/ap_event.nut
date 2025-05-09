@@ -34,9 +34,9 @@ this.ap_event <- ::inherit("scripts/events/event",
 		this.m.Title = this.getString(format("%sTitle", _key));
 	}
 
-	function compileStringFragments( _stringKey )
+	function compileStringFragments( _stringKey, _colour = null )
 	{
-		return ::AP.Strings.getFragmentsAsCompiledString(_stringKey, "Events", this.m.EventKey, null);
+		return ::AP.Strings.getFragmentsAsCompiledString(_stringKey, "Events", this.m.EventKey, _colour);
 	}
 
 	function constructScreen( _screenKey )
@@ -72,7 +72,7 @@ this.ap_event <- ::inherit("scripts/events/event",
 
 	function getScreenTextByID( _screenKey )
 	{	# NB: all screen text strings are stored as 'fragments'.
-		local stringKey = format("%sTextFragment", _screenKey);
+		local stringKey = format("%sScreenFragment", _screenKey);
 		return this.compileStringFragments(stringKey);
 	}
 
