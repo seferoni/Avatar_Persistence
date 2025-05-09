@@ -14,10 +14,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 		foreach( attribute in viableAttributes )
 		{
-			local nominalBonus = this.getAttributeBonus(attribute);
-			local multiplier = this.getAttributeBonusMultiplier();
-			local actualBonus = ::Math.floor(nominalBonus * multiplier);
-			_currentProperties[attribute] += actualBonus;
+			_currentProperties[attribute] += this.getAttributeBonus(attribute);
 		}
 	}
 
@@ -76,7 +73,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function getAttributeBonus( _attributeKey )
 	{
-		return ::AP.Standard.getFlag(_attributeKey, this);
+		return this.getNaiveAttributeBonus(_attributeKey) * this.getAttributeBonusMultiplier();
 	}
 
 	function getAttributeBonusMultiplier()
@@ -153,7 +150,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 		foreach( attribute in viableAttributes )
 		{
-			if (this.getAttributeBonus(attribute) != false)
+			if (this.getNaiveAttributeBonus(attribute) != false)
 			{
 				continue;
 			}
@@ -168,14 +165,18 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	}
 
 	function onTargetKilled( _targetEntity, _skill )
-	{
+	{	// TODO: DEBUG
+		::logInfo("target killed!")
 		local eligibleAttribute = this.getEligibleAttributeByEntity(_targetEntity);
 
 		if (eligibleAttribute == null)
 		{
+			::logInfo("no eligible attribute!")
 			return;
 		}
 
+		::logInfo("incrementing bonus for " + eligibleAttribute)
+		this.spawnOverlayOnCurrentTile();
 		this.incrementAttributeBonus(eligibleAttribute);
 	}
 
