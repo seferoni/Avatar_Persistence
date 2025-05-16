@@ -194,7 +194,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	}
 
 	function refreshStateByConfiguration()
-	{
+	{	// TODO: does not appear to actually hide the skill
 		this.m.IsHidden = !::AP.Standard.getParameter("EnableMomentum");
 	}
 
