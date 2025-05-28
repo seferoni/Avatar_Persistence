@@ -40,8 +40,8 @@ this.ap_blueprint <- ::inherit("scripts/crafting/blueprint",
 	}
 
 	function buildIngredients( _properName )
-	{	// TODO: don't typically like naively accessing the database handler's getField
-		this.init(::AP.Database.getField("Blueprints", this.m.BlueprintKey).Ingredients);
+	{
+		this.init(::AP.Items.getBlueprintField(this.m.BlueprintKey).Ingredients);
 	}
 
 	function buildPreview()

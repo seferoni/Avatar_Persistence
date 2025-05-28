@@ -1,5 +1,10 @@
 ::AP.Items <-
 {
+	function getBlueprintField( _fieldName )
+	{
+		return ::AP.Database.getField("Blueprints", _fieldName);
+	}
+
 	function getItemStringField( _fieldName )
 	{
 		return ::AP.Strings.getField("Items", _fieldName);
