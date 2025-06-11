@@ -1,5 +1,5 @@
 this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
-{
+{	// TODO: isHidden is a pretty awkward solution. could integrate something within create itself
 	m = {},
 	function create()
 	{

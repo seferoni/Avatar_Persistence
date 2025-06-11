@@ -4,14 +4,8 @@ this.ap_blueprint <- ::inherit("scripts/crafting/blueprint",
 	function create()
 	{
 		this.blueprint.create();
-		this.assignGenericProperties();
 		this.assignSpecialProperties();
 		this.buildPreview();
-	}
-
-	function assignGenericProperties()
-	{
-		return;
 	}
 
 	function assignPropertiesByName( _properName )
