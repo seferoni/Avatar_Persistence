@@ -1,5 +1,5 @@
 this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
-{
+{	// TODO: need to revise this from a design perspective. momentum should decay per time, and skill gain should be agnostic to character stats. focus on entity instead.
 	m = {},
 	function create()
 	{
@@ -109,17 +109,8 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		local eligibleAttributes = [];
 		local viableAttributes = this.getViableAttributesForScaling();
 		local targetProperties = _targetEntity.getBaseProperties();
-		local playerProperties = this.getContainer().getActor().getCurrentProperties();
 
-		foreach( attribute in viableAttributes )
-		{
-			if (targetProperties[attribute] <= playerProperties[attribute])
-			{
-				continue;
-			}
-
-			eligibleAttributes.push(attribute);
-		}
+		// TODO: need to sort the target's attributes from highest to lowest, choose from the highest three
 
 		if (eligibleAttributes.len() == 0)
 		{
@@ -139,7 +130,6 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		local tooltipArray = this.ap_skill.getTooltip();
 		local push = @(_entry) ::AP.Standard.push(_entry, tooltipArray);
 
-		this.refreshStateByConfiguration();
 		push(this.createMomentumStateEntry());
 		push(this.createAttributeEntries());
 		return tooltipArray;
@@ -177,6 +167,11 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function onTargetKilled( _targetEntity, _skill )
 	{
+		if (!::AP.Standard.getParameter("EnableMomentum"))
+		{
+			return;
+		}
+
 		local eligibleAttribute = this.getEligibleAttributeByEntity(_targetEntity);
 
 		if (eligibleAttribute == null)
@@ -191,7 +186,6 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function onUpdate( _properties )
 	{
 		this.ap_skill.onUpdate(_properties);
-		this.refreshStateByConfiguration();
 
 		if (!::AP.Standard.getParameter("EnableMomentum"))
 		{
@@ -199,11 +193,6 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		}
 
 		this.applySkillBonuses(_properties);
-	}
-
-	function refreshStateByConfiguration()
-	{
-		this.m.IsHidden = !::AP.Standard.getParameter("EnableMomentum");
 	}
 
 	function resetMomentum()
