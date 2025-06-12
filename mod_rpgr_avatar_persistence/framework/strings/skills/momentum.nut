@@ -6,5 +6,6 @@
 
 	StatePrefix = "Momentum: ",
 	StateBelowRosterThreshold = "Fortified",
+	StateDisabled = "Disabled",
 	StateRosterThresholdExceeded = "Weakened",
 };

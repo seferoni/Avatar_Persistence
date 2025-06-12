@@ -1,5 +1,5 @@
 this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
-{	// TODO: isHidden is a pretty awkward solution. could integrate something within create itself
+{
 	m = {},
 	function create()
 	{
@@ -21,6 +21,12 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function createAttributeEntries()
 	{
 		local entries = [];
+
+		if (!::AP.Standard.getParameter("EnableMomentum"))
+		{
+			return entries;
+		}
+
 		local viableAttributes = this.getViableAttributesForScaling();
 
 		foreach( attribute in viableAttributes )
@@ -55,13 +61,17 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function createMomentumStateEntry()
 	{
-		local colour = ::AP.Standard.Colour.Green;
-		local suffix = this.getString("StateBelowRosterThreshold");
+		local colour = ::AP.Standard.Colour.Red;
+		local suffix = this.getString("StateRosterThresholdExceeded");
 
-		if (!this.isWithinRosterThreshold())
+		if (!::AP.Standard.getParameter("EnableMomentum"))
 		{
-			colour = ::AP.Standard.Colour.Red;
-			suffix = this.getString("StateRosterThresholdExceeded");
+			suffix = this.getString("StateDisabled");
+		}
+		else if (this.isWithinRosterThreshold())
+		{
+			colour = ::AP.Standard.Colour.Green;
+			suffix = this.getString("StateBelowRosterThreshold");
 		}
 
 		return ::AP.Standard.constructEntry
@@ -129,6 +139,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		local tooltipArray = this.ap_skill.getTooltip();
 		local push = @(_entry) ::AP.Standard.push(_entry, tooltipArray);
 
+		this.refreshStateByConfiguration();
 		push(this.createMomentumStateEntry());
 		push(this.createAttributeEntries());
 		return tooltipArray;
@@ -165,17 +176,14 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	}
 
 	function onTargetKilled( _targetEntity, _skill )
-	{	// TODO: DEBUG
-		::logInfo("target killed!")
+	{
 		local eligibleAttribute = this.getEligibleAttributeByEntity(_targetEntity);
 
 		if (eligibleAttribute == null)
 		{
-			::logInfo("no eligible attribute!")
 			return;
 		}
 
-		::logInfo("incrementing bonus for " + eligibleAttribute)
 		this.spawnOverlayOnCurrentTile();
 		this.incrementAttributeBonus(eligibleAttribute);
 	}
