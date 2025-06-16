@@ -81,6 +81,11 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		);
 	}
 
+	function executeDecayProcedures()
+	{
+		// TODO:
+	}
+
 	function getAttributeBonus( _attributeKey )
 	{
 		return this.getNaiveAttributeBonus(_attributeKey) * this.getAttributeBonusMultiplier();
@@ -106,18 +111,23 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function getEligibleAttributeByEntity( _targetEntity )
 	{
-		local eligibleAttributes = [];
+		local targetProperties = _entityObject.getBaseProperties();
 		local viableAttributes = this.getViableAttributesForScaling();
-		local targetProperties = _targetEntity.getBaseProperties();
-
-		// TODO: need to sort the target's attributes from highest to lowest, choose from the highest three
-
-		if (eligibleAttributes.len() == 0)
+		viableAttributes.sort(function( _firstGroup, _secondGroup )
 		{
-			return null;
-		}
+			if (targetProperties[_firstGroup.Key] > targetProperties[_secondGroup.Key])
+			{
+				return 1;
+			}
 
-		return eligibleAttributes[::Math.rand(0, eligibleAttributes.len() - 1)];
+			if (targetProperties[_firstGroup.Key] < targetProperties[_secondGroup.Key])
+			{
+				return -1;
+			}
+
+			return 0;
+		});
+		return viableAttributes[0].Key;
 	}
 
 	function getNaiveAttributeBonus( _attributeKey )
@@ -137,7 +147,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function getViableAttributesForScaling()
 	{
-		return this.getSkillData().ScalableAttributes;
+		return clone this.getSkillData().ScalableAttributes;
 	}
 
 	function incrementAttributeBonus( _attributeKey )
@@ -165,6 +175,11 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		return ::World.getPlayerRoster().getAll().len() <= ::AP.Standard.getParameter("MomentumRosterThreshold");
 	}
 
+	function onNewDay()
+	{
+		this.executeDecayProcedures();
+	}
+
 	function onTargetKilled( _targetEntity, _skill )
 	{
 		if (!::AP.Standard.getParameter("EnableMomentum"))
@@ -174,10 +189,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 		local eligibleAttribute = this.getEligibleAttributeByEntity(_targetEntity);
 
-		if (eligibleAttribute == null)
-		{
-			return;
-		}
+		// TODO: consider thresholds.
 
 		this.spawnOverlayOnCurrentTile();
 		this.incrementAttributeBonus(eligibleAttribute);
