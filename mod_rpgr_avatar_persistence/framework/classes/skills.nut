@@ -5,18 +5,6 @@
 		_playerObject.getSkills().add(::new(_injuryScript));
 	}
 
-	function addMomentum( _playerObject )
-	{
-		local skills = _playerObject.getSkills();
-
-		if (skills.hasSkill("effects.ap_momentum"))
-		{
-			return;
-		}
-
-		skills.add(::new(::AP.Utilities.getCommonField("SkillPaths").Momentum));
-	}
-
 	function createPlayerCharacterTraitTooltipEntries( _playerObject )
 	{
 		local entries = [];
@@ -102,15 +90,5 @@
 		}
 
 		return tooltipData;
-	}
-
-	function resetMomentum( _playerObject )
-	{
-		if (!::AP.Standard.getParameter("EnableMomentum"))
-		{
-			return;
-		}
-
-		_playerObject.getSkills().getSkillByID("effects.ap_momentum").resetMomentum();
 	}
 };

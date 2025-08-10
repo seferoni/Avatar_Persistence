@@ -19,9 +19,6 @@
 	EnableDefeatEventName = "Enable Defeat Event",
 	EnableDefeatEventDescription = "Determines whether an event is fired upon defeat. This event serves as a diegetic catalogue of item and resource losses.",
 
-	EnableMomentumName = "Enable Momentum",
-	EnableMomentumDescription = "Determines whether the Momentum effect is added to and active for player characters.",
-
 	ItemRemovalCeilingName = "Item Removal Ceiling",
 	ItemRemovalCeilingDescription = "Determines the maximum number of items that may be removed per instance of player defeat. Does nothing if Lose Items Upon Defeat is disabled.",
 
@@ -33,9 +30,6 @@
 
 	ModifyTooltipName = "Modify Tooltip",
 	ModifyTooltipDescription = "Determines whether the player character trait tooltip reflects changes brought about by Avatar Persistence.",
-
-	MomentumRosterThresholdName = "Momentum Roster Threshold",
-	MomentumRosterThresholdDescription = "Determines the roster size at and below which Momentum is Hastened. In this state, further attribute gains via Momentum are doubled.",
 
 	MoneyLossPercentageName = "Money Loss Percentage",
 	MoneyLossPercentageDescription = "Determines the percentage of money lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.",

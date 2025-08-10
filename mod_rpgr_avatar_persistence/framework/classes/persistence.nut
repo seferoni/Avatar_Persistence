@@ -32,7 +32,6 @@
 	function executeFallbackRoutine()
 	{
 		local playerCharacter = ::AP.Utilities.getPlayerInRoster(::World.getPlayerRoster());
-		::AP.Skills.resetMomentum(playerCharacter);
 		::AP.Items.removeItemsFromStashAndPlayerCharacter(playerCharacter, this.getCulledItems(playerCharacter));
 		::AP.Utilities.reduceResources(this.getCulledResources());
 	}

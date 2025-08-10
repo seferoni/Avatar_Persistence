@@ -26,10 +26,6 @@
 	{
 		Default = true
 	},
-	EnableMomentum =
-	{
-		Default = true
-	},
 	ItemRemovalCeiling =
 	{
 		Default = 6,
@@ -43,12 +39,6 @@
 	ModifyTooltip =
 	{
 		Default = true,
-	},
-	MomentumRosterThreshold =
-	{
-		Default = 6,
-		Range = [1, 27],
-		Interval = 1
 	},
 	MoneyLossPercentage =
 	{
