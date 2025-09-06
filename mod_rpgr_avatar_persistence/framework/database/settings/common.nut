@@ -4,13 +4,13 @@
 	{
 		Default = 40,
 		Range = [0, 100],
-		Interval = 5
+		Interval = 1
 	},
 	ArmorPartsLossPercentage =
 	{
 		Default = 100,
 		Range = [1, 100],
-		Interval = 5
+		Interval = 1
 	},
 	ElixirConfersAvatarStatus =
 	{
@@ -20,7 +20,7 @@
 	{
 		Default = 50,
 		Range = [0, 100],
-		Interval = 5
+		Interval = 1
 	},
 	EnableDefeatEvent =
 	{
@@ -44,19 +44,19 @@
 	{
 		Default = 100,
 		Range = [1, 100],
-		Interval = 5
+		Interval = 1
 	},
 	MedicineLossPercentage =
 	{
 		Default = 100,
 		Range = [1, 100],
-		Interval = 5
+		Interval = 1
 	},
 	PermanentInjuryChance =
 	{
 		Default = 66,
 		Range = [0, 100],
-		Interval = 5
+		Interval = 1
 	},
 	PermanentInjuryThreshold =
 	{
