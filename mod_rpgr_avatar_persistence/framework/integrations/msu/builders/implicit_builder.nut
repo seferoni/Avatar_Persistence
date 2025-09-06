@@ -1,13 +1,15 @@
 ::AP.Integrations.MSU.Builders.Implicit <-
 {
-	function addSettingsImplicitly( _settingTable, _pageID )
+	function addSettingsImplicitly( _settingGroup, _pageID )
 	{
 		local elements = [];
 		local booleanSettings = [];
+		local settingIDs = this.getSettingIDsFromGroup(_settingGroup);
 
-		foreach( settingID, settingGroup in _settingTable )
+		foreach( settingID in settingIDs )
 		{
-			local settingElement = this.buildSettingElement(settingID, settingGroup);
+			local settingValues = _settingGroup[settingID];
+			local settingElement = this.buildSettingElement(settingID, settingValues);
 
 			if (settingElement == null)
 			{
@@ -34,25 +36,19 @@
 
 	function build()
 	{
-		this.buildPages();
+		local pageOrder = ::AP.Integrations.MSU.getPageOrder();
 
-		foreach( category, settingGroup in ::AP.Database.Settings )
+		foreach( pageKey in pageOrder )
 		{
-			local pageID = format("Page%s", category);
-			this.addSettingsImplicitly(settingGroup, pageID);
+			this.buildPage(pageKey);
+			this.addSettingsImplicitly(::AP.Database.Settings[pageKey], pageKey);
 		}
 	}
 
-	function buildPages()
+	function buildPage( _pageID )
 	{
-		local pageCategories = ::AP.Database.getSettingCategories();
-
-		foreach( category in pageCategories )
-		{
-			local pageID = format("Page%s", category);
-			local pageName = ::AP.Strings.Settings.Common[format("%sName", pageID)];
-			::AP.Integrations.MSU.addPage(pageID, pageName);
-		}
+		local pageName = ::AP.Integrations.MSU.getPageName(_pageID);
+		::AP.Integrations.MSU.addPage(_pageID, pageName);
 	}
 
 	function buildSettingElement( _settingID, _settingValues )
@@ -62,6 +58,7 @@
 		switch (typeof _settingValues.Default)
 		{
 			case ("bool"): settingElement = this.createBooleanSetting(_settingID, _settingValues); break;
+			case ("string"): settingElement = this.createStringSetting(_settingID, _settingValues); break;
 			case ("float"):
 			case ("integer"): settingElement = this.createNumericalSetting(_settingID, _settingValues); break;
 		}
@@ -97,5 +94,25 @@
 			_settingValues.Interval,
 			::AP.Integrations.MSU.getElementName(_settingID)
 		);
+	}
+
+	function createStringSetting( _settingID, _settingValues )
+	{
+		return ::MSU.Class.StringSetting
+		(
+			_settingID,
+			_settingValues.Default,
+			::AP.Integrations.MSU.getElementName(_settingID)
+		);
+	}
+
+	function getSettingIDsFromGroup( _settingGroup )
+	{
+		local settingIDs = ::AP.Standard.getKeys(_settingGroup);
+		::AP.Standard.sortArrayAlphabetically(settingIDs, function( _settingID )
+		{
+			return ::AP.Integrations.MSU.getElementName(_settingID);
+		});
+		return settingIDs;
 	}
 };

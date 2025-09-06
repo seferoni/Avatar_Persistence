@@ -1,8 +1,6 @@
 ::AP.Strings.Settings.Common <-
 {
 	PageCommonName = "Common",
-	PageItemLossName = "Item Loss",
-	PageElixirName = "Elixir",
 
 	AmmoLossPercentageName = "Ammo Loss Percentage",
 	AmmoLossPercentageDescription = "Determines the percentage of ammo lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.",

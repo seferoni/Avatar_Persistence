@@ -36,6 +36,16 @@
 		return ::AP.Interfaces.MSU.ModSettings.getPage(_pageID);
 	}
 
+	function getPageOrder()
+	{
+		return ::AP.Database.getField("SettingData", "PageOrder");
+	}
+
+	function getPageName( _pageKey )
+	{
+		return this.getElementName(format("Page%s", _pageKey));
+	}
+
 	function getPages()
 	{
 		return ::AP.Interfaces.MSU.ModSettings.getPanel().getPages();

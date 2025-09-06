@@ -349,4 +349,27 @@
 		local flag = _isNative ? format("%s", _string) : format("%s.%s", ::AP.ID, _string);
 		_object.getFlags().set(flag, _value);
 	}
+
+	function sortArrayAlphabetically( _array, _comparableFunction = null, _isAscending = true )
+	{
+		local comparableValue = @(_value) _comparableFunction == null ? _value : _comparableFunction(_value);
+		local orderPrefactor = _isAscending ? 1 : -1;
+		_array.sort(function( _firstMember, _secondMember )
+		{
+			local firstValue = comparableValue(_firstMember);
+			local secondValue = comparableValue(_secondMember);
+
+			if (firstValue > secondValue)
+			{
+				return 1 * orderPrefactor;
+			}
+
+			if (firstValue < secondValue)
+			{
+				return -1 * orderPrefactor;
+			}
+
+			return 0;
+		});
+	}
 };
