@@ -10,7 +10,7 @@ this.ap_elixir_blueprint <- ::inherit("scripts/crafting/ap_blueprint",
 	function assignGenericProperties()
 	{
 		this.ap_blueprint.assignGenericProperties();
-		this.m.Cost = 500;
+		this.m.Cost = 75; // TODO: this is costing no money
 	}
 
 	function assignSpecialProperties()

@@ -8,11 +8,11 @@
 	ArmorPartsLossPercentageName = "Tools Loss Percentage",
 	ArmorPartsLossPercentageDescription = "Determines the percentage of tools lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.",
 
+	ElixirAlchemistChanceName = "Elixir Alchemist Chance",
+	ElixirAlchemistChanceDescription = "Determines the percentage chance for elixirs to be found at alchemists.",
+
 	ElixirConfersAvatarStatusName = "Elixir Confers Avatar Status",
 	ElixirConfersAvatarStatusDescription = "Determines whether or not the elixir has the ability to confer player character status to selected non-player characters on consumption.",
-
-	ElixirMarketplaceChanceName = "Elixir Marketplace Chance",
-	ElixirMarketplaceChanceDescription = "Determines the percentage chance for elixirs to be found in marketplaces.",
 
 	EnableDefeatEventName = "Enable Defeat Event",
 	EnableDefeatEventDescription = "Determines whether an event is fired upon defeat. This event serves as a diegetic catalogue of item and resource losses.",

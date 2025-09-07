@@ -19,8 +19,9 @@
 	{
 		if (!::AP.Standard.getParameter("EnableDefeatEvent") || this.RuntimeVariables.EventAttempts >= this.Parameters.EventMaxAttempts)
 		{
-			::logInfo("executing fallback")
+			::AP.Standard.log("Skipping defeat event, executing fallback routine.");
 			this.executeFallbackRoutine();
+			this.resetEventAttempts();
 			this.setQueueDefeatRoutineState(false);
 			return;
 		}
@@ -100,6 +101,11 @@
 	function getQueueDefeatRoutineState()
 	{
 		return ::AP.Standard.getFlag("QueueDefeatRoutine", ::World.Statistics);
+	}
+
+	function resetEventAttempts()
+	{
+		this.RuntimeVariables.EventAttempts = 0;
 	}
 
 	function setQueueDefeatRoutineState( _boolean )

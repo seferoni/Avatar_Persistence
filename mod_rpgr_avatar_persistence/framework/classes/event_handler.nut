@@ -37,6 +37,7 @@
 			return;
 		}
 
+		::AP.Persistence.resetEventAttempts();
 		::AP.Persistence.setQueueDefeatRoutineState(false);
 		::World.Events.fire("event.ap_defeat");
 	}

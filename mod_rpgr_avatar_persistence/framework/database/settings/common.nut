@@ -16,9 +16,9 @@
 	{
 		Default = true,
 	},
-	ElixirMarketplaceChance =
+	ElixirAlchemistChance =
 	{
-		Default = 50,
+		Default = 66,
 		Range = [0, 100],
 		Interval = 1
 	},
