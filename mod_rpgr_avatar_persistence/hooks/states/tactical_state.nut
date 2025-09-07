@@ -12,7 +12,7 @@
 			return;
 		}
 
-		if (!_isVictory)
+		if (!_isVictory && ::Tactical.getRetreatRoster().getSize() == 0)
 		{
 			::AP.Persistence.setQueueDefeatRoutineState(true);
 		}
