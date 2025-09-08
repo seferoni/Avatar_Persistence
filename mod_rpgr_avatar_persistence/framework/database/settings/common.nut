@@ -54,13 +54,13 @@
 	},
 	PermanentInjuryChance =
 	{
-		Default = 66,
+		Default = 20,
 		Range = [0, 100],
 		Interval = 1
 	},
 	PermanentInjuryThreshold =
 	{
-		Default = 0,
+		Default = 2,
 		Range = [0, 7],
 		Interval = 1
 	},
