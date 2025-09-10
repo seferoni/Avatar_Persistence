@@ -22,6 +22,11 @@
 			return;
 		}
 
+		if (::AP.Utilities.getPlayerInRoster(::World.getPlayerRoster()) != null)
+		{
+			return;
+		}
+
 		::World.Assets.getStash().add(::new(::AP.Utilities.getCommonField("ItemPaths").DiluteElixir));
 	});
 });
