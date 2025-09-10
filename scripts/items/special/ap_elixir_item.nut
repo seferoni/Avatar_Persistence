@@ -152,23 +152,6 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 		return true;
 	}
 
-	function getConfermentViableState( _playerObject )
-	{
-		if (!::AP.Standard.getParameter("ElixirConfersAvatarStatus"))
-		{
-			this.setWarning("CharacterNotEligible");
-			return false;
-		}
-
-		if (::AP.Utilities.getPlayerInRoster(::World.getPlayerRoster()) != null)
-		{
-			this.setWarning("AvatarAlreadyPresent");
-			return false;
-		}
-
-		return true;
-	}
-
 	function onUse( _playerObject, _item = null )
 	{
 		if (::AP.Utilities.isActorPlayerCharacter(_playerObject))
