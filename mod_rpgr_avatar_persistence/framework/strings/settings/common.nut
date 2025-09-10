@@ -2,6 +2,9 @@
 {
 	PageCommonName = "Common",
 
+	AddElixirOnStartName = "Add Elixir On Start",
+	AddElixirOnStartDescription = "Adds a special variant of the elixir to the player stash on campaign start. This variant, besides having little monetary value, functions only to confer avatar status to the character that consumes it.",
+
 	AmmoLossPercentageName = "Ammo Loss Percentage",
 	AmmoLossPercentageDescription = "Determines the percentage of ammo lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.",
 

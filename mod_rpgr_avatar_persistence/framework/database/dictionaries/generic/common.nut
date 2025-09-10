@@ -9,6 +9,7 @@
 	],
 	ItemPaths =
 	{
+		DiluteElixir = "scripts/items/special/ap_dilute_elixir_item",
 		Elixir = "scripts/items/special/ap_elixir_item"
 	},
 	MoodChanges =

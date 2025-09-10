@@ -1,5 +1,9 @@
 ::AP.Database.Settings.Common <-
 {
+	AddElixirOnStart =
+	{
+		Default = false,
+	},
 	AmmoLossPercentage =
 	{
 		Default = 40,
