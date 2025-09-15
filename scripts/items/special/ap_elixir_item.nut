@@ -53,7 +53,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 			return null;
 		}
 
-		local confermentText = ::AP.Strings.getFragmentsAsCompiledString("ConfermentFragment", "Items", "Elixir", ::AP.Standard.Colour.Green);
+		local confermentText = this.getString("ConfermentFragment");
 		return ::AP.Standard.constructEntry
 		(
 			"Special",
@@ -63,7 +63,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 
 	function createTutorialEntry()
 	{
-		local tutorialText = ::AP.Strings.getFragmentsAsCompiledString("TutorialFragment", "Items", "Elixir", ::AP.Standard.Colour.Green);
+		local tutorialText = this.getString("TutorialFragment");
 		return ::AP.Standard.constructEntry
 		(
 			"Special",

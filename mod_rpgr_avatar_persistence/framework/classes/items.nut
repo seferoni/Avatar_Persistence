@@ -5,9 +5,9 @@
 		return ::AP.Database.getField("Blueprints", _fieldName);
 	}
 
-	function getItemStringField( _fieldName )
+	function getItemStringField( _fieldName, _logWarning = true )
 	{
-		return ::AP.Strings.getField("Items", _fieldName);
+		return ::AP.Strings.getField("Items", _fieldName, _logWarning);
 	}
 
 	function isItemViableForRemoval( _itemObject )
