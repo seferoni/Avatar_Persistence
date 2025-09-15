@@ -50,11 +50,11 @@
 		return fragmentKeys.map(@(_fragmentKey) database[_fragmentKey]);
 	}
 
-	function getField( _tableName, _fieldName )
+	function getField( _tableName, _fieldName, _logWarning = true )
 	{
 		local field = this.getTopLevelField(_tableName, _fieldName);
 
-		if (field == null)
+		if (field == null && _logWarning)
 		{
 			::AP.Standard.log(format("Could not find %s in the specified string database %s.", _fieldName, _tableName), true);
 		}

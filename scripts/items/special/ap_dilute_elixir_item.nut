@@ -7,6 +7,12 @@ this.ap_dilute_elixir_item <- ::inherit("scripts/items/special/ap_elixir_item",
 		this.assignPropertiesByName("Dilute Elixir");
 	}
 
+	function assignPropertiesByName( _properName )
+	{
+		this.ap_item.assignPropertiesByName(_properName);
+		this.setItemKey("Elixir");
+	}
+
 	function assignGenericProperties()
 	{
 		this.ap_item.assignGenericProperties();

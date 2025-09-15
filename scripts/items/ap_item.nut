@@ -118,9 +118,23 @@ this.ap_item <- ::inherit("scripts/items/item",
 		return this.m.Flags;
 	}
 
-	function getString( _fieldName )
+	function getString( _fieldName, _fragmentColour = ::AP.Standard.Colour.Green )
 	{
-		return ::AP.Items.getItemStringField(this.m.ItemKey)[_fieldName];
+		local stringDatabase = ::AP.Items.getItemStringField(this.m.ItemKey, false);
+
+		if (_fieldName in stringDatabase)
+		{
+			return stringDatabase[_fieldName];
+		}
+
+		local compiledString = ::AP.Strings.getFragmentsAsCompiledString(_fieldName, "Items", this.m.ItemKey, _fragmentColour);
+
+		if (compiledString == "")
+		{
+			::AP.Standard.log(format("Could not find %s in the specified item string database %s.", _fieldName, this.m.ItemKey), true);
+		}
+
+		return compiledString;
 	}
 
 	function getTooltip()
