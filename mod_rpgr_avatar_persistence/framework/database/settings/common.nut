@@ -2,7 +2,7 @@
 {
 	AddElixirOnStart =
 	{
-		Default = false,
+		Default = true,
 	},
 	AmmoLossPercentage =
 	{
@@ -58,13 +58,13 @@
 	},
 	PermanentInjuryChance =
 	{
-		Default = 20,
+		Default = 15,
 		Range = [0, 100],
 		Interval = 1
 	},
 	PermanentInjuryThreshold =
 	{
-		Default = 2,
+		Default = 3,
 		Range = [0, 7],
 		Interval = 1
 	},
