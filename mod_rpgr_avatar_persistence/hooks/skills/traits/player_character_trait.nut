@@ -10,4 +10,9 @@
 		_tooltipArray.extend(::AP.Skills.createPlayerCharacterTraitTooltipEntries(this.getContainer().getActor()));
 		return _tooltipArray;
 	});
+
+	::AP.Patcher.wrap(p, "onAdded", function()
+	{
+		::AP.Skills.addMomentum(this.getContainer().getActor());
+	});
 });

@@ -34,6 +34,7 @@
 	SkillPaths =
 	{
 		Avatar = "scripts/skills/traits/player_character_trait",
+		Momentum = "scripts/skills/effects/ap_momentum_effect",
 		Sickness = "scripts/skills/injury/sickness_injury"
 	}
 };

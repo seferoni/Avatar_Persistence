@@ -84,6 +84,7 @@
 		this.loadFolder("settings");
 		this.loadFolder("events");
 		this.loadFolder("items");
+		this.loadFolder("skills");
 	}
 
 	function loadFolder( _path )

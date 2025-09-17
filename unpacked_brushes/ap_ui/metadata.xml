@@ -1,0 +1,6 @@
+<brush name="gfx/ap_ui.png" version="17" b1="2" b5="0">
+	<!-- Effect icons.-->
+	<sprite id="ap_momentum_effect" ic = "FF23165B" img="..\..\gfx\skills\ap_momentum_effect.png"/>
+	<!-- Minis.-->
+	<sprite id="ap_momentum_effect_mini" ic = "FF23165B" img="skills\mini\ap_momentum_effect_mini.png"/>
+</brush>

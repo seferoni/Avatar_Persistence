@@ -15,6 +15,7 @@ this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
 
 		push(this.createEventItemRemovalEntries(_itemsArray));
 		push(this.createEventResourceReductionEntries(_resourceReductionTable));
+		push(this.createEventMomentumResetEntry());
 		return entries;
 	}
 
@@ -35,6 +36,22 @@ this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
 		}
 
 		return entries;
+	}
+
+	function createEventMomentumResetEntry()
+	{
+		local playerCharacter = ::AP.Utilities.getPlayerInRoster(::World.getPlayerRoster());
+
+		if (!::AP.Skills.hasMomentum(playerCharacter))
+		{
+			return null;
+		}
+
+		return ::AP.Standard.constructEntry
+		(
+			"Momentum",
+			this.compileStringFragments("IntroMomentumLossFragment", ::AP.Standard.Colour.Cyan)
+		);
 	}
 
 	function createEventResourceReductionEntries( _reductionTable )
@@ -71,6 +88,7 @@ this.ap_defeat_event <- ::inherit("scripts/events/ap_event",
 			local culledItems = ::AP.Persistence.getCulledItems(playerCharacter);
 			::AP.Standard.push(playerCharacter.getImagePath(), this.Characters);
 			::AP.Standard.push(_event.createEventEntries(culledItems, culledResources), this.List);
+			::AP.Skills.resetMomentum(playerCharacter);
 			::AP.Items.removeItemsFromStashAndPlayerCharacter(playerCharacter, culledItems);
 			::AP.Utilities.reduceResources(culledResources);
 		};

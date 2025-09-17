@@ -5,6 +5,21 @@
 		_playerObject.getSkills().add(::new(_injuryScript));
 	}
 
+	function addMomentum( _playerObject )
+	{
+		if (!::AP.Standard.getParameter("EnableMomentum"))
+		{
+			return;
+		}
+
+		if (this.hasMomentum(_playerObject))
+		{
+			return;
+		}
+
+		_playerObject.getSkills().add(::new(::AP.Utilities.getCommonField("SkillPaths").Momentum));
+	}
+
 	function createPlayerCharacterTraitTooltipEntries( _playerObject )
 	{
 		local entries = [];
@@ -90,5 +105,20 @@
 		}
 
 		return tooltipData;
+	}
+
+	function hasMomentum( _playerObject )
+	{
+		return _playerObject.getSkills().hasSkill("effects.ap_momentum");
+	}
+
+	function resetMomentum( _playerObject )
+	{
+		if (!this.hasMomentum(_playerObject))
+		{
+			return;
+		}
+
+		_playerObject.getSkills().getSkillByID("effects.ap_momentum").resetMomentum();
 	}
 };

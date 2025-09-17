@@ -20,6 +20,9 @@
 	EnableDefeatEventName = "Enable Defeat Event",
 	EnableDefeatEventDescription = "Determines whether an event is fired upon defeat. This event serves as a diegetic log of item and resource losses.",
 
+	EnableMomentumName = "Enable Momentum",
+	EnableMomentumDescription = "Determines whether the Momentum effect is added to player characters. Momentum is a unique effect that permits player characters to gain points in attributes upon slaying enemies, which is then reset when the player character is struck down. Does nothing once the effect has been added for a given playthrough.",
+
 	ItemRemovalCeilingName = "Item Removal Ceiling",
 	ItemRemovalCeilingDescription = "Determines the maximum number of items that may be removed per instance of player defeat. Does nothing if Lose Items Upon Defeat is disabled.",
 
@@ -34,6 +37,12 @@
 
 	MoneyLossPercentageName = "Money Loss Percentage",
 	MoneyLossPercentageDescription = "Determines the percentage of money lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.",
+
+	MomentumRosterThresholdName = "Momentum Roster Threshold",
+	MomentumRosterThresholdDescription = "Determines the roster size at and below which Momentum is Fortified. In this state, further attribute gains via Momentum are doubled.",
+
+	MomentumScalingChanceName = "Momentum Scaling Chance",
+	MomentumScalingChanceDescription = "Determines the percentage chance for Momentum to scale an attribute upon killing an enemy with a higher-valued attribute than the player character.",
 
 	PermanentInjuryChanceName = "Permanent Injury Chance",
 	PermanentInjuryChanceDescription = "Determines the percentage chance for the player character to suffer permanent injuries upon defeat.",
