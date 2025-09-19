@@ -91,7 +91,14 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function getNaiveAttributeBonus( _attributeKey )
 	{
-		return ::AP.Standard.getFlag(_attributeKey, this);
+		local baseBonus = ::AP.Standard.getFlag(_attributeKey, this);
+
+		if (baseBonus == false)
+		{	# Rendered entirely redundant by initialiseFlags, but left for posterity.
+			return 0;
+		}
+
+		return baseBonus;
 	}
 
 	function getTooltip()
@@ -152,10 +159,11 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function isAttributeEligibleForScaling( _targetEntity, _attribute )
 	{
-		local playerProperties = this.getContainer().getActor().getCurrentProperties();
+		local playerProperties = this.getContainer().getActor().getBaseProperties();
+		local baseBonus = this.getNaiveAttributeBonus(_attribute);
 		local targetProperties = _targetEntity.getBaseProperties();
 
-		if (playerProperties[_attribute] >= targetProperties[_attribute])
+		if (playerProperties[_attribute] + baseBonus >= targetProperties[_attribute])
 		{
 			return false;
 		}
@@ -170,6 +178,16 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function onTargetKilled( _targetEntity, _skill )
 	{
+		if (_targetEntity == null)
+		{
+			return;
+		}
+
+		if (::Math.rand(1, 100) > ::AP.Standard.getParameter("MomentumScalingChance"))
+		{
+			return;
+		}
+
 		local eligibleAttribute = this.getViableAttributeByEntity(_targetEntity);
 
 		if (!this.isAttributeEligibleForScaling(_targetEntity, eligibleAttribute))
