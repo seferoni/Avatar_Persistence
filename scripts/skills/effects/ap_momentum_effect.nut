@@ -57,6 +57,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	{
 		local colour = ::AP.Standard.Colour.Red;
 		local suffix = this.getString("StateRosterThresholdExceeded");
+		local bonusMultiplier = this.getAttributeBonusMultiplier();
 
 		if (this.isWithinRosterThreshold())
 		{
@@ -67,7 +68,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		return ::AP.Standard.constructEntry
 		(
 			"Momentum",
-			format("%s %s", this.getString("StatePrefix"), ::AP.Standard.colourWrap(suffix, colour))
+			format("%s %s (x%i)", this.getString("StatePrefix"), ::AP.Standard.colourWrap(suffix, colour), bonusMultiplier)
 		);
 	}
 
@@ -77,14 +78,8 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	}
 
 	function getAttributeBonusMultiplier()
-	{	// TODO: for some reason, this is resulting in very large attribute bonuses
+	{
 		local nominalMultiplier = 1;
-		local injuryCount = ::AP.Skills.getPermanentInjuryCount(this.getContainer().getActor());
-
-		if (injuryCount > 0)
-		{
-			nominalMultiplier++;
-		}
 
 		if (this.isWithinRosterThreshold())
 		{
@@ -92,28 +87,6 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		}
 
 		return nominalMultiplier;
-	}
-
-	function getEntityHighestAttribute( _targetEntity )
-	{
-		local targetProperties = _targetEntity.getBaseProperties();
-		local viableAttributes = this.getViableAttributesForScaling();
-		viableAttributes.sort(function( _firstAttribute, _secondAttribute )
-		{
-			if (targetProperties[_firstAttribute] > targetProperties[_secondAttribute])
-			{
-				return -1;
-			}
-
-			if (targetProperties[_firstAttribute] < targetProperties[_secondAttribute])
-			{
-				return 1;
-			}
-
-			return 0;
-		});
-		::logInfo(format("got highest attribute %s", viableAttributes[0])); // TODO: get rid of these when done
-		return viableAttributes[0];
 	}
 
 	function getNaiveAttributeBonus( _attributeKey )
@@ -131,6 +104,27 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		return tooltipArray;
 	}
 
+	function getViableAttributeByEntity( _targetEntity )
+	{
+		local targetProperties = _targetEntity.getBaseProperties();
+		local viableAttributes = this.getViableAttributesForScaling();
+		viableAttributes.sort(function( _firstAttribute, _secondAttribute )
+		{
+			if (targetProperties[_firstAttribute] > targetProperties[_secondAttribute])
+			{
+				return -1;
+			}
+
+			if (targetProperties[_firstAttribute] < targetProperties[_secondAttribute])
+			{
+				return 1;
+			}
+
+			return 0;
+		});
+		return viableAttributes[::Math.rand(0, 2)];
+	}
+
 	function getViableAttributesForScaling()
 	{
 		return clone this.getSkillData().ScalableAttributes;
@@ -138,7 +132,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function incrementAttributeBonus( _attributeKey )
 	{
-		this.setAttributeBonus(_attributeKey, this.getAttributeBonus(_attributeKey) + 1);
+		this.setAttributeBonus(_attributeKey, this.getNaiveAttributeBonus(_attributeKey) + 1);
 	}
 
 	function initialiseFlags()
@@ -163,11 +157,9 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 		if (playerProperties[_attribute] >= targetProperties[_attribute])
 		{
-			::logInfo(format("%s not eligible for scaling: player %i vs target %i", _attribute, playerProperties[_attribute], targetProperties[_attribute]));
 			return false;
 		}
-		 // TODO: get rid of these when done
-		::logInfo(format("attribute %s eligible for scaling: player %i vs target %i", _attribute, playerProperties[_attribute], targetProperties[_attribute]));
+
 		return true;
 	}
 
@@ -178,7 +170,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function onTargetKilled( _targetEntity, _skill )
 	{
-		local eligibleAttribute = this.getEntityHighestAttribute(_targetEntity);
+		local eligibleAttribute = this.getViableAttributeByEntity(_targetEntity);
 
 		if (!this.isAttributeEligibleForScaling(_targetEntity, eligibleAttribute))
 		{

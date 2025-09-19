@@ -50,13 +50,13 @@
 	},
 	MomentumRosterThreshold =
 	{
-		Default = 6,
+		Default = 4,
 		Range = [1, 27],
 		Interval = 1
 	},
 	MomentumScalingChance =
 	{
-		Default = 100,
+		Default = 45,
 		Range = [0, 100],
 		Interval = 1
 	},

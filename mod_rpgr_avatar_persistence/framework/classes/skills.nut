@@ -7,12 +7,12 @@
 
 	function addMomentum( _playerObject )
 	{
-		if (!::AP.Standard.getParameter("EnableMomentum"))
+		if (this.hasMomentum(_playerObject))
 		{
 			return;
 		}
 
-		if (this.hasMomentum(_playerObject))
+		if (!::AP.Standard.getParameter("EnableMomentum"))
 		{
 			return;
 		}

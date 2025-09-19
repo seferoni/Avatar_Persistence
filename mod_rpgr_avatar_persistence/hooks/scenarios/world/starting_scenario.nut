@@ -22,8 +22,11 @@
 			return;
 		}
 
-		if (::AP.Utilities.getPlayerInRoster(::World.getPlayerRoster()) != null)
+		local playerCharacter = ::AP.Utilities.getPlayerInRoster(::World.getPlayerRoster());
+
+		if (playerCharacter != null)
 		{
+			::AP.Skills.addMomentum(playerCharacter);
 			return;
 		}
 

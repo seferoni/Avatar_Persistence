@@ -37,6 +37,7 @@ this.ap_elixir_item <- ::inherit("scripts/items/ap_item",
 		_playerObject.getSkills().add(::new(::AP.Utilities.getCommonField("SkillPaths").Avatar));
 		::AP.Standard.setFlag("IsPlayerCharacter", true, _playerObject, true);
 		::AP.Standard.setFlag("AvatarStatusConferred", true, ::World.Statistics);
+		::AP.Skills.addMomentum(_playerObject);
 	}
 
 	function consume( _actor )
