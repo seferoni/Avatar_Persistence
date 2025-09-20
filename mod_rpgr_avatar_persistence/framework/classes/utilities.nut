@@ -15,6 +15,11 @@
 		return this.getField("Common")[_fieldName];
 	}
 
+	function getCurrentRosterSize()
+	{
+		return ::World.getPlayerRoster().getAll().len();
+	}
+
 	function getField( _fieldName )
 	{
 		return ::AP.Database.getField("Generic", _fieldName);

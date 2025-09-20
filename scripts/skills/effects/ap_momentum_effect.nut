@@ -72,6 +72,31 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		);
 	}
 
+	function createMomentumTutorialEntry()
+	{
+		local rosterDifferential = this.getRosterThresholdDifferential();
+		local colour = @(_string) ::AP.Standard.colourWrap(_string, ::AP.Standard.Colour.Red);
+
+		local iconKey = "Warning";
+		local text = format(this.getString("RosterThresholdTooltip"), colour(::Math.abs(rosterDifferential) + 1));
+
+		if (rosterDifferential >= 1)
+		{
+			iconKey = "Locked";
+			text = format(this.getString("RosterThresholdExceededTooltip"), colour(::AP.Standard.getParameter("MomentumRosterThreshold")));
+		}
+		else if (rosterDifferential == 0)
+		{
+			text = this.getString("RosterThresholdTooltipBaselineFragment", ::AP.Standard.Colour.Red);
+		}
+
+		return ::AP.Standard.constructEntry
+		(
+			iconKey,
+			text
+		);
+	}
+
 	function getAttributeBonus( _attributeKey )
 	{
 		return this.getNaiveAttributeBonus(_attributeKey) * this.getAttributeBonusMultiplier();
@@ -101,12 +126,19 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		return baseBonus;
 	}
 
+	function getRosterThresholdDifferential()
+	{
+		local currentRosterSize = ::AP.Utilities.getCurrentRosterSize();
+		return currentRosterSize - ::AP.Standard.getParameter("MomentumRosterThreshold");
+	}
+
 	function getTooltip()
 	{
 		local tooltipArray = this.ap_skill.getTooltip();
 		local push = @(_entry) ::AP.Standard.push(_entry, tooltipArray);
 
 		push(this.createMomentumStateEntry());
+		push(this.createMomentumTutorialEntry());
 		push(this.createAttributeEntries());
 		return tooltipArray;
 	}
@@ -173,7 +205,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function isWithinRosterThreshold()
 	{
-		return ::World.getPlayerRoster().getAll().len() <= ::AP.Standard.getParameter("MomentumRosterThreshold");
+		return this.getRosterThresholdDifferential() <= 0;
 	}
 
 	function onTargetKilled( _targetEntity, _skill )

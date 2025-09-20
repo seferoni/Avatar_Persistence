@@ -8,6 +8,7 @@
 	FatigueRecoveryRate = "ui/icons/fatigue.png",
 	Hitpoints = "ui/icons/health.png",
 	Initiative = "ui/icons/initiative.png",
+	Locked = "ui/icons/icon_locked.png",
 	Medicine = "ui/icons/asset_medicine.png",
 	MeleeDefense = "ui/icons/melee_defense.png",
 	MeleeSkill = "ui/icons/melee_skill.png",

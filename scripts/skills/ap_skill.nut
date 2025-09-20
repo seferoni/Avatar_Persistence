@@ -75,9 +75,23 @@ this.ap_skill <- ::inherit("scripts/skills/skill",
 		return ::AP.Skills.getSkillData(this.m.SkillKey);
 	}
 
-	function getString( _fieldName )
+	function getString( _fieldName, _fragmentColour = ::AP.Standard.Colour.Green )
 	{
-		return ::AP.Skills.getSkillStringField(this.m.SkillKey)[_fieldName];
+		local stringDatabase = ::AP.Skills.getSkillStringField(this.m.SkillKey, false);
+
+		if (_fieldName in stringDatabase)
+		{
+			return stringDatabase[_fieldName];
+		}
+
+		local compiledString = ::AP.Strings.getFragmentsAsCompiledString(_fieldName, "Skills", this.m.SkillKey, _fragmentColour);
+
+		if (compiledString == "")
+		{
+			::AP.Standard.log(format("Could not find %s in the specified skill string database %s.", _fieldName, this.m.SkillKey), true);
+		}
+
+		return compiledString;
 	}
 
 	function getTooltip()

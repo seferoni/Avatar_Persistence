@@ -79,22 +79,21 @@
 		return ::AP.Database.getField("Skills", _fieldName);
 	}
 
-	function getSkillStringField( _fieldName )
+	function getSkillStringField( _fieldName, _logWarning = true )
 	{
-		return ::AP.Strings.getField("Skills", _fieldName);
+		return ::AP.Strings.getField("Skills", _fieldName, _logWarning);
 	}
 
 	function getTooltipDataByInjuryDifferential( _injuryDifferential )
 	{
-		local threshold = ::AP.Standard.getParameter("PermanentInjuryThreshold");
 		local colour = @(_string) ::AP.Standard.colourWrap(_string, ::AP.Standard.Colour.Red);
 		local tooltipData =
 		{
 			IconKey = "Warning",
-			Text = format(::AP.Utilities.getTooltipString("InjuryThresholdTooltip"), colour(threshold + 1))
+			Text = format(::AP.Utilities.getTooltipString("InjuryThresholdTooltip"), colour(::Math.abs(_injuryDifferential) + 1))
 		};
 
-		if (_injuryDifferential > 0)
+		if (_injuryDifferential >= 1)
 		{
 			tooltipData.IconKey = "Skull";
 			tooltipData.Text = colour(::AP.Utilities.getTooltipString("InjuryThresholdExceededTooltip"));
