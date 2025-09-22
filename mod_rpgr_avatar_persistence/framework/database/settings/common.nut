@@ -56,7 +56,7 @@
 	},
 	MomentumScalingChance =
 	{
-		Default = 75,
+		Default = 100,
 		Range = [0, 100],
 		Interval = 1
 	},
