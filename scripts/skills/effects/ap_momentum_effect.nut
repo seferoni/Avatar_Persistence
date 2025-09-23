@@ -243,6 +243,11 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 		foreach( attribute in viableAttributes )
 		{
+			if (::Math.rand(1, 100) > ::AP.Skills.Parameters.MomentumAttributeResetChance)
+			{
+				continue;
+			}
+
 			this.setAttributeBonus(attribute, 0);
 		}
 	}

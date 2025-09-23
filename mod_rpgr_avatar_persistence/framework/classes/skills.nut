@@ -1,5 +1,10 @@
 ::AP.Skills <-
 {
+	Parameters =
+	{
+		MomentumAttributeResetChance = 60
+	}
+
 	function addInjuryByScript( _injuryScript, _playerObject )
 	{
 		_playerObject.getSkills().add(::new(_injuryScript));
