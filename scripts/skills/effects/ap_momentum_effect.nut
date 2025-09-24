@@ -161,7 +161,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 			return 0;
 		});
-		return viableAttributes[::Math.rand(0, 2)];
+		return viableAttributes[::Math.rand(0, viableAttributes.len() - 3)];
 	}
 
 	function getViableAttributesForScaling()
