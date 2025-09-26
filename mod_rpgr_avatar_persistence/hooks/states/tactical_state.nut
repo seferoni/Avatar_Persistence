@@ -8,11 +8,11 @@
 		}
 
 		if (::AP.Utilities.getPlayerInRoster(::Tactical.getSurvivorRoster()) == null)
-		{
+		{	# A struck-down player character is always added to the survivor roster.
 			return;
 		}
 
-		if (!_isVictory && ::Tactical.getRetreatRoster().getSize() == 0)
+		if (!_isVictory && ::Tactical.Entities.getCombatResult() == ::Const.Tactical.CombatResult.PlayerDestroyed)
 		{
 			::AP.Persistence.setQueueDefeatRoutineState(true);
 		}

@@ -143,30 +143,27 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		return tooltipArray;
 	}
 
-	function getViableAttributeByEntity( _targetEntity )
+	function getScalableAttributesByEntity( _targetEntity )
 	{
-		local targetProperties = _targetEntity.getBaseProperties();
+		local scalableAttributes = [];
 		local viableAttributes = this.getViableAttributesForScaling();
-		viableAttributes.sort(function( _firstAttribute, _secondAttribute )
+
+		foreach( attribute in viableAttributes )
 		{
-			if (targetProperties[_firstAttribute] > targetProperties[_secondAttribute])
+			if (!this.isAttributeEligibleForScaling(_targetEntity, attribute))
 			{
-				return -1;
+				continue;
 			}
 
-			if (targetProperties[_firstAttribute] < targetProperties[_secondAttribute])
-			{
-				return 1;
-			}
+			scalableAttributes.push(attribute);
+		}
 
-			return 0;
-		});
-		return viableAttributes[::Math.rand(0, viableAttributes.len() - 3)];
+		return scalableAttributes;
 	}
 
 	function getViableAttributesForScaling()
 	{
-		return clone this.getSkillData().ScalableAttributes;
+		return this.getSkillData().ScalableAttributes;
 	}
 
 	function incrementAttributeBonus( _attributeKey )
@@ -220,15 +217,15 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 			return;
 		}
 
-		local eligibleAttribute = this.getViableAttributeByEntity(_targetEntity);
+		local scalableAttributes = this.getScalableAttributesByEntity(_targetEntity);
 
-		if (!this.isAttributeEligibleForScaling(_targetEntity, eligibleAttribute))
+		if (scalableAttributes.len() == 0)
 		{
 			return;
 		}
 
 		this.spawnOverlayOnCurrentTile();
-		this.incrementAttributeBonus(eligibleAttribute);
+		this.incrementAttributeBonus(scalableAttributes[::Math.rand(0, scalableAttributes.len() - 1)]);
 	}
 
 	function onUpdate( _properties )

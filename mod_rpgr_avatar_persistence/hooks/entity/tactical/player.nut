@@ -7,7 +7,7 @@
 			return;
 		}
 
-		if (::AP.Skills.getPermanentInjuryThresholdDifferential(this) > 0)
+		if (::AP.Skills.getPermanentInjuryThresholdDifferential(this) >= 1)
 		{
 			return;
 		}
