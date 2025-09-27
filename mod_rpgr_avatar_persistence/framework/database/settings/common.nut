@@ -74,7 +74,7 @@
 	},
 	PermanentInjuryChance =
 	{
-		Default = 15,
+		Default = 100,
 		Range = [0, 100],
 		Interval = 1
 	},
