@@ -12,7 +12,7 @@
 	},
 	ArmorPartsLossPercentage =
 	{
-		Default = 100,
+		Default = 60,
 		Range = [1, 100],
 		Interval = 1
 	},
@@ -36,7 +36,7 @@
 	},
 	ItemRemovalCeiling =
 	{
-		Default = 6,
+		Default = 3,
 		Range = [1, 10],
 		Interval = 1,
 	},
@@ -62,19 +62,19 @@
 	},
 	MoneyLossPercentage =
 	{
-		Default = 100,
+		Default = 50,
 		Range = [1, 100],
 		Interval = 1
 	},
 	MedicineLossPercentage =
 	{
-		Default = 100,
+		Default = 50,
 		Range = [1, 100],
 		Interval = 1
 	},
 	PermanentInjuryChance =
 	{
-		Default = 100,
+		Default = 25,
 		Range = [0, 100],
 		Interval = 1
 	},
