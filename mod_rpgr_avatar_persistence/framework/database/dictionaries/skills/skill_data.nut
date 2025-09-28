@@ -2,6 +2,11 @@
 {
 	Momentum =
 	{
+		PassiveScalableAttributes =
+		[
+			"MeleeDefense",
+			"RangedDefense"
+		],
 		ScalableAttributes =
 		[
 			"Hitpoints",

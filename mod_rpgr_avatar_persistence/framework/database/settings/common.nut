@@ -51,13 +51,25 @@
 	MomentumRosterThreshold =
 	{
 		Default = 5,
-		Range = [1, 27],
+		Range = [2, 27],
 		Interval = 1
 	},
-	MomentumScalingChance =
+	MomentumActiveScalingChance =
 	{
 		Default = 100,
 		Range = [0, 100],
+		Interval = 1
+	},
+	MomentumPassiveScalingChance =
+	{
+		Default = 20,
+		Range = [0, 100],
+		Interval = 1
+	},
+	MomentumPassiveScalingThreshold =
+	{
+		Default = 15,
+		Range = [1, 30],
 		Interval = 1
 	},
 	MoneyLossPercentage =

@@ -45,7 +45,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 			::AP.Standard.constructEntry
 			(
 				"Warning",
-				::AP.Standard.colourWrap(this.getString("NoBonusesText"), ::AP.Standard.Colour.Red),
+				::AP.Standard.colourWrap(this.getString("NoBonuses"), ::AP.Standard.Colour.Red),
 				entries
 			);
 		}
@@ -97,6 +97,39 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		);
 	}
 
+	function createScalingChanceEntries()
+	{
+		local entries = [];
+		local push = @(_entry) ::AP.Standard.push(_entry, entries);
+		local colour = @(_string, _colour) ::AP.Standard.colourWrap(_string, ::AP.Standard.Colour[_colour]);
+		local activeScalingChance = ::AP.Standard.getParameter("MomentumActiveScalingChance");
+
+		::AP.Standard.constructEntry
+		(
+			"Special",
+			format(this.getString("ActiveScalingChance"), colour(activeScalingChance, "Green")),
+			entries
+		);
+
+		local passiveScalingChance = ::AP.Standard.getParameter("MomentumPassiveScalingChance");
+		local passiveScalingThreshold = ::AP.Standard.getParameter("MomentumPassiveScalingThreshold");
+		local passiveScalingText = format(this.getString("PassiveScalingChance"), colour(passiveScalingChance, "Green"), colour(passiveScalingThreshold, "Red"));
+
+		if (!this.isPlayerEligibleForPassiveScaling())
+		{
+			passiveScalingText = colour(this.getString("PassiveScalingThresholdExceeded"), "Red");
+		}
+
+		::AP.Standard.constructEntry
+		(
+			"Time",
+			passiveScalingText,
+			entries
+		);
+
+		return entries;
+	}
+
 	function getAttributeBonus( _attributeKey )
 	{
 		return this.getNaiveAttributeBonus(_attributeKey) * this.getAttributeBonusMultiplier();
@@ -105,7 +138,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function getAttributeBonusMultiplier()
 	{
 		local nominalMultiplier = 1;
-		
+
 		if (!this.isWithinRosterThreshold())
 		{
 			return nominalMultiplier;
@@ -147,6 +180,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 		push(this.createMomentumStateEntry());
 		push(this.createMomentumTutorialEntry());
+		push(this.createScalingChanceEntries());
 		push(this.createAttributeEntries());
 		return tooltipArray;
 	}
@@ -172,6 +206,11 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 	function getViableAttributesForScaling()
 	{
 		return this.getSkillData().ScalableAttributes;
+	}
+
+	function getViableAttributesForPassiveScaling()
+	{
+		return this.getSkillData().PassiveScalableAttributes;
 	}
 
 	function incrementAttributeBonus( _attributeKey )
@@ -208,9 +247,56 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		return true;
 	}
 
+	function isPlayerEligibleForPassiveScaling()
+	{
+		local baseProperties = this.getContainer().getActor().getBaseProperties();
+		local scalableAttributes = this.getViableAttributesForPassiveScaling();
+
+		foreach( attribute in scalableAttributes )
+		{
+			local baseBonus = this.getNaiveAttributeBonus(attribute);
+			local passiveScalingThreshold = ::AP.Standard.getParameter("MomentumPassiveScalingThreshold");
+
+			if (baseProperties[attribute] + baseBonus <= passiveScalingThreshold)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	function isWithinRosterThreshold()
 	{
 		return this.getRosterThresholdDifferential() <= 0;
+	}
+
+	function onNewDay()
+	{
+		if (::Math.rand(1, 100) > ::AP.Standard.getParameter("MomentumPassiveScalingChance"))
+		{
+			return;
+		}
+
+		if (!this.isPlayerEligibleForPassiveScaling())
+		{
+			return;
+		}
+
+		local scalableAttributes = this.getViableAttributesForPassiveScaling();
+		local playerProperties = this.getContainer().getActor().getBaseProperties();
+
+		foreach( attribute in scalableAttributes )
+		{
+			local baseBonus = this.getNaiveAttributeBonus(attribute);
+
+			if (playerProperties[attribute] + baseBonus > ::AP.Standard.getParameter("MomentumPassiveScalingThreshold"))
+			{
+				continue;
+			}
+
+			this.incrementAttributeBonus(attribute);
+		}
 	}
 
 	function onTargetKilled( _targetEntity, _skill )
@@ -220,7 +306,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 			return;
 		}
 
-		if (::Math.rand(1, 100) > ::AP.Standard.getParameter("MomentumScalingChance"))
+		if (::Math.rand(1, 100) > ::AP.Standard.getParameter("MomentumActiveScalingChance"))
 		{
 			return;
 		}
