@@ -15,8 +15,5 @@
 	NoBonuses = "This character currently possesses no Momentum.",
 	RosterThresholdTooltip = "Fortified until the company hires %s more brothers.",
 	RosterThresholdExceededTooltip = "Weakened until the company is reduced to a size of %s brothers or fewer.",
-
-	RosterThresholdTooltipBaselineFragmentA = "Fortified until",
-	RosterThresholdTooltipBaselineFragmentB = "any additional brothers",
-	RosterThresholdTooltipBaselineFragmentC = "are hired.",
+	RosterThresholdTooltipBaseline = "Fortified until any additional brothers are hired.",
 };

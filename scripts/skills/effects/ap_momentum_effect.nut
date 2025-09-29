@@ -87,7 +87,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		}
 		else if (rosterDifferential == 0)
 		{
-			text = this.getString("RosterThresholdTooltipBaselineFragment", ::AP.Standard.Colour.Red);
+			text = colour(this.getString("RosterThresholdTooltipBaseline"));
 		}
 
 		return ::AP.Standard.constructEntry

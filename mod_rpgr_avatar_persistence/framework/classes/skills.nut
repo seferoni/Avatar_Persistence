@@ -100,7 +100,7 @@
 		}
 		else if (_injuryDifferential == 0)
 		{
-			tooltipData.Text = ::AP.Utilities.compileTooltipFragments("InjuryThresholdTooltipBaselineFragment", ::AP.Standard.Colour.Red);
+			tooltipData.Text = colour(::AP.Utilities.getTooltipString("InjuryThresholdTooltipBaseline"));
 		}
 
 		return tooltipData;
