@@ -249,7 +249,6 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 	function isPlayerEligibleForPassiveScaling()
 	{
-		local baseProperties = this.getContainer().getActor().getBaseProperties();
 		local scalableAttributes = this.getViableAttributesForPassiveScaling();
 
 		foreach( attribute in scalableAttributes )
@@ -257,7 +256,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 			local baseBonus = this.getNaiveAttributeBonus(attribute);
 			local passiveScalingThreshold = ::AP.Standard.getParameter("MomentumPassiveScalingThreshold");
 
-			if (baseProperties[attribute] + baseBonus <= passiveScalingThreshold)
+			if (baseBonus <= passiveScalingThreshold)
 			{
 				return true;
 			}
@@ -284,13 +283,12 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		}
 
 		local scalableAttributes = this.getViableAttributesForPassiveScaling();
-		local playerProperties = this.getContainer().getActor().getBaseProperties();
 
 		foreach( attribute in scalableAttributes )
 		{
 			local baseBonus = this.getNaiveAttributeBonus(attribute);
 
-			if (playerProperties[attribute] + baseBonus > ::AP.Standard.getParameter("MomentumPassiveScalingThreshold"))
+			if (baseBonus > ::AP.Standard.getParameter("MomentumPassiveScalingThreshold"))
 			{
 				continue;
 			}

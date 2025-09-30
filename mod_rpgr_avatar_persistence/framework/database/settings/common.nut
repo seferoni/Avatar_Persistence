@@ -68,7 +68,7 @@
 	},
 	MomentumPassiveScalingThreshold =
 	{
-		Default = 15,
+		Default = 10,
 		Range = [1, 30],
 		Interval = 1
 	},
