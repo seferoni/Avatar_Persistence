@@ -6,10 +6,10 @@
 	AddElixirOnStartDescription = "Adds a special variant of the Elixir, called the Dilute Elixir, to the player stash on campaign start. Dilute Elixirs, besides having little monetary value, function only to confer avatar status to the character that consumes them. Applicable only for origins without a player character already present.",
 
 	AmmoLossPercentageName = "Ammo Loss Percentage",
-	AmmoLossPercentageDescription = "Determines the percentage of ammo lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.",
+	AmmoLossPercentageDescription = "Determines the percentage of ammo lost upon defeat.",
 
 	ArmorPartsLossPercentageName = "Tools Loss Percentage",
-	ArmorPartsLossPercentageDescription = "Determines the percentage of tools lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.",
+	ArmorPartsLossPercentageDescription = "Determines the percentage of tools lost upon defeat.",
 
 	ElixirAlchemistChanceName = "Elixir Alchemist Chance",
 	ElixirAlchemistChanceDescription = "Determines the percentage chance for Elixirs to be sold at alchemists per inventory refresh.",
@@ -24,19 +24,16 @@
 	EnableMomentumDescription = "Determines whether the Momentum effect is added to player characters. Momentum is a powerful effect exclusive to player characters, meant primarily to cater to campaigns with smaller roster sizes. Does nothing once the effect has been added for a given playthrough.",
 
 	ItemRemovalCeilingName = "Item Removal Ceiling",
-	ItemRemovalCeilingDescription = "Determines the maximum number of items that may be removed per instance of player defeat. Does nothing if Lose Items Upon Defeat is disabled.",
-
-	LoseItemsUponDefeatName = "Lose Items Upon Defeat",
-	LoseItemsUponDefeatDescription = "Determines whether items kept in the player's stash are removed at random upon defeat, in the case of persistence.",
+	ItemRemovalCeilingDescription = "Determines the maximum number of items that may be removed per instance of player defeat.",
 
 	MedicineLossPercentageName = "Medicine Loss Percentage",
-	MedicineLossPercentageDescription = "Determines the percentage of medicine lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.",
+	MedicineLossPercentageDescription = "Determines the percentage of medicine lost upon defeat.",
 
 	ModifyTooltipName = "Modify Trait Tooltip",
 	ModifyTooltipDescription = "Determines whether the player character trait tooltip reflects changes brought about by Avatar Persistence.",
 
 	MoneyLossPercentageName = "Money Loss Percentage",
-	MoneyLossPercentageDescription = "Determines the percentage of money lost upon defeat. Does nothing if Lose Items Upon Defeat is disabled.",
+	MoneyLossPercentageDescription = "Determines the percentage of money lost upon defeat.",
 
 	MomentumRosterThresholdName = "Momentum Roster Threshold",
 	MomentumRosterThresholdDescription = "Determines the roster size at and below which Momentum is Fortified. In this state, Momentum's attribute bonuses are doubled, with each sustained permanent injury further raising this bonus multiplier.",
@@ -45,10 +42,10 @@
 	MomentumActiveScalingChanceDescription = "Determines the percentage chance for Momentum to scale an attribute upon killing an enemy with a higher-valued attribute than the player character.",
 
 	MomentumPassiveScalingChanceName = "Momentum Passive Scaling Chance",
-	MomentumPassiveScalingChanceDescription = "Determines the percentage chance for Momentum to scale defensive attributes (Melee Defense & Ranged Defense) at the start of each day. This parameter is also governed by the passive scaling attribute threshold.",
+	MomentumPassiveScalingChanceDescription = "Determines the percentage chance for Momentum to scale defensive attributes (Melee Defense & Ranged Defense) at the start of each day. This parameter is also governed by the Passive Scaling Threshold.",
 
 	MomentumPassiveScalingThresholdName = "Momentum Passive Scaling Threshold",
-	MomentumPassiveScalingThresholdDescription = "Determines the maximum value (after considering the base bonus conferred by Momentum) a defensive attribute can have before it can no longer benefit from Momentum's passive scaling. Has no effect on active scaling.",
+	MomentumPassiveScalingThresholdDescription = "Determines the threshold value of the base bonus a defensive attribute can have via Momentum above which further passive scaling is disabled. Has no effect on active scaling.",
 
 	PermanentInjuryChanceName = "Permanent Injury Chance",
 	PermanentInjuryChanceDescription = "Determines the percentage chance for the player character to suffer permanent injuries upon defeat.",

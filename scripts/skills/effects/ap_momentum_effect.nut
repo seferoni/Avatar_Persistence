@@ -113,7 +113,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 
 		local passiveScalingChance = ::AP.Standard.getParameter("MomentumPassiveScalingChance");
 		local passiveScalingThreshold = ::AP.Standard.getParameter("MomentumPassiveScalingThreshold");
-		local passiveScalingText = format(this.getString("PassiveScalingChance"), colour(passiveScalingChance, "Green"), colour(passiveScalingThreshold, "Red"));
+		local passiveScalingText = format(this.getString("PassiveScalingChance"), colour(passiveScalingChance, "Green"), colour(format("+%i", passiveScalingThreshold + 1), "Green"));
 
 		if (!this.isPlayerEligibleForPassiveScaling())
 		{

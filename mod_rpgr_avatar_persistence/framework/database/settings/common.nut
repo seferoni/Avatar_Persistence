@@ -13,7 +13,7 @@
 	ArmorPartsLossPercentage =
 	{
 		Default = 60,
-		Range = [1, 100],
+		Range = [0, 100],
 		Interval = 1
 	},
 	ElixirConfersAvatarStatus =
@@ -37,12 +37,8 @@
 	ItemRemovalCeiling =
 	{
 		Default = 3,
-		Range = [1, 10],
+		Range = [0, 10],
 		Interval = 1,
-	},
-	LoseItemsUponDefeat =
-	{
-		Default = true,
 	},
 	ModifyTooltip =
 	{
@@ -68,20 +64,20 @@
 	},
 	MomentumPassiveScalingThreshold =
 	{
-		Default = 10,
+		Default = 9,
 		Range = [1, 30],
 		Interval = 1
 	},
 	MoneyLossPercentage =
 	{
 		Default = 50,
-		Range = [1, 100],
+		Range = [0, 100],
 		Interval = 1
 	},
 	MedicineLossPercentage =
 	{
 		Default = 50,
-		Range = [1, 100],
+		Range = [0, 100],
 		Interval = 1
 	},
 	PermanentInjuryChance =

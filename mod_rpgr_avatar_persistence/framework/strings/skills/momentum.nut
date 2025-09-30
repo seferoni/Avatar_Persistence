@@ -4,7 +4,7 @@
 	Description = "This character's indomitable spirit permits their vigour to be raised for each powerful foe felled by their hand. This effect is fortified for as long as they remain in a small company, but is diminished upon each defeat.",
 
 	ActiveScalingChance = "Has a %s%% chance to gain an attribute bonus upon slaying a stronger enemy.",
-	PassiveScalingChance = "Has a %s%% chance to gain a defensive attribute bonus each day, up to a threshold of %s.",
+	PassiveScalingChance = "Has a %s%% chance to gain a defensive attribute bonus each day, up to a maximum bonus of %s.",
 	PassiveScalingThresholdExceeded = "Can no longer gain passive bonuses to defensive attributes.",
 
 	StatePrefix = "Momentum: ",
