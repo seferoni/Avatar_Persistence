@@ -46,7 +46,7 @@
 	},
 	MomentumRosterThreshold =
 	{
-		Default = 5,
+		Default = 6,
 		Range = [2, 27],
 		Interval = 1
 	},
