@@ -46,7 +46,7 @@
 	},
 	MomentumRosterThreshold =
 	{
-		Default = 9,
+		Default = 6,
 		Range = [2, 27],
 		Interval = 1
 	},
@@ -88,7 +88,7 @@
 	},
 	PermanentInjuryThreshold =
 	{
-		Default = 3,
+		Default = 4,
 		Range = [0, 7],
 		Interval = 1
 	},
