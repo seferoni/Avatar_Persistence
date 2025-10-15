@@ -62,9 +62,9 @@
 		Range = [0, 100],
 		Interval = 1
 	},
-	MomentumPassiveScalingThreshold =
+	MomentumPassiveScalingCap =
 	{
-		Default = 9,
+		Default = 10,
 		Range = [1, 30],
 		Interval = 1
 	},

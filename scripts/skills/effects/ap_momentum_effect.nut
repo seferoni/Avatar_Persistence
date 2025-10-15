@@ -112,12 +112,12 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		);
 
 		local passiveScalingChance = ::AP.Standard.getParameter("MomentumPassiveScalingChance");
-		local passiveScalingThreshold = ::AP.Standard.getParameter("MomentumPassiveScalingThreshold");
-		local passiveScalingText = format(this.getString("PassiveScalingChance"), colour(passiveScalingChance, "Green"), colour(format("+%i", passiveScalingThreshold + 1), "Green"));
+		local passiveScalingCap = ::AP.Standard.getParameter("MomentumPassiveScalingCap") * this.getAttributeBonusMultiplier();
+		local passiveScalingText = format(this.getString("PassiveScalingChance"), colour(passiveScalingChance, "Green"), colour(format("+%i", passiveScalingCap), "Green"));
 
 		if (!this.isPlayerEligibleForPassiveScaling())
 		{
-			passiveScalingText = colour(this.getString("PassiveScalingThresholdExceeded"), "Red");
+			passiveScalingText = colour(this.getString("PassiveScalingCapExceeded"), "Red");
 		}
 
 		::AP.Standard.constructEntry
@@ -254,9 +254,9 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		foreach( attribute in scalableAttributes )
 		{
 			local baseBonus = this.getNaiveAttributeBonus(attribute);
-			local passiveScalingThreshold = ::AP.Standard.getParameter("MomentumPassiveScalingThreshold");
+			local passiveScalingCap = ::AP.Standard.getParameter("MomentumPassiveScalingCap");
 
-			if (baseBonus <= passiveScalingThreshold)
+			if (baseBonus < passiveScalingCap)
 			{
 				return true;
 			}
@@ -288,7 +288,7 @@ this.ap_momentum_effect <- ::inherit("scripts/skills/ap_skill",
 		{
 			local baseBonus = this.getNaiveAttributeBonus(attribute);
 
-			if (baseBonus > ::AP.Standard.getParameter("MomentumPassiveScalingThreshold"))
+			if (baseBonus > ::AP.Standard.getParameter("MomentumPassiveScalingCap"))
 			{
 				continue;
 			}

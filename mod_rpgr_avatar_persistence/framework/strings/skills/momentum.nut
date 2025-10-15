@@ -5,7 +5,7 @@
 
 	ActiveScalingChance = "Has a %s%% chance to gain an attribute bonus upon slaying a stronger enemy.",
 	PassiveScalingChance = "Has a %s%% chance to gain a defensive attribute bonus each day, up to a maximum bonus of %s.",
-	PassiveScalingThresholdExceeded = "Can no longer gain passive bonuses to defensive attributes.",
+	PassiveScalingCapExceeded = "Can no longer gain passive bonuses to defensive attributes.",
 
 	StatePrefix = "Momentum: ",
 	StateBelowRosterThreshold = "Fortified",

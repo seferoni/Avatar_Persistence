@@ -44,8 +44,8 @@
 	MomentumPassiveScalingChanceName = "Momentum Passive Scaling Chance",
 	MomentumPassiveScalingChanceDescription = "Determines the percentage chance for Momentum to scale defensive attributes (Melee Defense & Ranged Defense) at the start of each day. This parameter is also governed by the Passive Scaling Threshold.",
 
-	MomentumPassiveScalingThresholdName = "Momentum Passive Scaling Threshold",
-	MomentumPassiveScalingThresholdDescription = "Determines the threshold value of the base bonus a defensive attribute can have via Momentum above which further passive scaling is disabled. Has no effect on active scaling.",
+	MomentumPassiveScalingCapName = "Momentum Passive Scaling Cap",
+	MomentumPassiveScalingCapDescription = "Determines the maximum value of the base bonus a defensive attribute can have via Momentum above which further passive scaling is disabled. Has no effect on active scaling.",
 
 	PermanentInjuryChanceName = "Permanent Injury Chance",
 	PermanentInjuryChanceDescription = "Determines the percentage chance for the player character to suffer permanent injuries upon defeat.",
